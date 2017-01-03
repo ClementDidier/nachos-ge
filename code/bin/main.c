@@ -32,6 +32,7 @@ main(argc, argv)
 int argc;
 char *argv[];
 {
+	printf("\nqsd---------qsd0");
 	register char *s;
 	char *fakeargv[3];
 

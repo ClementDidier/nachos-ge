@@ -15,6 +15,9 @@
 int
 main ()
 {
+	int j = 2;
+	int i = j + 1;
+	i = i + 1;
     Halt ();
 
     /* not reached */
