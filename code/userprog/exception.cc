@@ -89,17 +89,24 @@ ExceptionHandler (ExceptionType which)
     switch(type)
     {
       case SC_Halt:
-        DEBUG(’a’, "Shutdown, initiated by user program.\n");
+      {
+        DEBUG('a', "Shutdown, initiated by user program.\n");
         interrupt->Halt();
         break;
-
+      }
       case SC_PutChar:
-        console->PutChar();
+      {
+        char arg = (char)machine->ReadRegister (4);
+        //printf("Appel systeme PutChar réalisé <%c>\n", arg);
+        synchconsole->SynchPutChar(arg);
         break;
-
+      }
       default:
+      {
         printf("Unexpected user mode exception %d %d\n", which, type);
         ASSERT(FALSE);
+        break;
+      }
     }
   }
   #endif

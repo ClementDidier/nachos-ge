@@ -14,6 +14,9 @@
 #include "addrspace.h"
 #include "synch.h"
 
+
+#define EOL '\0'
+
 //----------------------------------------------------------------------
 // StartProcess
 //      Run a user program.  Open the executable, load it into
@@ -96,13 +99,11 @@ ConsoleTest (char *in, char *out)
 
 #ifdef CHANGED
 #include "synchconsole.h"
-/*void
+void
 SynchConsoleTest (char *in, char *out)
 {
     char ch;
-    SynchConsole *synchconsole = new SynchConsole(in, out);
-    
-    while ((ch = synchconsole->SynchGetChar()) != EOF)
+    while ((ch = synchconsole->SynchGetChar()) != EOF && ch != EOL)
     {
         if(ch != '\n') synchconsole->SynchPutChar('<');
         synchconsole->SynchPutChar(ch);
@@ -110,14 +111,5 @@ SynchConsoleTest (char *in, char *out)
     }
     
     fprintf(stderr, "Solaris: EOF detected in SynchConsole!\n");
-}*/
-void
-SynchConsoleTest (char *in, char *out)
-{
-    SynchConsole *synchconsole = new SynchConsole(in, out);
-    
-    char str[] = "00000\0";
-    synchconsole->SynchGetString(str, 5);
-    synchconsole->SynchPutString(str);
 }
 #endif //CHANGED
