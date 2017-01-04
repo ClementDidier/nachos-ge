@@ -58,7 +58,9 @@
 
 extern void ThreadTest (void), Copy (const char *unixFile, const char *nachosFile);
 extern void Print (char *file), PerformanceTest (void);
-extern void StartProcess (char *file), ConsoleTest (char *in, char *out);
+extern void StartProcess (char *file);
+extern void ConsoleTest (char *in, char *out);
+extern void SynchConsoleTest (char *in, char *out);
 extern void MailTest (int networkID);
 
 //----------------------------------------------------------------------
@@ -89,76 +91,90 @@ main (int argc, char **argv)
 #endif
 
     for (argc--, argv++; argc > 0; argc -= argCount, argv += argCount)
-      {
-	  argCount = 1;
+    {
+    	argCount = 1;
 	  if (!strcmp (*argv, "-z"))	// print copyright
-	      printf ("%s", copyright);
+	  	printf ("%s", copyright);
 #ifdef USER_PROGRAM
 	  if (!strcmp (*argv, "-x"))
 	    {			// run a user program
-		ASSERT (argc > 1);
-		StartProcess (*(argv + 1));
-		argCount = 2;
+	    	ASSERT (argc > 1);
+	    	StartProcess (*(argv + 1));
+	    	argCount = 2;
 	    }
-	  else if (!strcmp (*argv, "-c"))
+	    else if (!strcmp (*argv, "-c"))
 	    {			// test the console
-		if (argc == 1)
-		    ConsoleTest (NULL, NULL);
-		else
-		  {
-		      ASSERT (argc > 2);
-		      ConsoleTest (*(argv + 1), *(argv + 2));
-		      argCount = 3;
-		  }
-		interrupt->Halt ();	// once we start the console, then 
-		// Nachos will loop forever waiting 
-		// for console input
-	    }
+	    	if (argc == 1)
+	    		ConsoleTest (NULL, NULL);
+	    	else
+	    	{
+	    		ASSERT (argc > 2);
+	    		ConsoleTest (*(argv + 1), *(argv + 2));
+	    		argCount = 3;
+	    	}
+			interrupt->Halt ();	// once we start the console, then 
+			// Nachos will loop forever waiting 
+			// for console input
+		}
+		else if (!strcmp (*argv, "-sc"))
+	    {			// test the console
+	    	if (argc == 1)
+	    		SynchConsoleTest (NULL, NULL);
+	    	else
+	    	{
+	    		ASSERT (argc > 2);
+	    		SynchConsoleTest (*(argv + 1), *(argv + 2));
+	    		argCount = 3;
+	    	}
+			interrupt->Halt ();	// once we start the console, then 
+			// Nachos will loop forever waiting 
+			// for console input
+		}
 #endif // USER_PROGRAM
 #ifdef FILESYS
-	  if (!strcmp (*argv, "-cp"))
+	if (!strcmp (*argv, "-cp"))
 	    {			// copy from UNIX to Nachos
-		ASSERT (argc > 2);
-		Copy (*(argv + 1), *(argv + 2));
-		argCount = 3;
+	    	ASSERT (argc > 2);
+	    	Copy (*(argv + 1), *(argv + 2));
+	    	argCount = 3;
 	    }
-	  else if (!strcmp (*argv, "-p"))
+	    else if (!strcmp (*argv, "-p"))
 	    {			// print a Nachos file
-		ASSERT (argc > 1);
-		Print (*(argv + 1));
-		argCount = 2;
+	    	ASSERT (argc > 1);
+	    	Print (*(argv + 1));
+	    	argCount = 2;
 	    }
-	  else if (!strcmp (*argv, "-r"))
+	    else if (!strcmp (*argv, "-r"))
 	    {			// remove Nachos file
-		ASSERT (argc > 1);
-		fileSystem->Remove (*(argv + 1));
-		argCount = 2;
+	    	ASSERT (argc > 1);
+	    	fileSystem->Remove (*(argv + 1));
+	    	argCount = 2;
 	    }
-	  else if (!strcmp (*argv, "-l"))
+	    else if (!strcmp (*argv, "-l"))
 	    {			// list Nachos directory
-		fileSystem->List ();
+	    	fileSystem->List ();
 	    }
-	  else if (!strcmp (*argv, "-D"))
+	    else if (!strcmp (*argv, "-D"))
 	    {			// print entire filesystem
-		fileSystem->Print ();
+	    	fileSystem->Print ();
 	    }
-	  else if (!strcmp (*argv, "-t"))
+	    else if (!strcmp (*argv, "-t"))
 	    {			// performance test
-		PerformanceTest ();
+	    	PerformanceTest ();
 	    }
 #endif // FILESYS
 #ifdef NETWORK
-	  if (!strcmp (*argv, "-o"))
+	    if (!strcmp (*argv, "-o"))
 	    {
-		ASSERT (argc > 1);
+	    	ASSERT (argc > 1);
 		Delay (2);	// delay for 2 seconds
 		// to give the user time to 
 		// start up another nachos
 		MailTest (atoi (*(argv + 1)));
 		argCount = 2;
-	    }
+	}
 #endif // NETWORK
-      }
+}
 
     currentThread->Finish ();	// NOTE: if the procedure "main" 
     // returns, then the program "nachos"

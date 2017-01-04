@@ -84,12 +84,40 @@ ConsoleTest (char *in, char *out)
     writeDone = new Semaphore ("write done", 0);
 
     for (;;)
-      {
-	  readAvail->P ();	// wait for character to arrive
-	  ch = console->GetChar ();
-	  console->PutChar (ch);	// echo it!
-	  writeDone->P ();	// wait for write to finish
-	  if (ch == 'q')
-	      return;		// if q, quit
-      }
+    {
+        readAvail->P ();	// wait for character to arrive
+        ch = console->GetChar ();
+        console->PutChar (ch);	// echo it!
+        writeDone->P ();	// wait for write to finish
+        if (ch == 'q')
+            return;		// if q, quit
+    }
 }
+
+#ifdef CHANGED
+#include "synchconsole.h"
+/*void
+SynchConsoleTest (char *in, char *out)
+{
+    char ch;
+    SynchConsole *synchconsole = new SynchConsole(in, out);
+    
+    while ((ch = synchconsole->SynchGetChar()) != EOF)
+    {
+        if(ch != '\n') synchconsole->SynchPutChar('<');
+        synchconsole->SynchPutChar(ch);
+        if(ch != '\n') synchconsole->SynchPutChar('>');
+    }
+    
+    fprintf(stderr, "Solaris: EOF detected in SynchConsole!\n");
+}*/
+void
+SynchConsoleTest (char *in, char *out)
+{
+    SynchConsole *synchconsole = new SynchConsole(in, out);
+    
+    char str[] = "00000\0";
+    synchconsole->SynchGetString(str, 5);
+    synchconsole->SynchPutString(str);
+}
+#endif //CHANGED
