@@ -60,7 +60,12 @@ extern void ThreadTest (void), Copy (const char *unixFile, const char *nachosFil
 extern void Print (char *file), PerformanceTest (void);
 extern void StartProcess (char *file);
 extern void ConsoleTest (char *in, char *out);
+
+#ifdef CHANGED
 extern void SynchConsoleTest (char *in, char *out);
+extern void SynchStringTest(char *in, char *out);
+#endif
+
 extern void MailTest (int networkID);
 
 //----------------------------------------------------------------------
@@ -93,10 +98,10 @@ main (int argc, char **argv)
     for (argc--, argv++; argc > 0; argc -= argCount, argv += argCount)
     {
     	argCount = 1;
-	  if (!strcmp (*argv, "-z"))	// print copyright
-	  	printf ("%s", copyright);
+	  	if (!strcmp (*argv, "-z"))	// print copyright
+	  		printf ("%s", copyright);
 #ifdef USER_PROGRAM
-	  if (!strcmp (*argv, "-x"))
+	  	if (!strcmp (*argv, "-x"))
 	    {			// run a user program
 	    	ASSERT (argc > 1);
 	    	StartProcess (*(argv + 1));
@@ -130,9 +135,23 @@ main (int argc, char **argv)
 			// Nachos will loop forever waiting 
 			// for console input
 		}
+		else if (!strcmp (*argv, "-ss"))
+	    {			// test the console
+	    	if (argc == 1)
+	    		SynchStringTest (NULL, NULL);
+	    	else
+	    	{
+	    		ASSERT (argc > 2);
+	    		SynchStringTest (*(argv + 1), *(argv + 2));
+	    		argCount = 3;
+	    	}
+			interrupt->Halt ();	// once we start the console, then 
+			// Nachos will loop forever waiting 
+			// for console input
+		}
 #endif // USER_PROGRAM
 #ifdef FILESYS
-	if (!strcmp (*argv, "-cp"))
+		if (!strcmp (*argv, "-cp"))
 	    {			// copy from UNIX to Nachos
 	    	ASSERT (argc > 2);
 	    	Copy (*(argv + 1), *(argv + 2));

@@ -105,4 +105,34 @@ void SynchConsole::SynchGetString(char *s, int n)
 	}
 }
 
+//----------------------------------------------------------------------
+// copyStringFromMachine()
+// 	Converti une chaîne de caractères MIPS en chaîne de caractères Linux
+//	from : L'adresse MIPS de la chaine de caractères (premier caractère)
+//	to : Chaine de caractères valeur de retour
+//	size : La taille maximale de la chaine de caractères à convertir
+//----------------------------------------------------------------------
+void SynchConsole::copyStringFromMachine(int from, char *to, unsigned size)
+{
+	// Lecture en mémoire de la chaine de caractères
+
+	char c;
+	int v = 0;
+	unsigned int i = 0;
+	while(i < size)
+	{
+		machine->ReadMem(from + i, 1, &v);
+		c = (char)v;
+
+		if(c == EOF)
+			break;
+		
+		*(to + i) = c;
+
+		i++;
+	}
+
+	*(to + size) = '\0';
+}
+
 #endif // CHANGED

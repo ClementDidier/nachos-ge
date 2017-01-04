@@ -88,6 +88,10 @@ ExceptionHandler (ExceptionType which)
   {
     switch(type)
     {
+      case SC_Exit:
+      {
+        break;
+      }
       case SC_Halt:
       {
         DEBUG('a', "Shutdown, initiated by user program.\n");
@@ -97,9 +101,36 @@ ExceptionHandler (ExceptionType which)
       case SC_PutChar:
       {
         char arg = (char)machine->ReadRegister (4);
-        //printf("Appel systeme PutChar réalisé <%c>\n", arg);
+        DEBUG('a', "Appel systeme PutChar réalisé\n");
         synchconsole->SynchPutChar(arg);
         break;
+      }
+      case SC_SynchPutString:
+      {
+        // lecture de l'adresse de la chaine de caractères MIPS
+        int arg = machine->ReadRegister (4);
+
+        // Buffer de la chaine de caractères LINUX (initialement vide et de taille maximale)
+        char * buffer = new char[MAX_STRING_SIZE];
+
+        // Conversion String MIPS --> String LINUX
+        synchconsole->copyStringFromMachine(arg, buffer, MAX_STRING_SIZE);
+
+        
+        synchconsole->SynchPutString(buffer);
+        DEBUG('a', "Appel systeme SynchPutString réalisé\n");
+
+        // Free du buffer
+        delete [] buffer;
+        break;
+      }
+      case SC_SynchGetChar:
+      {
+        // TODO -------------------------------------------------------
+      }
+      case SC_SynchGetString:
+      {
+        // TODO -------------------------------------------------------
       }
       default:
       {
@@ -111,6 +142,6 @@ ExceptionHandler (ExceptionType which)
   }
   #endif
     // LB: Do not forget to increment the pc before returning!
- UpdatePC ();
+  UpdatePC ();
     // End of addition
 }

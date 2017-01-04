@@ -14,7 +14,7 @@ int
 main()
 {
 	print('a', 5);
-	Halt();
+	//Halt();
 
 	/*Not reached */
 	return 0;
