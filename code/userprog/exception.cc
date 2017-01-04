@@ -126,11 +126,19 @@ ExceptionHandler (ExceptionType which)
       }
       case SC_SynchGetChar:
       {
-        // TODO -------------------------------------------------------
+        machine->WriteRegister(2, (int)synchconsole->SynchGetChar());
+        DEBUG('a', "Appel systeme SynchGetChar réalisé\n");
       }
       case SC_SynchGetString:
       {
-        // TODO -------------------------------------------------------
+        int result = machine->ReadRegister(4);
+        char * buffer = new char[MAX_STRING_SIZE];
+        synchconsole->SynchGetString(buffer, MAX_STRING_SIZE);
+        synchconsole->copyStringFromMachine(result, buffer, MAX_STRING_SIZE);
+        DEBUG('a', "Appel systeme SynchGetString réalisé\n");
+
+        delete [] buffer;
+        break;
       }
       default:
       {

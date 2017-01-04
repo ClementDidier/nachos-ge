@@ -135,4 +135,15 @@ void SynchConsole::copyStringFromMachine(int from, char *to, unsigned size)
 	*(to + size) = '\0';
 }
 
+void SynchConsole::copyMachineFromString(char * from, int to, unsigned size)
+{
+	char c = 'a';
+	unsigned int i = 0;
+	while(i < size && c != EOL && c != EOF)
+	{
+		c = from[i];
+		machine->WriteMem(to + i, 1, (int)c);
+	}
+}
+
 #endif // CHANGED

@@ -147,7 +147,7 @@ SynchPutString:
 
 	.globl SynchGetChar
 	.ent	SynchGetChar
-SynchPutString:
+SynchGetChar:
 	addiu $2,$0,SC_SynchGetChar
 	syscall
 	j	$31
@@ -155,7 +155,7 @@ SynchPutString:
 
 	.globl SynchGetString
 	.ent	SynchGetString
-SynchPutString:
+SynchGetString:
 	addiu $2,$0,SC_SynchGetString
 	syscall
 	j	$31
