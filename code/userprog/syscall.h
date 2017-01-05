@@ -18,21 +18,21 @@
 /* system call codes -- used by the stubs to tell the kernel which system call
  * is being asked for
  */
-#define SC_Halt				0
-#define SC_Exit				1
-#define SC_Exec				2
-#define SC_Join				3
-#define SC_Create			4
-#define SC_Open				5
-#define SC_Read				6
-#define SC_Write			7
-#define SC_Close			8
-#define SC_Fork				9
-#define SC_Yield			10
-#define SC_PutChar			11
-#define SC_SynchPutString 	12
-#define SC_SynchGetChar		13
-#define SC_SynchGetString	14
+#define SC_Halt			0
+#define SC_Exit			1
+#define SC_Exec			2
+#define SC_Join			3
+#define SC_Create		4
+#define SC_Open			5
+#define SC_Read			6
+#define SC_Write		7
+#define SC_Close		8
+#define SC_Fork			9
+#define SC_Yield		10
+#define SC_PutChar		11
+#define SC_PutString 	12
+#define SC_GetChar		13
+#define SC_GetString	14
 
 #ifdef IN_USER_MODE
 
@@ -134,11 +134,14 @@ void Yield ();
 
 void PutChar(char c);
 
-char SynchGetChar();
+char GetChar();
 
-void SynchPutString(const char *s);
+void PutString(const char *s);
 
-void SynchGetString(char *s, int n);
+/*	n corresepond à la taille maximale de la chaine de caractaire, 
+ *	doit être fixé par l'utilisateur
+ */
+void GetString(char *s, int n);
 
 #endif // IN_USER_MODE
 

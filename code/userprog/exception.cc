@@ -105,7 +105,7 @@ ExceptionHandler (ExceptionType which)
         synchconsole->SynchPutChar(arg);
         break;
       }
-      case SC_SynchPutString:
+      case SC_PutString:
       {
         // lecture de l'adresse de la chaine de caractères MIPS
         int arg = machine->ReadRegister (4);
@@ -120,12 +120,12 @@ ExceptionHandler (ExceptionType which)
         DEBUG('a', "Appel systeme SynchPutString réalisé\n");
         break;
       }
-      case SC_SynchGetChar:
+      case SC_GetChar:
       {
         machine->WriteRegister(2, (int)synchconsole->SynchGetChar());
         DEBUG('a', "Appel systeme SynchGetChar réalisé\n");
       }
-      case SC_SynchGetString:
+      case SC_GetString:
       {
         int result = machine->ReadRegister(4);
         int maxStringSize = machine->ReadRegister(5);
