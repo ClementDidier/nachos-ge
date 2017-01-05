@@ -34,7 +34,7 @@ int do_UserThreadCreate(int f, int arg){
 	Thread *newThread = new Thread ("Thread Noyau");
 
 	newThread->Fork (StartUserThread, (int) &params);
-
+	currentThread->Yield();
 	return 0;
 }
 
