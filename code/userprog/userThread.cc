@@ -3,26 +3,38 @@
 #include "addrspace.h"
 #include "noff.h"
 #include "userThread.h"
+#include "machine.h"
+
+struct userThreadParams{
+	int arg;
+	int f;
+};
+
+static void StartUserThread(int f){
+	currentThread->space->InitRegisters();
+	currentThread->space->RestoreState();
+	struct userThreadParams * params = (struct userThreadParams *) f;
+
+	int pc = machine->ReadRegister (PCReg);
+
+	machine->WriteRegister (PCReg, params->f);
+	machine->WriteRegister (NextPCReg, params->f + PageSize);
+	machine->WriteRegister (4, params->arg);
+	machine->WriteRegister (StackReg, pc + (PageSize*3));
+
+	machine->Run();
+}
 
 int do_UserThreadCreate(int f, int arg){
-	// on vérifie la quantité de mémoire disponible (ici ou en mode noyau ?)
-	/*NoffHeader noffH;
+	struct userThreadParams params;
 
-	if(noffH.uninitData.size < UserStackSize){
-		return -1;
-	}*/
-
-
-	// on effectue l'appel système fork
+	params.arg = arg;
+	params.f = f;
 
 	Thread *newThread = new Thread ("Thread Noyau");
 
-    newThread->Fork (StartUserThread, 1);
+	newThread->Fork (StartUserThread, (int) &params);
 
-	newThread->space = currentThread->space;
 	return 0;
 }
 
-static void StartUserThread(int f){
-
-}
