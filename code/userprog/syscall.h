@@ -134,6 +134,12 @@ void Yield ();
 
 void PutChar(char c);
 
+char SynchGetChar();
+
+void SynchPutString(const char *s);
+
+void SynchGetString(char *s, int n);
+
 #endif // IN_USER_MODE
 
 #endif /* SYSCALL_H */

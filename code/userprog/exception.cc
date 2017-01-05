@@ -134,7 +134,8 @@ ExceptionHandler (ExceptionType which)
         int result = machine->ReadRegister(4);
         char * buffer = new char[MAX_STRING_SIZE];
         synchconsole->SynchGetString(buffer, MAX_STRING_SIZE);
-        synchconsole->copyStringFromMachine(result, buffer, MAX_STRING_SIZE);
+        synchconsole->copyMachineFromString(buffer, result, MAX_STRING_SIZE);
+        machine->WriteRegister(2, result);
         DEBUG('a', "Appel systeme SynchGetString réalisé\n");
 
         delete [] buffer;

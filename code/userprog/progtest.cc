@@ -102,31 +102,25 @@ ConsoleTest (char *in, char *out)
 void
 SynchConsoleTest (char *in, char *out)
 {
-    SynchConsole * synchconsoletest = new SynchConsole(in, out);
     char ch;
-    while ((ch = synchconsoletest->SynchGetChar()) != EOF && ch != EOL)
+    while ((ch = synchconsole->SynchGetChar()) != EOF && ch != EOL)
     {
-        if(ch != '\n') synchconsoletest->SynchPutChar('<');
-        synchconsoletest->SynchPutChar(ch);
-        if(ch != '\n') synchconsoletest->SynchPutChar('>');
+        if(ch != '\n') synchconsole->SynchPutChar('<');
+        synchconsole->SynchPutChar(ch);
+        if(ch != '\n') synchconsole->SynchPutChar('>');
     }
     
     fprintf(stderr, "Solaris: EOF detected in SynchConsole!\n");
-    delete synchconsoletest;
 }
 
 void
 SynchStringTest (char *in, char *out)
 {
-    SynchConsole * synchconsoletest = new SynchConsole(in, out);
-    
     char * buffer = new char[MAX_STRING_SIZE];
-    synchconsoletest->SynchGetString(buffer, MAX_STRING_SIZE); // TODO : Implémenter la gestion systeme
-    synchconsoletest->SynchPutString(buffer);
-
-    fprintf(stderr, "Solaris: EOF detected in SynchConsole!\n");
+    synchconsole->SynchGetString(buffer, MAX_STRING_SIZE);
+    synchconsole->SynchPutString(buffer);
+    synchconsole->SynchPutChar('\n');
 
     delete [] buffer;
-    delete synchconsoletest;
 }
 #endif //CHANGED
