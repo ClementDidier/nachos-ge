@@ -10,7 +10,7 @@
 
 static Semaphore *readAvail;
 static Semaphore *writeDone;
-static Semaphore *semRead, *semWrite;
+static Semaphore *semRead, *semWrite, *semMemory;
 
 static void ReadAvail(int arg) { readAvail->V(); }
 static void WriteDone(int arg) { writeDone->V(); }
@@ -28,6 +28,7 @@ SynchConsole::SynchConsole(char *readFile, char *writeFile)
 	writeDone = new Semaphore("write done", 0);
 	semRead = new Semaphore("read console", 1);
 	semWrite = new Semaphore("write console", 1);
+	semMemory = new Semaphore("memory", 1); // Semaphore de protection de la zone critique mémoire (ReadMem / WriteMem)
 	console = new Console(readFile, writeFile, ReadAvail, WriteDone, 0);
 }
 
@@ -80,13 +81,15 @@ void SynchConsole::SynchPutString(const char s[])
 
 	int i = 0;
 	char c;
-
+	
 	// Tant que non fin de ligne et non fin de fichier
 	while((c = s[i]) != EOL && c != EOF)
 	{
+		//printf("<%c>\n", c);
 		SynchPutChar(s[i]);
 		i++;
 	}
+
 
 	semWrite->V();
 	semRead->V();
@@ -101,6 +104,7 @@ void SynchConsole::SynchPutString(const char s[])
 //----------------------------------------------------------------------
 void SynchConsole::SynchGetString(char *s, int n)
 {
+
 	semRead->P();
 
 	int i = 0;
@@ -110,9 +114,10 @@ void SynchConsole::SynchGetString(char *s, int n)
 	{
 		s[i] = SynchGetChar();
 
+		// Si le caractère lu est EOF ou '\n'
 		if(s[i] == EOF || s[i] == NL)
 		{
-
+			// On arrête de lire l'entrée
 			break;
 		}
 
@@ -122,7 +127,7 @@ void SynchConsole::SynchGetString(char *s, int n)
 	// Remplir le reste de la chaîne proprement
 	while(i < n)
 	{
-		s[i] = EOL;
+		s[i] = EOL; // EOL = '\0'
 		i++;
 	}
 
@@ -139,6 +144,7 @@ void SynchConsole::SynchGetString(char *s, int n)
 void SynchConsole::copyStringFromMachine(int from, char *to, unsigned size)
 {
 	// Lecture en mémoire de la chaine de caractères
+	semMemory->P();
 
 	char c;
 	int v = 0;
@@ -157,6 +163,8 @@ void SynchConsole::copyStringFromMachine(int from, char *to, unsigned size)
 	}
 
 	*(to + size) = '\0';
+
+	semMemory->V();
 }
 
 //----------------------------------------------------------------------
@@ -168,6 +176,8 @@ void SynchConsole::copyStringFromMachine(int from, char *to, unsigned size)
 //----------------------------------------------------------------------
 void SynchConsole::copyMachineFromString(char * from, int to, unsigned size)
 {
+	semMemory->P();
+
 	char c = 'a';
 	unsigned int i = 0;
 	while(i < size && c != EOL && c != EOF && c != NL)
@@ -176,6 +186,8 @@ void SynchConsole::copyMachineFromString(char * from, int to, unsigned size)
 		machine->WriteMem(to + i, 1, (int)c);
 		i++;
 	}
+
+	semMemory->V();
 }
 
 #endif // CHANGED
