@@ -112,17 +112,13 @@ ExceptionHandler (ExceptionType which)
         int arg = machine->ReadRegister (4);
 
         // Buffer de la chaine de caractères LINUX (initialement vide et de taille maximale)
-        char * buffer = new char[MAX_STRING_SIZE];
+        char buffer[MAX_STRING_SIZE];
 
         // Conversion String MIPS --> String LINUX
         synchconsole->copyStringFromMachine(arg, buffer, MAX_STRING_SIZE);
 
-        
         synchconsole->SynchPutString(buffer);
         DEBUG('a', "Appel systeme SynchPutString réalisé\n");
-
-        // Free du buffer
-        delete [] buffer;
         break;
       }
       case SC_SynchGetChar:
@@ -133,12 +129,13 @@ ExceptionHandler (ExceptionType which)
       case SC_SynchGetString:
       {
         int result = machine->ReadRegister(4);
-        char * buffer = new char[MAX_STRING_SIZE];
-        synchconsole->SynchGetString(buffer, MAX_STRING_SIZE);
-        synchconsole->copyStringFromMachine(result, buffer, MAX_STRING_SIZE);
-        DEBUG('a', "Appel systeme SynchGetString réalisé\n");
+        int maxStringSize = machine->ReadRegister(5);
+        char buffer[maxStringSize];
+        synchconsole->SynchGetString(buffer, maxStringSize);
+        synchconsole->copyMachineFromString(buffer, result, maxStringSize);
+        machine->WriteRegister(2, result);
 
-        delete [] buffer;
+        DEBUG('a', "Appel systeme SynchGetString réalisé\n");
         break;
       }
       case SC_UserThreadCreate:

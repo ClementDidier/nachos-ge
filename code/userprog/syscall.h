@@ -136,9 +136,17 @@ void Yield ();
 
 void PutChar(char c);
 
+<<<<<<< HEAD
 int UserThreadCreate(void f(void *arg), void *arg);
 
 void UserThreadExit();
+=======
+char SynchGetChar();
+
+void SynchPutString(const char *s);
+
+void SynchGetString(char *s, int n);
+>>>>>>> master
 
 #endif // IN_USER_MODE
 
