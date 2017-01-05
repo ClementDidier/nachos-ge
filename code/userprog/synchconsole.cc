@@ -85,7 +85,6 @@ void SynchConsole::SynchPutString(const char s[])
 	// Tant que non fin de ligne et non fin de fichier
 	while((c = s[i]) != EOL && c != EOF)
 	{
-		//printf("<%c>\n", c);
 		SynchPutChar(s[i]);
 		i++;
 	}
@@ -99,6 +98,7 @@ void SynchConsole::SynchPutString(const char s[])
 // SynchConsole::SynchGetString()
 // 	Obtient une chaîne de caractères de façon synchrone depuis l'entrée
 //  standard de la console simulée
+//	Information : Ignore et écrase les données du buffer
 //	s : chaîne de caractères resultante
 //	n : taille maximale de la chaîne de caractères en entrée
 //----------------------------------------------------------------------
@@ -108,28 +108,29 @@ void SynchConsole::SynchGetString(char *s, int n)
 	semRead->P();
 
 	int i = 0;
+	char c;
 
 	// Tant que inférieur à la taille donnée
 	while(i < n)
 	{
-		s[i] = SynchGetChar();
+		// Lecture du caractère en entrée
+		c = SynchGetChar();
 
 		// Si le caractère lu est EOF ou '\n'
-		if(s[i] == EOF || s[i] == NL)
+		if(c == EOF || c == NL)
 		{
 			// On arrête de lire l'entrée
 			break;
 		}
 
+		// Si bon caractère, on l'ajoute à la chaîne de caratère resultante
+		s[i] = c;
+
 		i++;
 	}
 
-	// Remplir le reste de la chaîne proprement
-	while(i < n)
-	{
-		s[i] = EOL; // EOL = '\0'
-		i++;
-	}
+	// Caractere de fin de chaîne
+	s[i] = EOL;
 
 	semRead->V();
 }
@@ -149,20 +150,21 @@ void SynchConsole::copyStringFromMachine(int from, char *to, unsigned size)
 	char c;
 	int v = 0;
 	unsigned int i = 0;
+
 	while(i < size)
 	{
 		machine->ReadMem(from + i, 1, &v);
 		c = (char)v;
 
-		if(c == EOF)
+		if(c == EOL || c == EOF)
 			break;
 		
-		*(to + i) = c;
+		to[i] = c;
 
 		i++;
 	}
 
-	*(to + size) = '\0';
+	to[i] = '\0';
 
 	semMemory->V();
 }
@@ -178,11 +180,10 @@ void SynchConsole::copyMachineFromString(char * from, int to, unsigned size)
 {
 	semMemory->P();
 
-	char c = 'a';
+	char c;
 	unsigned int i = 0;
-	while(i < size && c != EOL && c != EOF && c != NL)
+	while(i < size && (c = from[i]) != EOL && c != EOF && c != NL)
 	{
-		c = from[i];
 		machine->WriteMem(to + i, 1, (int)c);
 		i++;
 	}

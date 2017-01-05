@@ -111,18 +111,13 @@ ExceptionHandler (ExceptionType which)
         int arg = machine->ReadRegister (4);
 
         // Buffer de la chaine de caractères LINUX (initialement vide et de taille maximale)
-        char * buffer = new char[MAX_STRING_SIZE];
+        char buffer[MAX_STRING_SIZE];
 
         // Conversion String MIPS --> String LINUX
         synchconsole->copyStringFromMachine(arg, buffer, MAX_STRING_SIZE);
 
         synchconsole->SynchPutString(buffer);
         DEBUG('a', "Appel systeme SynchPutString réalisé\n");
-        
-        // Free du buffer 
-        // TODO : Comprendre l'erreur de double free()
-        //delete[] buffer;
-        //buffer = NULL;
         break;
       }
       case SC_SynchGetChar:
@@ -133,14 +128,13 @@ ExceptionHandler (ExceptionType which)
       case SC_SynchGetString:
       {
         int result = machine->ReadRegister(4);
-        char * buffer = new char[MAX_STRING_SIZE];
-        synchconsole->SynchGetString(buffer, MAX_STRING_SIZE);
-        synchconsole->copyMachineFromString(buffer, result, MAX_STRING_SIZE);
+        int maxStringSize = machine->ReadRegister(5);
+        char buffer[maxStringSize];
+        synchconsole->SynchGetString(buffer, maxStringSize);
+        synchconsole->copyMachineFromString(buffer, result, maxStringSize);
         machine->WriteRegister(2, result);
 
         DEBUG('a', "Appel systeme SynchGetString réalisé\n");
-
-        delete [] buffer;
         break;
       }
       default:

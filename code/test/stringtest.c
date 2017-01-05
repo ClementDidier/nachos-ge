@@ -2,9 +2,8 @@
 
 int main()
 {
-	SynchPutString("---------------------\n");
-	char ubuffer[100];
-	SynchGetString(ubuffer, 100);
+	char ubuffer[5];
+	SynchGetString(ubuffer, 5);
 	SynchPutString(ubuffer);
 	return 0;
 }
