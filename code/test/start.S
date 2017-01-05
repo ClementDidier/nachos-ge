@@ -161,6 +161,14 @@ SynchGetString:
 	j	$31
 	.end SynchGetString
 
+	.globl UserThreadCreate
+	.ent	UserThreadCreate
+UserThreadCreate:
+	addiu $2,$0,SC_UserThreadCreate /* appel système sur création de thread utilisateur*/
+	syscall
+	j	$31
+	.end UserThreadCreate
+
 
 /* dummy function to keep gcc happy */
         .globl  __main

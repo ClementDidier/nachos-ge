@@ -33,6 +33,8 @@
 #define SC_SynchPutString 	12
 #define SC_SynchGetChar		13
 #define SC_SynchGetString	14
+#define SC_UserThreadCreate	15
+#define SC_UserThreadExit	16
 
 #ifdef IN_USER_MODE
 
@@ -133,6 +135,10 @@ void Fork (void (*func) ());
 void Yield ();
 
 void PutChar(char c);
+
+int UserThreadCreate(void f(void *arg), void *arg);
+
+void UserThreadExit();
 
 #endif // IN_USER_MODE
 
