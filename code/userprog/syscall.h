@@ -132,14 +132,22 @@ void Fork (void (*func) ());
  */
 void Yield ();
 
+/* Ecrit un caractère sur la console standard
+ */
 void PutChar(char c);
 
+/* Obtient un caractère depuis l'entrée de la console standard
+ */
 char GetChar();
 
+/* Ecrit une chaîne de caractères sur la console standard
+ */
 void PutString(const char *s);
 
-/*	n corresepond à la taille maximale de la chaine de caractaire, 
- *	doit être fixé par l'utilisateur
+/* Obtient une chaîne de caractère de taille maximale définie depuis l'entrée
+ * de la console standard
+ * Info : n corresepond à la taille maximale de la chaine de caracteres
+ * Il doit être fixé par l'utilisateur
  */
 void GetString(char *s, int n);
 
