@@ -137,29 +137,46 @@ PutChar:
 	j	$31
 	.end PutChar
 
-	.globl SynchPutString
-	.ent	SynchPutString
-SynchPutString:
-	addiu $2,$0,SC_SynchPutString
+	.globl PutString
+	.ent	PutString
+PutString:
+	addiu $2,$0,SC_PutString
 	syscall
 	j	$31
-	.end SynchPutString
+	.end PutString
 
-	.globl SynchGetChar
-	.ent	SynchGetChar
-SynchGetChar:
-	addiu $2,$0,SC_SynchGetChar
+	.globl GetChar
+	.ent	GetChar
+GetChar:
+	addiu $2,$0,SC_GetChar
 	syscall
 	j	$31
-	.end SynchGetChar
+	.end GetChar
 
-	.globl SynchGetString
-	.ent	SynchGetString
-SynchGetString:
-	addiu $2,$0,SC_SynchGetString
+	.globl GetString
+	.ent	GetString
+GetString:
+	addiu $2,$0,SC_GetString
 	syscall
 	j	$31
-	.end SynchGetString
+	.end GetString
+
+	.globl GetInt
+	.ent	GetInt
+GetInt:
+	addiu $2,$0,SC_GetInt
+	syscall
+	j	$31
+	.end GetInt
+
+	.globl PutInt
+	.ent	PutInt
+PutInt:
+	addiu $2,$0,SC_PutInt
+	syscall
+	j	$31
+	.end PutInt
+
 
 	.globl UserThreadCreate
 	.ent	UserThreadCreate

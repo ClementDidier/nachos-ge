@@ -18,6 +18,7 @@
 /* system call codes -- used by the stubs to tell the kernel which system call
  * is being asked for
  */
+<<<<<<< HEAD
 #define SC_Halt				0
 #define SC_Exit				1
 #define SC_Exec				2
@@ -35,6 +36,23 @@
 #define SC_SynchGetString	14
 #define SC_UserThreadCreate	15
 #define SC_UserThreadExit	16
+=======
+#define SC_Halt			0
+#define SC_Exit			1
+#define SC_Exec			2
+#define SC_Join			3
+#define SC_Create		4
+#define SC_Open			5
+#define SC_Read			6
+#define SC_Write		7
+#define SC_Close		8
+#define SC_Fork			9
+#define SC_Yield		10
+#define SC_PutChar		11
+#define SC_PutString 	12
+#define SC_GetChar		13
+#define SC_GetString	14
+>>>>>>> master
 
 #ifdef IN_USER_MODE
 
@@ -134,17 +152,32 @@ void Fork (void (*func) ());
  */
 void Yield ();
 
+/* Ecrit un caractère sur la console standard
+ */
 void PutChar(char c);
 
+<<<<<<< HEAD
 int UserThreadCreate(void f(void *arg), void *arg);
 
 void UserThreadExit();
 
 char SynchGetChar();
+=======
+/* Obtient un caractère depuis l'entrée de la console standard
+ */
+char GetChar();
+>>>>>>> master
 
-void SynchPutString(const char *s);
+/* Ecrit une chaîne de caractères sur la console standard
+ */
+void PutString(const char *s);
 
-void SynchGetString(char *s, int n);
+/* Obtient une chaîne de caractère de taille maximale définie depuis l'entrée
+ * de la console standard
+ * Info : n corresepond à la taille maximale de la chaine de caracteres
+ * Il doit être fixé par l'utilisateur
+ */
+void GetString(char *s, int n);
 
 
 #endif // IN_USER_MODE
