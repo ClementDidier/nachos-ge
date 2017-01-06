@@ -148,7 +148,9 @@ ExceptionHandler (ExceptionType which)
       }
       case SC_UserThreadExit:
       {
+        machine->WriteRegister(2,do_UserThreadExit());
         DEBUG('a', "Appel systeme SC_UserThreadExit réalisé\n");
+        break;
       }
       default:
       {

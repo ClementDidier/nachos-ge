@@ -4,6 +4,7 @@
 #include "noff.h"
 #include "userThread.h"
 #include "machine.h"
+#include "syscall.h"
 
 struct userThreadParams{
 	int arg;
@@ -11,10 +12,6 @@ struct userThreadParams{
 };
 
 static void StartUserThread(int f){
-	printf ("\ndebut StartUserThread");
-
-
-
 	currentThread->space->InitRegisters();
 	currentThread->space->RestoreState();
 	struct userThreadParams * params = (struct userThreadParams *) f;
@@ -25,7 +22,7 @@ static void StartUserThread(int f){
 	machine->WriteRegister (NextPCReg, params->f + 4);
 	machine->WriteRegister (4, params->arg);
 	machine->WriteRegister (StackReg, spr - (PageSize*3));
-printf("\nfin StartUserThread");
+	//machine->WriteRegister (RetAddrReg, UserThreadExit);
 	machine->Run();
 }
 
@@ -38,9 +35,12 @@ int do_UserThreadCreate(int f, int arg){
 	Thread *newThread = new Thread ("Thread Noyau");
 
 	newThread->Fork (StartUserThread, (int) params);
-	/*while(1){
-		currentThread->Yield();
-	}*/
+
+	return 0;
+}
+
+int do_UserThreadExit(){
+	currentThread->Finish();
 	return 0;
 }
 

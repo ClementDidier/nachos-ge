@@ -182,10 +182,19 @@ PutInt:
 	.ent	UserThreadCreate
 UserThreadCreate:
 	addiu $2,$0,SC_UserThreadCreate /* appel système sur création de thread utilisateur*/
+	addiu $6,$0,SC_UserThreadExit
 	syscall
 	j	$31
 	.end UserThreadCreate
 
+
+	.globl UserThreadExit
+	.ent	UserThreadExit
+UserThreadExit:
+	addiu $2,$0,SC_UserThreadExit
+	syscall
+	j	$31
+	.end UserThreadExit
 
 /* dummy function to keep gcc happy */
         .globl  __main
