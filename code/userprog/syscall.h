@@ -29,17 +29,14 @@
 #define SC_Close			8
 #define SC_Fork				9
 #define SC_Yield			10
-#define SC_PutChar		11
-#define SC_PutString 	12
-#define SC_GetChar		13
-#define SC_GetString	14
-<<<<<<< HEAD
-#define SC_GetInt		15
-#define SC_PutInt		16
-=======
-#define SC_UserThreadCreate	15
-#define SC_UserThreadExit	16
->>>>>>> etape3
+#define SC_PutChar			11
+#define SC_PutString 		12
+#define SC_GetChar			13
+#define SC_GetString		14
+#define SC_GetInt			15
+#define SC_PutInt			16
+#define SC_UserThreadCreate	17
+#define SC_UserThreadExit	18
 
 #ifdef IN_USER_MODE
 
@@ -143,10 +140,6 @@ void Yield ();
  */
 void PutChar(char c);
 
-int UserThreadCreate(void f(void *arg), void *arg);
-
-void UserThreadExit();
-
 /* Obtient un caractère depuis l'entrée de la console standard
  */
 char GetChar();
@@ -171,6 +164,9 @@ void PutInt(int n);
  */
 void GetInt(int * n);
 
+int UserThreadCreate(void f(void *arg), void *arg);
+
+void UserThreadExit();
 
 #endif // IN_USER_MODE
 

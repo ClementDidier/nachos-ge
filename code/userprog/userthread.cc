@@ -2,16 +2,18 @@
 #include "system.h"
 #include "addrspace.h"
 #include "noff.h"
-#include "userThread.h"
+#include "userthread.h"
 #include "machine.h"
 #include "syscall.h"
 
-struct userThreadParams{
+struct userThreadParams
+{
 	int arg;
 	int f;
 };
 
-static void StartUserThread(int f){
+static void StartUserThread(int f)
+{
 	currentThread->space->InitRegisters();
 	currentThread->space->RestoreState();
 	struct userThreadParams * params = (struct userThreadParams *) f;
@@ -26,7 +28,8 @@ static void StartUserThread(int f){
 	machine->Run();
 }
 
-int do_UserThreadCreate(int f, int arg){
+int do_UserThreadCreate(int f, int arg)
+{
 	struct userThreadParams * params = new(userThreadParams);
 
 	params->arg = arg;
@@ -39,7 +42,8 @@ int do_UserThreadCreate(int f, int arg){
 	return 0;
 }
 
-int do_UserThreadExit(){
+int do_UserThreadExit()
+{
 	currentThread->Finish();
 	return 0;
 }
