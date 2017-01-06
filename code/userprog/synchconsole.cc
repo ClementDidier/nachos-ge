@@ -222,7 +222,12 @@ void SynchConsole::SynchGetInt(int * n)
 	char buffer[MAX_STRING_SIZE];
 	SynchGetString(buffer, MAX_STRING_SIZE);
 	sscanf(buffer, "%d", n);
-	ASSERT(*n < 256); // Entier codé uniquement sur 8bits
+
+	if(*n > 255) // ASSERTION avec message : Entier codé uniquement sur 8bits
+	{
+		SynchPutString("Erreur : Entier non compris entre [0; 255]\n");
+		ASSERT(FALSE);
+	}
 }
 
 #endif // CHANGED
