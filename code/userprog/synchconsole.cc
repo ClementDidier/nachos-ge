@@ -197,4 +197,32 @@ void SynchConsole::copyMachineFromString(char * from, int to, unsigned size)
 	semMemory->V();
 }
 
+
+//----------------------------------------------------------------------
+// PutInt()
+// 	Ecrit un entier sur la console standard
+//	n : L'entier à écrire
+//----------------------------------------------------------------------
+void SynchConsole::SynchPutInt(int n)
+{
+	char buffer[MAX_STRING_SIZE];
+	snprintf(buffer, MAX_STRING_SIZE, "%d", n);
+
+	SynchPutString(buffer);
+}
+
+//----------------------------------------------------------------------
+// GetInt()
+// 	Obtenir un entier 8bits depuis l'entrée de la console standard
+//	n : L'entier resultant
+//	Info : La fonction travail uniquement sur des entiers codés sur 8bits
+//----------------------------------------------------------------------
+void SynchConsole::SynchGetInt(int * n)
+{
+	char buffer[MAX_STRING_SIZE];
+	SynchGetString(buffer, MAX_STRING_SIZE);
+	sscanf(buffer, "%d", n);
+	ASSERT(*n < 256); // Entier codé uniquement sur 8bits
+}
+
 #endif // CHANGED

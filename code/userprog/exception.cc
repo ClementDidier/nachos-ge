@@ -117,13 +117,13 @@ ExceptionHandler (ExceptionType which)
         synchconsole->copyStringFromMachine(arg, buffer, MAX_STRING_SIZE);
 
         synchconsole->SynchPutString(buffer);
-        DEBUG('a', "Appel systeme SynchPutString réalisé\n");
+        DEBUG('a', "Appel systeme PutString réalisé\n");
         break;
       }
       case SC_GetChar:
       {
         machine->WriteRegister(2, (int)synchconsole->SynchGetChar());
-        DEBUG('a', "Appel systeme SynchGetChar réalisé\n");
+        DEBUG('a', "Appel systeme GetChar réalisé\n");
       }
       case SC_GetString:
       {
@@ -134,7 +134,25 @@ ExceptionHandler (ExceptionType which)
         synchconsole->copyMachineFromString(buffer, result, maxStringSize);
         machine->WriteRegister(2, result);
 
-        DEBUG('a', "Appel systeme SynchGetString réalisé\n");
+        DEBUG('a', "Appel systeme GetString réalisé\n");
+        break;
+      }
+      case SC_GetInt:
+      {
+        int addr = machine->ReadRegister(4);
+        int n;
+        //synchconsole->copyMachineFromInt(&n, result);
+        synchconsole->SynchGetInt(&n);
+        machine->WriteMem(addr, 1, n);
+        DEBUG('a', "Appel systeme GetInt réalisé\n");
+        break;
+      }
+      case SC_PutInt:
+      {
+        int n = machine->ReadRegister(4);
+        //synchconsole->copyIntFromMachine(arg, &n);
+        synchconsole->SynchPutInt(n);
+        DEBUG('a', "Appel systeme PutInt réalisé\n");
         break;
       }
       default:

@@ -33,6 +33,8 @@
 #define SC_PutString 	12
 #define SC_GetChar		13
 #define SC_GetString	14
+#define SC_GetInt		15
+#define SC_PutInt		16
 
 #ifdef IN_USER_MODE
 
@@ -150,6 +152,15 @@ void PutString(const char *s);
  * Il doit être fixé par l'utilisateur
  */
 void GetString(char *s, int n);
+
+/* Ecrit un entier sur la console standard
+ */
+void PutInt(int n);
+
+/* Obtient un entier sur 8bits depuis l'entrée de la console standard
+ * Entier codé sur 8 bits
+ */
+void GetInt(int * n);
 
 #endif // IN_USER_MODE
 
