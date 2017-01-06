@@ -10,7 +10,7 @@
 
 static Semaphore *readAvail;
 static Semaphore *writeDone;
-static Semaphore *semRead, *semWrite, *semMemory;
+static Semaphore *semRead, *semWrite, *semMemory, *semPutChar;
 
 static void ReadAvail(int arg) { readAvail->V(); }
 static void WriteDone(int arg) { writeDone->V(); }
@@ -29,6 +29,7 @@ SynchConsole::SynchConsole(char *readFile, char *writeFile)
 	semRead = new Semaphore("read console", 1);
 	semWrite = new Semaphore("write console", 1);
 	semMemory = new Semaphore("memory", 1); // Semaphore de protection de la zone critique mémoire (ReadMem / WriteMem)
+	semPutChar = new Semaphore("putchar lock", 1); // Semaphore de protection de la zone critique de la méthode PutChar
 	console = new Console(readFile, writeFile, ReadAvail, WriteDone, 0);
 }
 
@@ -43,6 +44,7 @@ SynchConsole::~SynchConsole()
 	delete readAvail;
 	delete semRead;
 	delete semWrite;
+	delete semPutChar;
 }
 
 //----------------------------------------------------------------------
@@ -51,9 +53,13 @@ SynchConsole::~SynchConsole()
 //----------------------------------------------------------------------
 void SynchConsole::SynchPutChar(const char ch)
 {
+	semPutChar->P();
+
 	console->PutChar(ch);
 	writeDone->P(); 
 	// Ecriture réalisée, on peux continuer
+
+	semPutChar->V();
 }
 
 //----------------------------------------------------------------------

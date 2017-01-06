@@ -3,7 +3,7 @@
 int main()
 {
 	char ubuffer[5];
-	SynchGetString(ubuffer, 5);
-	SynchPutString(ubuffer);
+	GetString(ubuffer, 5);
+	PutString(ubuffer);
 	return 0;
 }
