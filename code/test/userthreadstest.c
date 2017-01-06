@@ -22,11 +22,10 @@ main()
 {
 	PutString("<-  😨  😱  😮  😲  --->");
 	UserThreadCreate(aff, (void *) 4);
+	UserThreadCreate(aff, (void *) 4);
 	PutString("<||||>");
 
-	while(1){
-		
-	}
+	Halt ();
 
 	return 0;
 }
