@@ -12,15 +12,19 @@ void print(char c, int n)
 
 void aff(void * x)
 {
-	print('a',3);
+	SynchPutString("\nabc\n");
+
 }
 
 int
 main()
 {
-	print('a',2);
-	print('b',1);
+	SynchPutString("\ndef\n");
 	UserThreadCreate(aff, (void *) 4);
-	print('j',3);
+	UserThreadCreate(aff, (void *) 4);
+	UserThreadCreate(aff, (void *) 4);
+
+	while(1);
+
 	return 0;
 }
