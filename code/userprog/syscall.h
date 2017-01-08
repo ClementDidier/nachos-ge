@@ -8,6 +8,10 @@
  * Copyright (c) 1992-1993 The Regents of the University of California.
  * All rights reserved.  See copyright.h for copyright notice and limitation
  * of liability and disclaimer of warranty provisions.
+*/
+/**
+ * \file syscall.h
+ * \brief Définit les appels systems et les déclares pour être utilisés.
  */
 
 #ifndef SYSCALLS_H
@@ -136,36 +140,60 @@ void Fork (void (*func) ());
  */
 void Yield ();
 
-/* Ecrit un caractère sur la console standard
+/**
+ * \fn void PutChar(char c)
+ * \brief Ecrit un caractère sur la console standard
  */
 void PutChar(char c);
 
-/* Obtient un caractère depuis l'entrée de la console standard
+/**
+ * \fn char GetChar()
+ * \brief Obtient un caractère depuis l'entrée de la console standard
  */
 char GetChar();
 
-/* Ecrit une chaîne de caractères sur la console standard
+/**
+ * \fn void PutString(const char *s)
+ * \brief Ecrit une chaîne de caractères sur la console standard
  */
 void PutString(const char *s);
 
-/* Obtient une chaîne de caractère de taille maximale définie depuis l'entrée
+/**
+ * \fn void GetString(char *s, int n)
+ * \brief Obtient une chaîne de caractère de taille maximale définie depuis l'entrée
  * de la console standard
- * Info : n corresepond à la taille maximale de la chaine de caracteres
+ * \param n Corresepond à la taille maximale de la chaine de caracteres
  * Il doit être fixé par l'utilisateur
  */
 void GetString(char *s, int n);
 
-/* Ecrit un entier sur la console standard
+/**
+ * \fn void PutInt(int n)
+ * \brief Ecrit un entier sur la console standard
  */
 void PutInt(int n);
 
-/* Obtient un entier sur 8bits depuis l'entrée de la console standard
- * Entier codé sur 8 bits
+/**
+ * \fn void GetInt(int * n)
+ * \brief Obtient un entier sur 8bits depuis l'entrée de la console standard
+ * \param n Entier codé sur 8 bits
  */
 void GetInt(int * n);
 
+/**
+ * \fn int UserThreadCreate(void f(void *arg), void *arg)
+ * \brief Demande la création d'un thread utilisateur au système
+ * \param f Pointeur vers une fonction à 1 argument
+ * \param arg Argument à passer a la fonction f
+ * \return Retour le PID ou -1 si la création a échouée
+ */
 int UserThreadCreate(void f(void *arg), void *arg);
 
+/*
+ * \fn void UserThreadExit()
+ * \brief Demande la terminaison du thread utilisateur actuel
+ *
+ */
 void UserThreadExit();
 
 #endif // IN_USER_MODE

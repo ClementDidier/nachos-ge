@@ -1,3 +1,8 @@
+/**
+ * \file userthread.h
+ * \brief Permet la création et l'execution de thread utilisateurs
+*/
+
 #ifdef CHANGED
 
 struct userThreadParams;

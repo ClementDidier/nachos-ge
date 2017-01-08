@@ -206,6 +206,7 @@ AddrSpace::BindUserThread()
     verrou->P();
   mutex->V();
 }
+
 void
 AddrSpace::UnbindUserThread()
 {

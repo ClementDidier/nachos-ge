@@ -112,7 +112,11 @@ class Thread
     {
 	printf ("%s, ", name);
     }
-    //vérifie si le stack est plein
+    /**
+     * \fn bool isStackFull();
+     * \brief Vérifie l'état de la stack
+     * \return Retourne l'état de la stack du thread (True si pleine)
+    */
     bool isStackFull();
 
   private:

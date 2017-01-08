@@ -1,3 +1,7 @@
+/**
+ * \file synchconsole.cc
+ * \brief Émulation d'une console
+*/
 #ifdef CHANGED
 
 #define EOL '\0'
@@ -15,13 +19,7 @@ static Semaphore *semRead, *semWrite, *semMemory, *semPutChar;
 static void ReadAvail(int arg) { readAvail->V(); }
 static void WriteDone(int arg) { writeDone->V(); }
 
-//----------------------------------------------------------------------
-// SynchConsole::SynchConsole
-// 	Initialise l'utilisation d'une console hardware simulée
-//
-//	"readFile" -- UNIX file simulating the keyboard (NULL -> use stdin)
-//	"writeFile" -- UNIX file simulating the display (NULL -> use stdout)
-//----------------------------------------------------------------------
+
 SynchConsole::SynchConsole(char *readFile, char *writeFile)
 {
 	readAvail = new Semaphore("read avail", 0);
@@ -33,10 +31,7 @@ SynchConsole::SynchConsole(char *readFile, char *writeFile)
 	console = new Console(readFile, writeFile, ReadAvail, WriteDone, 0);
 }
 
-//----------------------------------------------------------------------
-// SynchConsole::~SynchConsole
-// 	Nettoie la console simulée
-//----------------------------------------------------------------------
+
 SynchConsole::~SynchConsole()
 {
 	delete console;
@@ -47,39 +42,24 @@ SynchConsole::~SynchConsole()
 	delete semPutChar;
 }
 
-//----------------------------------------------------------------------
-// SynchConsole::SynchPutChar()
-// 	Ecrit un caractère de façon synchrone dans la console simulée
-//----------------------------------------------------------------------
 void SynchConsole::SynchPutChar(const char ch)
 {
 	semPutChar->P();
 
 	console->PutChar(ch);
-	writeDone->P(); 
+	writeDone->P();
 	// Ecriture réalisée, on peux continuer
 
 	semPutChar->V();
 }
 
-//----------------------------------------------------------------------
-// SynchConsole::SynchGetChar()
-// 	Obtient un caractère de façon synchrone depuis l'entrée standard
-//  de la console simulée
-//----------------------------------------------------------------------
 char SynchConsole::SynchGetChar()
 {
-	readAvail->P(); 
+	readAvail->P();
 	// Lecture possible
 	return console->GetChar();
 }
 
-//----------------------------------------------------------------------
-// SynchConsole::SynchPutString()
-// 	Ecrit une chaîne de caractères de façon synchrone
-//  dans la console simulée
-//	s : chaîne de caractères à flush sur la console
-//----------------------------------------------------------------------
 void SynchConsole::SynchPutString(const char s[])
 {
 	semRead->P();
@@ -87,7 +67,7 @@ void SynchConsole::SynchPutString(const char s[])
 
 	int i = 0;
 	char c;
-	
+
 	// Tant que non fin de ligne et non fin de fichier
 	while((c = s[i]) != EOL && c != EOF)
 	{
@@ -100,14 +80,6 @@ void SynchConsole::SynchPutString(const char s[])
 	semRead->V();
 }
 
-//----------------------------------------------------------------------
-// SynchConsole::SynchGetString()
-// 	Obtient une chaîne de caractères de façon synchrone depuis l'entrée
-//  standard de la console simulée
-//	Information : Ignore et écrase les données du buffer
-//	s : chaîne de caractères resultante
-//	n : taille maximale de la chaîne de caractères en entrée
-//----------------------------------------------------------------------
 void SynchConsole::SynchGetString(char *s, int n)
 {
 
@@ -141,13 +113,6 @@ void SynchConsole::SynchGetString(char *s, int n)
 	semRead->V();
 }
 
-//----------------------------------------------------------------------
-// copyStringFromMachine()
-// 	Converti une chaîne de caractères MIPS en chaîne de caractères Linux
-//	from : L'adresse MIPS de la chaine de caractères (premier caractère)
-//	to : Chaine de caractères valeur de retour
-//	size : La taille maximale de la chaine de caractères à convertir
-//----------------------------------------------------------------------
 void SynchConsole::copyStringFromMachine(int from, char *to, unsigned size)
 {
 	// Lecture en mémoire de la chaine de caractères
@@ -164,7 +129,7 @@ void SynchConsole::copyStringFromMachine(int from, char *to, unsigned size)
 
 		if(c == EOL || c == EOF)
 			break;
-		
+
 		to[i] = c;
 
 		i++;
@@ -175,13 +140,6 @@ void SynchConsole::copyStringFromMachine(int from, char *to, unsigned size)
 	semMemory->V();
 }
 
-//----------------------------------------------------------------------
-// copyMachineFromString()
-// 	Converti une chaîne de caractères Linux en chaîne de caractères MIPS
-//	from : L'adresse de la chaine de caractères LINUX
-//	to : L'adresse MIPS de la chaine de caractères
-//	size : La taille maximale de la chaine de caractères à convertir
-//----------------------------------------------------------------------
 void SynchConsole::copyMachineFromString(char * from, int to, unsigned size)
 {
 	semMemory->P();
@@ -197,12 +155,6 @@ void SynchConsole::copyMachineFromString(char * from, int to, unsigned size)
 	semMemory->V();
 }
 
-
-//----------------------------------------------------------------------
-// PutInt()
-// 	Ecrit un entier sur la console standard
-//	n : L'entier à écrire
-//----------------------------------------------------------------------
 void SynchConsole::SynchPutInt(int n)
 {
 	char buffer[MAX_STRING_SIZE];
@@ -211,12 +163,6 @@ void SynchConsole::SynchPutInt(int n)
 	SynchPutString(buffer);
 }
 
-//----------------------------------------------------------------------
-// GetInt()
-// 	Obtenir un entier 8bits depuis l'entrée de la console standard
-//	n : L'entier resultant
-//	Info : La fonction travail uniquement sur des entiers codés sur 8bits
-//----------------------------------------------------------------------
 void SynchConsole::SynchGetInt(int * n)
 {
 	char buffer[MAX_STRING_SIZE];

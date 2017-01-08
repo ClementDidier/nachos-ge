@@ -9,6 +9,10 @@
 // Copyright (c) 1992-1993 The Regents of the University of California.
 // All rights reserved.  See copyright.h for copyright notice and limitation
 // of liability and disclaimer of warranty provisions.
+/**
+ * \file addrspace.h
+ * \brief Structures de données pour l'espace d'addressage utilisateur
+ */
 
 #ifndef ADDRSPACE_H
 #define ADDRSPACE_H
@@ -33,7 +37,17 @@ class AddrSpace
 
     void SaveState ();		// Save/restore address space-specific
     void RestoreState ();	// info on a context switch
+    /**
+     * \fn void BindUserThread()
+     * \brief Lie un thread à cette AddrSpace
+     *
+    */
     void BindUserThread();
+    /**
+     * \fn void AddrSpace::UnbindUserThread()
+     * \brief Délie un thread de cet AddrSpace
+     *
+    */
     void UnbindUserThread();
     Semaphore *mutex; // Ne dois JAMAIS depasser 1 token;
     Semaphore *verrou;
