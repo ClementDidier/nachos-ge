@@ -59,6 +59,7 @@ int do_UserThreadCreate(int f, int arg)
 	{
 		return -1;
 	}
+
 	struct userThreadParams * params = new(userThreadParams);
 	params->arg = arg;
 	params->f = f;
@@ -66,8 +67,8 @@ int do_UserThreadCreate(int f, int arg)
 	currentThread->space->BindUserThread();
 	newThread->Fork (StartUserThread, (int) params);
 
-	/*int sr = machine->ReadRegister(StackReg);
-	machine->WriteRegister(StackReg, sr - 1024 - PageSize * 3);*/
+	int sr = machine->ReadRegister(StackReg);
+	machine->WriteRegister(StackReg, sr - 1024);
 
 	return 0;
 }
