@@ -9,9 +9,10 @@ void threadHandler(void * arg)
 
 int main()
 {
-	for(int i = 1; i < 10; i++)
+	int i;
+	for(i = 1; i < 10; i++)
 		UserThreadCreate(threadHandler, (void *) i);
-	
+
 
 	while(1) { }
 

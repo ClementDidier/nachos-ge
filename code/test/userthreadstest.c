@@ -14,16 +14,17 @@ void aff(void * x)
 {
 	PutString("abc");
 	UserThreadExit();
-
 }
 
 int
 main()
 {
-	PutString("<---->");
+	//PutString("<---->");
 	UserThreadCreate(aff, (void *) 4);
-	PutString("<||||>");
 
+	//PutString("<||||>");
+	//while(1)
+//		;
 	Halt ();
 
 	return 0;

@@ -121,7 +121,7 @@ AddrSpace::AddrSpace (OpenFile * executable)
       }
       verrou = new Semaphore("verrouHalt", 1);
       mutex = new Semaphore("mutexNbActiveThread", 1);
-      NbActiveThreads = 0;
+      NbActiveThreads = 1;
 }
 
 //----------------------------------------------------------------------
@@ -202,8 +202,9 @@ void
 AddrSpace::BindUserThread()
 {
   mutex->P();
-  if (NbActiveThreads++ == 1)
+  if (NbActiveThreads++ == 1){
     verrou->P();
+  }
   mutex->V();
 }
 
@@ -211,7 +212,8 @@ void
 AddrSpace::UnbindUserThread()
 {
   mutex->P();
-  if (--NbActiveThreads <= 1)
+  if (--NbActiveThreads <= 1){
     verrou->V();
+  }
   mutex->V();
 }

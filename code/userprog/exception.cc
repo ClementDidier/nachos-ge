@@ -165,6 +165,7 @@ ExceptionHandler (ExceptionType which)
       {
         int f = machine->ReadRegister(4);
         int arg = machine->ReadRegister(5);
+        //int retaddr = machine->ReadRegister(6)
         machine->WriteRegister(2,do_UserThreadCreate(f, arg));
         DEBUG('a', "Appel systeme SC_UserThreadCreate réalisé\n");
         break;
