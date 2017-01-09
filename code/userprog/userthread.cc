@@ -30,13 +30,16 @@ struct userThreadParams
 */
 static void StartUserThread(int f)
 {
-	int spr = machine->ReadRegister (StackReg);
+	
 	currentThread->space->InitRegisters();
 	currentThread->space->RestoreState();
 	struct userThreadParams * params = (struct userThreadParams *) f;
 	machine->WriteRegister (PCReg, params->f);
 	machine->WriteRegister (NextPCReg, params->f + 4);
+
+	int spr = machine->ReadRegister (StackReg);
 	machine->WriteRegister (4, params->arg);
+
 	machine->WriteRegister (StackReg, spr - (PageSize*3));
 	//machine->WriteRegister (RetAddrReg, UserThreadExit);
 	delete params;
@@ -53,13 +56,18 @@ static void StartUserThread(int f)
 int do_UserThreadCreate(int f, int arg)
 {
 	if (currentThread->isStackFull())
+	{
 		return -1;
+	}
 	struct userThreadParams * params = new(userThreadParams);
 	params->arg = arg;
 	params->f = f;
 	Thread *newThread = new Thread ("Thread Noyau");
 	currentThread->space->BindUserThread();
 	newThread->Fork (StartUserThread, (int) params);
+
+	/*int sr = machine->ReadRegister(StackReg);
+	machine->WriteRegister(StackReg, sr - 1024 - PageSize * 3);*/
 
 	return 0;
 }
