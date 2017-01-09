@@ -30,12 +30,12 @@ struct userThreadParams
 */
 static void StartUserThread(int f)
 {
+	int spr = machine->ReadRegister (StackReg);
 
 	currentThread->space->InitRegisters();
 	currentThread->space->RestoreState();
 	struct userThreadParams * params = (struct userThreadParams *) f;
 
-	int spr = machine->ReadRegister (StackReg);
 
 	machine->WriteRegister (PCReg, params->f);
 	machine->WriteRegister (NextPCReg, params->f + 4);

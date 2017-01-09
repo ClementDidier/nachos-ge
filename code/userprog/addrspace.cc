@@ -120,7 +120,7 @@ AddrSpace::AddrSpace (OpenFile * executable)
 			      noffH.initData.size, noffH.initData.inFileAddr);
       }
       verrou = new Semaphore("verrouHalt", 1);
-      mutex = new Semaphore("mutexNbActiveThread", 0);
+      mutex = new Semaphore("mutexNbActiveThread", 1);
       NbActiveThreads = 0;
 }
 

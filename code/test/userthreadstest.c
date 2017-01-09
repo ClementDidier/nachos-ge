@@ -20,8 +20,7 @@ void aff(void * x)
 int
 main()
 {
-	PutString("<-  😨  😱  😮  😲  --->");
-	UserThreadCreate(aff, (void *) 4);
+	PutString("<---->");
 	UserThreadCreate(aff, (void *) 4);
 	PutString("<||||>");
 

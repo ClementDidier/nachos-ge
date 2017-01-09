@@ -408,10 +408,12 @@ Thread::RestoreUserState ()
     for (int i = 0; i < NumTotalRegs; i++)
 	machine->WriteRegister (i, userRegisters[i]);
 }
-#endif
 
 bool
 Thread::isStackFull()
 {
-  return (3 * PageSize + (*stack - *stackTop)) >= StackSize;  
+  return machine->ReadRegister(StackReg) <= UserStackSize;  
 }
+#endif
+
+
