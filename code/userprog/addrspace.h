@@ -40,6 +40,7 @@ class AddrSpace
     /**
      * \fn void BindUserThread()
      * \brief Lie un thread à cette AddrSpace
+     * \return retourne le numéro du thread
      *
     */
     void BindUserThread();
@@ -55,6 +56,8 @@ class AddrSpace
   private:
 
       int NbActiveThreads; //Est protégé par le mutex
+
+      int tid;
 
       TranslationEntry * pageTable;	// Assume linear page table translation
     // for now!

@@ -42,6 +42,7 @@ static void StartUserThread(int f)
 	delete params;
 	machine->Run();
 }
+
 /**
  * \fn int do_UserThreadCreate(int f, int arg)
  * \brief Gère l'initialisation et la gestion d'un thread utilisateur
@@ -52,6 +53,7 @@ static void StartUserThread(int f)
 */
 int do_UserThreadCreate(int f, int arg)
 {
+	int tid;
 	if (currentThread->isStackFull())
 		return -1;
 	struct userThreadParams * params = new(userThreadParams);
@@ -59,9 +61,9 @@ int do_UserThreadCreate(int f, int arg)
 	params->f = f;
 	Thread *newThread = new Thread ("Thread Noyau");
 	currentThread->space->BindUserThread();
-	newThread->Fork (StartUserThread, (int) params);
-
-	return 0;
+	tid = newThread->Fork (StartUserThread, (int) params);
+	Thread::setThreadBitmap(tid, 1);
+	return tid;
 }
 /**
  * \fn int do_UserThreadExit()
@@ -70,8 +72,31 @@ int do_UserThreadCreate(int f, int arg)
 */
 int do_UserThreadExit()
 {
+	Thread::setThreadBitmap(currentThread->getTID(), 0);
 	currentThread->space->UnbindUserThread();
 	currentThread->space = NULL;
 	currentThread->Finish();
 	return 0;
+}
+
+int do_UserThreadJoin(int tid)
+{
+	currentThread->space->mutex->P();
+
+	if(tid > MaxNThread || tid < 1){
+		return -1;
+	}
+
+	if(Thread::getThreadBitmap(tid) == 0){
+		return 1;
+	}
+
+	while(Thread::getThreadBitmap(tid) == 1){
+		currentThread->space->mutex->V();
+		currentThread->Yield();
+		currentThread->space->mutex->P();
+	}
+		return 1;
+
+	currentThread->space->mutex->V();
 }

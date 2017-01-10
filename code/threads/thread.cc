@@ -24,6 +24,15 @@
 					// execution stack, for detecting
 					// stack overflows
 
+int Thread::ThreadBitMap[MaxNThread] = {0}; // on initialize la bitmap des thread id à 0
+
+
+#ifdef USER_PROGRAM
+int Thread::TIDcnt = 0;
+Semaphore * Thread::TIDcntLock = new Semaphore("hih",1);
+
+
+#endif
 //----------------------------------------------------------------------
 // Thread::Thread
 //      Initialize a thread control block, so that we can then call
@@ -32,6 +41,7 @@
 //      "threadName" is an arbitrary string, useful for debugging.
 //----------------------------------------------------------------------
 
+
 Thread::Thread (const char *threadName)
 {
     name = threadName;
@@ -39,11 +49,14 @@ Thread::Thread (const char *threadName)
     stack = NULL;
     status = JUST_CREATED;
 #ifdef USER_PROGRAM
+
     space = NULL;
     // FBT: Need to initialize special registers of simulator to 0
     // in particular LoadReg or it could crash when switching
     // user threads.
-    for (int r=NumGPRegs; r<NumTotalRegs; r++)
+  if (TIDcntLock == NULL)
+      TIDcntLock = new Semaphore("TIDcntLock", 1);
+  for (int r=NumGPRegs; r<NumTotalRegs; r++)
       userRegisters[r] = 0;
 #endif
 }
@@ -69,6 +82,13 @@ Thread::~Thread ()
 	DeallocBoundedArray ((char *) stack, StackSize * sizeof (int));
 }
 
+#ifdef USER_PROGRAM
+void Thread::setTID(){
+  TIDcntLock->P();
+  TID = ++TIDcnt;
+  TIDcntLock->V();
+}
+#endif
 //----------------------------------------------------------------------
 // Thread::Fork
 //      Invoke (*func)(arg), allowing caller and callee to execute
@@ -89,7 +109,7 @@ Thread::~Thread ()
 //      "arg" is a single argument to be passed to the procedure.
 //----------------------------------------------------------------------
 
-void
+int
 Thread::Fork (VoidFunctionPtr func, int arg)
 {
     DEBUG ('t', "Forking thread \"%s\" with func = 0x%x, arg = %d\n",
@@ -106,13 +126,26 @@ Thread::Fork (VoidFunctionPtr func, int arg)
 
     // LB: Observe that currentThread->space may be NULL at that time.
     this->space = currentThread->space;
-
+    setTID();
 #endif // USER_PROGRAM
 
     IntStatus oldLevel = interrupt->SetLevel (IntOff);
     scheduler->ReadyToRun (this);	// ReadyToRun assumes that interrupts
     // are disabled!
     (void) interrupt->SetLevel (oldLevel);
+    #ifdef USER_PROGRAM
+    return this->TID;
+    #else
+    return 0;
+    #endif
+}
+
+int
+Thread::getTID(){
+  #ifdef USER_PROGRAM
+  return this->TID;
+  #endif
+  return -1;
 }
 
 //----------------------------------------------------------------------
@@ -414,6 +447,17 @@ Thread::isStackFull()
 {
   return machine->ReadRegister(StackReg) <= UserStackSize;  
 }
+
+void 
+Thread::setThreadBitmap(int id, int value){
+  ThreadBitMap[id] = value;
+}
+
+int 
+Thread::getThreadBitmap(int id){
+  return ThreadBitMap[id];
+}
+
 #endif
 
 
