@@ -21,7 +21,6 @@
 #include "thread.h"
 #include "list.h"
 
-
 // The following class defines a "semaphore" whose value is a non-negative
 // integer.  The semaphore has only two operations P() and V():
 //
@@ -36,7 +35,7 @@
 // into a register, a context switch might have occurred,
 // and some other thread might have called P or V, so the true value might
 // now be different.
-
+class Thread;
 class Semaphore
 {
   public:
@@ -49,6 +48,7 @@ class Semaphore
 
     void P ();			// these are the only operations on a semaphore
     void V ();			// they are both *atomic*
+    bool checkNoTocken();
 
   private:
     const char *name;		// useful for debugging
@@ -89,7 +89,7 @@ class Lock
   private:
     const char *name;		// for debugging
     Semaphore * mutex;
-    int tid;
+    Thread * ThreadP;
 
     // plus some other stuff you'll need to define
 };

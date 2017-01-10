@@ -51,6 +51,14 @@ Semaphore::~Semaphore ()
     delete queue;
 }
 
+bool
+Semaphore::checkNoTocken(){
+    if (value != 0){
+        return false;
+    }
+    return true;
+}
+
 //----------------------------------------------------------------------
 // Semaphore::P
 //      Wait until semaphore value > 0, then decrement.  Checking the
@@ -105,7 +113,7 @@ Lock::Lock (const char *debugName)
 {
     name = debugName;
     mutex = new Semaphore("mutex lock" , 1);
-    tid = currentThread->getTID();
+    ThreadP = currentThread;
 }
 
 Lock::~Lock ()
@@ -121,12 +129,13 @@ void
 Lock::Release ()
 {
     mutex->V();
+    ASSERT(mutex->checkNoTocken());
 }
 
 bool
 Lock::isHeldByCurrentThread ()
 {
-    if(tid == currentThread->getTID())
+    if(ThreadP == currentThread)
     {
         return true;
     }
@@ -147,15 +156,43 @@ Condition::~Condition ()
 void
 Condition::Wait (Lock * conditionLock)
 {
-    //LThreads->
+    IntStatus oldLevel = interrupt->SetLevel (IntOff);
+    LThreads->Append(((void *) currentThread));
     conditionLock->Release();
+    (void) interrupt->SetLevel (oldLevel);
+    currentThread->Sleep();
+    conditionLock->Acquire();
+     
 }
 
 void
 Condition::Signal (Lock * conditionLock)
 {
+    IntStatus oldLevel = interrupt->SetLevel (IntOff);
+    if(conditionLock->isHeldByCurrentThread()){
+        if(LThreads->IsEmpty () == false)
+        {
+            scheduler->ReadyToRun ((Thread *)LThreads->Remove());
+        }
+    }
+    else{
+        ASSERT(false);
+    }
+    (void) interrupt->SetLevel (oldLevel);
 }
+
 void
 Condition::Broadcast (Lock * conditionLock)
 {
+    IntStatus oldLevel = interrupt->SetLevel (IntOff);
+    if(conditionLock->isHeldByCurrentThread()){
+        while(LThreads->IsEmpty () == false)
+        {
+            scheduler->ReadyToRun ((Thread *) LThreads->Remove());
+        }
+    }
+    else{
+        ASSERT(false);
+    }
+    (void) interrupt->SetLevel (oldLevel);
 }
