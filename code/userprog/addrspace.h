@@ -22,8 +22,13 @@
 #include "synch.h"
 #define UserStackSize		1024	// increase this as necessary!
 
-class Semaphore; //Declaration de l'existence de Semaphore
+#ifdef CHANGED
+#include "bitmap.h"
+#define MaxThread 2
+#endif
 
+class Semaphore; //Declaration de l'existence de Semaphore
+class Lock;
 class AddrSpace
 {
   public:
@@ -51,6 +56,11 @@ class AddrSpace
     void UnbindUserThread();
     Semaphore *mutex; // Ne dois JAMAIS depasser 1 token;
     Semaphore *verrou;
+
+    #ifdef CHANGED
+    Lock* mapLock;
+    BitMap* threadMap;
+    #endif
 
   private:
 

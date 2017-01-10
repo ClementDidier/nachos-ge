@@ -112,12 +112,17 @@ class Thread
     {
 	printf ("%s, ", name);
     }
+
+    #ifdef CHANGED
     /**
      * \fn bool isStackFull();
      * \brief Vérifie l'état de la stack
      * \return Retourne l'état de la stack du thread (True si pleine)
     */
     bool isStackFull();
+
+    int mapID;
+    #endif
 
   private:
     // some of the private data for this class is listed above

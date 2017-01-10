@@ -46,6 +46,10 @@ Thread::Thread (const char *threadName)
     for (int r=NumGPRegs; r<NumTotalRegs; r++)
       userRegisters[r] = 0;
 #endif
+
+#ifdef CHANGED
+    mapID = -2;
+#endif
 }
 
 //----------------------------------------------------------------------

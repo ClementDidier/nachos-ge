@@ -21,7 +21,6 @@ struct userThreadParams
 {
 	int arg;
 	int f;
-	int pt;
 };
 /**
  * \fn static void StartUserThread(int f)
@@ -38,12 +37,16 @@ static void StartUserThread(int f)
 	struct userThreadParams * params = (struct userThreadParams *) f;
 	machine->WriteRegister (PCReg, params->f);
 	machine->WriteRegister (NextPCReg, params->f + 4);
-
-	//int spr = machine->ReadRegister (StackReg);
 	machine->WriteRegister (4, params->arg);
 
-	machine->WriteRegister (StackReg, params->pt);
+	int spr = machine->ReadRegister (StackReg);
+	machine->WriteRegister (StackReg, spr - (UserStackSize * currentThread->mapID));
 	//machine->WriteRegister (RetAddrReg, UserThreadExit);
+
+	printf("Mem pt : %d\n", spr - (UserStackSize * currentThread->mapID));
+
+	currentThread->space->mapLock->Release();
+
 	delete params;
 	machine->Run();
 }
@@ -57,21 +60,27 @@ static void StartUserThread(int f)
 */
 int do_UserThreadCreate(int f, int arg)
 {
-	if (currentThread->isStackFull())
+	currentThread->space->mapLock->Acquire();
+	Thread *newThread = new Thread ("Thread Noyau");
+	newThread->mapID = currentThread->space->threadMap->Find();
+
+	if (newThread->mapID == -1)
 	{
+		printf("Pas de place !\n");
+		currentThread->space->mapLock->Release();
 		return -1;
 	}
 
 	struct userThreadParams * params = new(userThreadParams);
 	params->arg = arg;
 	params->f = f;
-	Thread *newThread = new Thread ("Thread Noyau");
+
 	currentThread->space->BindUserThread();
 	newThread->Fork (StartUserThread, (int) params);
 
-	int sr = machine->ReadRegister(StackReg);
+	/*int sr = machine->ReadRegister(StackReg);
 	params->pt = sr - (UserStackSize + PageSize * 3);
-	machine->WriteRegister(StackReg, params->pt);
+	machine->WriteRegister(StackReg, params->pt);*/
 
 	return 0;
 }
@@ -82,6 +91,9 @@ int do_UserThreadCreate(int f, int arg)
 */
 int do_UserThreadExit()
 {
+	currentThread->space->mapLock->Acquire();
+	currentThread->space->threadMap->Clear(currentThread->mapID);
+	currentThread->space->mapLock->Release();
 	currentThread->space->UnbindUserThread();
 	currentThread->space = NULL;
 	currentThread->Finish();
