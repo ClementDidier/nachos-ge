@@ -3,6 +3,7 @@
  * \brief Permet la création et l'execution de thread utilisateurs
  *
 */
+#ifdef CHANGED
 #include "userthread.h"
 #include "system.h"
 #include "addrspace.h"
@@ -38,15 +39,12 @@ static void StartUserThread(int f)
 	machine->WriteRegister (PCReg, params->f);
 	machine->WriteRegister (NextPCReg, params->f + 4);
 	machine->WriteRegister (4, params->arg);
-
 	int spr = machine->ReadRegister (StackReg);
 	machine->WriteRegister (StackReg, spr - (UserStackSize * currentThread->mapID));
+	spr = machine->ReadRegister (StackReg);
+
 	//machine->WriteRegister (RetAddrReg, UserThreadExit);
-
-	printf("Mem pt : %d\n", spr - (UserStackSize * currentThread->mapID));
-
 	currentThread->space->mapLock->Release();
-
 	delete params;
 	machine->Run();
 }
@@ -60,22 +58,22 @@ static void StartUserThread(int f)
 */
 int do_UserThreadCreate(int f, int arg)
 {
+	currentThread->space->BindUserThread();
 	currentThread->space->mapLock->Acquire();
 	Thread *newThread = new Thread ("Thread Noyau");
 	newThread->mapID = currentThread->space->threadMap->Find();
 
 	if (newThread->mapID == -1)
 	{
-		printf("Pas de place !\n");
 		currentThread->space->mapLock->Release();
+		currentThread->space->UnbindUserThread();
 		return -1;
 	}
+	ASSERT(newThread->mapID >= 0);
 
 	struct userThreadParams * params = new(userThreadParams);
 	params->arg = arg;
 	params->f = f;
-
-	currentThread->space->BindUserThread();
 	newThread->Fork (StartUserThread, (int) params);
 
 	/*int sr = machine->ReadRegister(StackReg);
@@ -95,7 +93,9 @@ int do_UserThreadExit()
 	currentThread->space->threadMap->Clear(currentThread->mapID);
 	currentThread->space->mapLock->Release();
 	currentThread->space->UnbindUserThread();
-	currentThread->space = NULL;
+	//currentThread->space = NULL;
 	currentThread->Finish();
 	return 0;
 }
+
+#endif

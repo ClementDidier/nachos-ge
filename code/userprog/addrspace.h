@@ -24,8 +24,9 @@
 
 #ifdef CHANGED
 #include "bitmap.h"
-#define MaxThread 2
 #endif
+#define MaxThread 4
+
 
 class Semaphore; //Declaration de l'existence de Semaphore
 class Lock;

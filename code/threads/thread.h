@@ -114,13 +114,6 @@ class Thread
     }
 
     #ifdef CHANGED
-    /**
-     * \fn bool isStackFull();
-     * \brief Vérifie l'état de la stack
-     * \return Retourne l'état de la stack du thread (True si pleine)
-    */
-    bool isStackFull();
-
     int mapID;
     #endif
 

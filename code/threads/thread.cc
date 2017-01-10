@@ -48,7 +48,7 @@ Thread::Thread (const char *threadName)
 #endif
 
 #ifdef CHANGED
-    mapID = -2;
+    mapID = -2; // Valeur d'erreur
 #endif
 }
 
@@ -411,12 +411,6 @@ Thread::RestoreUserState ()
 {
     for (int i = 0; i < NumTotalRegs; i++)
 	machine->WriteRegister (i, userRegisters[i]);
-}
-
-bool
-Thread::isStackFull()
-{
-  return machine->ReadRegister(StackReg) <= UserStackSize;  
 }
 #endif
 

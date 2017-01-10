@@ -103,19 +103,35 @@ Semaphore::V ()
 // the test case in the network assignment won't work!
 Lock::Lock (const char *debugName)
 {
+    name = debugName;
+    mutex = new Semaphore("mutex lock" , 1);
+    //tid = currentThread->getTID();
 }
 
 Lock::~Lock ()
 {
+    delete mutex;
 }
 void
 Lock::Acquire ()
 {
+    mutex->P();
 }
 void
 Lock::Release ()
 {
+    mutex->V();
 }
+
+/*bool
+Lock::isHeldByCurrentThread ()
+{
+    if(tid == currentThread->getTID())
+    {
+        return true;
+    }
+    return false;
+}*/
 
 Condition::Condition (const char *debugName)
 {

@@ -20,9 +20,13 @@ int main()
 	int i;
 	for(i = 0; i < 500000; i++)
 	{}
+	UserThreadCreate(threadHandler, (void *) 'm');
+	UserThreadCreate(threadHandler, (void *) 'i');
 
-	UserThreadCreate(threadHandler, (void *) 'd');
-	UserThreadCreate(threadHandler, (void *) 'e');
+	for(i = 0; i < 500000; i++)
+	{}
+
+	Halt();
 	
 	return 0;
 }

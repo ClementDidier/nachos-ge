@@ -130,6 +130,7 @@ AddrSpace::AddrSpace (OpenFile * executable)
       #ifdef CHANGED
       mapLock = new Lock("bitmap lock");
       threadMap = new BitMap(MaxThread);
+      threadMap->Mark(0);
       #endif
 }
 
@@ -215,6 +216,7 @@ AddrSpace::BindUserThread()
     verrou->P();
   }
   mutex->V();
+
 }
 
 void
@@ -225,4 +227,5 @@ AddrSpace::UnbindUserThread()
     verrou->V();
   }
   mutex->V();
+
 }

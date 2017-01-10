@@ -121,6 +121,7 @@ main (int argc, char **argv)
 			// Nachos will loop forever waiting 
 			// for console input
 		}
+		#ifdef CHANGED
 		else if (!strcmp (*argv, "-sc"))
 	    {			// test the console
 	    	if (argc == 1)
@@ -149,6 +150,7 @@ main (int argc, char **argv)
 			// Nachos will loop forever waiting 
 			// for console input
 		}
+		#endif
 #endif // USER_PROGRAM
 #ifdef FILESYS
 		if (!strcmp (*argv, "-cp"))

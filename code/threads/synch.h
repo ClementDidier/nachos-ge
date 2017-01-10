@@ -87,6 +87,8 @@ class Lock
 
   private:
     const char *name;		// for debugging
+    Semaphore * mutex;
+    //int tid;
     // plus some other stuff you'll need to define
 };
 
