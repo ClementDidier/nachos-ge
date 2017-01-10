@@ -113,7 +113,7 @@ Lock::Lock (const char *debugName)
 {
     name = debugName;
     mutex = new Semaphore("mutex lock" , 1);
-    ThreadP = currentThread;
+    ThreadP = NULL; // There is no thread acquire Lock at start
 }
 
 Lock::~Lock ()
@@ -124,12 +124,17 @@ void
 Lock::Acquire ()
 {
     mutex->P();
+    ThreadP = currentThread; // Lock is acquired by ThreadP
 }
 void
 Lock::Release ()
 {
-    mutex->V();
-    ASSERT(mutex->checkNoTocken());
+    if (isHeldByCurrentThread())
+    {
+        mutex->V();
+        ThreadP = NULL;
+    }
+    //ASSERT(mutex->checkNoTocken());
 }
 
 bool
