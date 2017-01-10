@@ -14,12 +14,14 @@
  * \brief Permet de passer plusieurs paramètres a StartUserThread
  * \param f Fonction que doit executer le thread utilisateurs
  * \param arg Arguments passés à cette Fonction
+ * \param pt L'adresse mémoire du thread
 */
 
 struct userThreadParams
 {
 	int arg;
 	int f;
+	int pt;
 };
 /**
  * \fn static void StartUserThread(int f)
@@ -37,10 +39,10 @@ static void StartUserThread(int f)
 	machine->WriteRegister (PCReg, params->f);
 	machine->WriteRegister (NextPCReg, params->f + 4);
 
-	int spr = machine->ReadRegister (StackReg);
+	//int spr = machine->ReadRegister (StackReg);
 	machine->WriteRegister (4, params->arg);
 
-	machine->WriteRegister (StackReg, spr - (PageSize*3));
+	machine->WriteRegister (StackReg, params->pt);
 	//machine->WriteRegister (RetAddrReg, UserThreadExit);
 	delete params;
 	machine->Run();
@@ -68,7 +70,8 @@ int do_UserThreadCreate(int f, int arg)
 	newThread->Fork (StartUserThread, (int) params);
 
 	int sr = machine->ReadRegister(StackReg);
-	machine->WriteRegister(StackReg, sr - 1024);
+	params->pt = sr - (UserStackSize + PageSize * 3);
+	machine->WriteRegister(StackReg, params->pt);
 
 	return 0;
 }
