@@ -21,6 +21,7 @@
 #include "thread.h"
 #include "list.h"
 
+
 // The following class defines a "semaphore" whose value is a non-negative
 // integer.  The semaphore has only two operations P() and V():
 //
@@ -87,6 +88,9 @@ class Lock
 
   private:
     const char *name;		// for debugging
+    Semaphore * mutex;
+    int tid;
+
     // plus some other stuff you'll need to define
 };
 
@@ -143,6 +147,8 @@ class Condition
 
   private:
     const char *name;
+    Lock * condMutex;
+    List * LThreads;
     // plus some other stuff you'll need to define
 };
 #endif // SYNCH_H

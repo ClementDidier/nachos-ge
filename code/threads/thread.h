@@ -43,8 +43,6 @@
 
 #ifdef USER_PROGRAM
 #include "addrspace.h"
-// CHANGER 1024 PAR UserStackSize mais je ne sais pas comment faire pour que sa compil...
-    // +1 pour le dernier et +1 pour eviter le 0 du tab, probablement inutile mais au cas où...
 #endif
 
 // CPU register state to be saved on context switch.
