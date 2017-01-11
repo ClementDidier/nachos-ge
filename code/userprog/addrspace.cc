@@ -49,6 +49,21 @@ SwapHeader (NoffHeader * noffH)
     noffH->uninitData.inFileAddr = WordToHost (noffH->uninitData.inFileAddr);
 }
 
+#ifdef CHANGED
+static void ReadAtVirtual(OpenFile *executable, int virtualaddr, int numBytes,
+    int position, TranslationEntry *pageTable, unsigned numPages)
+{
+  char buffer[numBytes];
+  executable->ReadAt(buffer, numBytes, position);
+  int virtualAddr = (int)(pageTable + numPages);
+  printf("virtualaddr : %d, numBytes : %d\n", virtualAddr, numBytes);
+
+  int i;
+  for(i = 0; i < numBytes; i++)
+    machine->WriteMem(virtualAddr, 1, (int)buffer[i]);
+}
+#endif
+
 //----------------------------------------------------------------------
 // AddrSpace::AddrSpace
 //      Create an address space to run a user program.
@@ -111,17 +126,27 @@ AddrSpace::AddrSpace (OpenFile * executable)
       {
 	  DEBUG ('a', "Initializing code segment, at 0x%x, size %d\n",
 		 noffH.code.virtualAddr, noffH.code.size);
-	  executable->ReadAt (&(machine->mainMemory[noffH.code.virtualAddr]),
-			      noffH.code.size, noffH.code.inFileAddr);
+	  /*executable->ReadAt (&(machine->mainMemory[noffH.code.virtualAddr]),
+			      noffH.code.size, noffH.code.inFileAddr);*/
+        #ifdef CHANGED
+        ReadAtVirtual(executable, noffH.code.virtualAddr, noffH.code.size, 
+          noffH.code.inFileAddr, pageTable, 0); // TODO : numPage à reflechir
+
+        #endif
       }
     if (noffH.initData.size > 0)
       {
 	  DEBUG ('a', "Initializing data segment, at 0x%x, size %d\n",
 		 noffH.initData.virtualAddr, noffH.initData.size);
-	  executable->ReadAt (&
+	  /*executable->ReadAt (&
 			      (machine->mainMemory
 			       [noffH.initData.virtualAddr]),
-			      noffH.initData.size, noffH.initData.inFileAddr);
+			      noffH.initData.size, noffH.initData.inFileAddr);*/
+
+        #ifdef CHANGED
+        ReadAtVirtual(executable, noffH.initData.virtualAddr, noffH.initData.size, 
+          noffH.initData.inFileAddr, pageTable, 0); // TODO : numPage à reflechir
+        #endif
       }
       verrou = new Semaphore("verrouHalt", 1);
       mutex = new Semaphore("mutexNbActiveThread", 1);
