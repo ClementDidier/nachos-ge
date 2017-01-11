@@ -48,7 +48,7 @@ class Semaphore
 
     void P ();			// these are the only operations on a semaphore
     void V ();			// they are both *atomic*
-    bool checkNoTocken();
+    bool checkUnTocken();
 
   private:
     const char *name;		// useful for debugging

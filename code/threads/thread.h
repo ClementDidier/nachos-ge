@@ -40,6 +40,8 @@
 #include "copyright.h"
 #include "utility.h"
 #include "machine.h"
+#include "synch.h"
+
 
 #ifdef USER_PROGRAM
 #include "addrspace.h"
@@ -76,6 +78,7 @@ extern void ThreadPrint (int arg);
 //  that only run in the kernel have a NULL address space.
 class AddrSpace; // Decl
 class Semaphore;
+class Lock;
 class Thread
 {
   private:
@@ -87,7 +90,7 @@ class Thread
   public:
       Thread (const char *debugName);	// initialize a Thread
      ~Thread ();		// deallocate a Thread
-    static int ThreadBitMap[MaxNThread];
+    static Thread * ThreadBitMap[MaxNThread];
     // NOTE -- thread being deleted
     // must not be running when delete
     // is called
@@ -114,15 +117,19 @@ class Thread
     {
 	printf ("%s, ", name);
     }
-    /**
-     * \fn bool isStackFull();
-     * \brief Vérifie l'état de la stack
-     * \return Retourne l'état de la stack du thread (True si pleine)
-    */
-    bool isStackFull();
+
     int getTID();
-    static void setThreadBitmap(int id, int value);
-    static int getThreadBitmap(int id);
+    static void pushThreadBitmap(Thread * value);
+    static bool checkThreadBitmap(int tid); 
+    static Thread * findThreadBitmap(int tid); 
+    static void deleteThreadBitmap(Thread * ThreadP);
+    static int attendre(int tid);
+    Lock * ThreadJoinMutex;
+    static Lock * LockThreadBitmap;
+
+    #ifdef CHANGED
+    int mapID;
+    #endif
 
 
   private:

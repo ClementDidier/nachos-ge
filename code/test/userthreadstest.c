@@ -12,7 +12,7 @@ void print(char c, int n)
 
 void aff(void * x)
 {
-	int i = 50;
+	int i = 5;
 	PutInt(i);
 	while(i <= 50){
 		i++;

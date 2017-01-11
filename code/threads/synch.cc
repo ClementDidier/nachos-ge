@@ -52,10 +52,12 @@ Semaphore::~Semaphore ()
 }
 
 bool
-Semaphore::checkNoTocken(){
-    if (value != 0){
+Semaphore::checkUnTocken(){
+    IntStatus oldLevel = interrupt->SetLevel (IntOff);
+    if (value > 1){
         return false;
     }
+    (void) interrupt->SetLevel (oldLevel);
     return true;
 }
 
@@ -128,8 +130,8 @@ Lock::Acquire ()
 void
 Lock::Release ()
 {
+    ASSERT(mutex->checkUnTocken());
     mutex->V();
-    ASSERT(mutex->checkNoTocken());
 }
 
 bool

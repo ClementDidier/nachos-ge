@@ -22,6 +22,10 @@
 
 #include <strings.h>		/* for bzero */
 
+#ifdef CHANGED
+#include "bitmap.h"
+#endif
+
 //----------------------------------------------------------------------
 // SwapHeader
 //      Do little endian to big endian conversion on the bytes in the
@@ -72,7 +76,7 @@ AddrSpace::AddrSpace (OpenFile * executable)
     ASSERT (noffH.noffMagic == NOFFMAGIC);
 
 // how big is address space?
-    size = noffH.code.size + noffH.initData.size + noffH.uninitData.size + UserStackSize;	// we need to increase the size
+    size = noffH.code.size + noffH.initData.size + noffH.uninitData.size + UserStackSize * MaxThread;	// we need to increase the size
     // to leave room for the stack
     numPages = divRoundUp (size, PageSize);
     size = numPages * PageSize;
@@ -122,6 +126,12 @@ AddrSpace::AddrSpace (OpenFile * executable)
       verrou = new Semaphore("verrouHalt", 1);
       mutex = new Semaphore("mutexNbActiveThread", 1);
       NbActiveThreads = 1;
+
+      #ifdef CHANGED
+      mapLock = new Lock("bitmap lock");
+      threadMap = new BitMap(MaxThread);
+      threadMap->Mark(0);
+      #endif
 }
 
 //----------------------------------------------------------------------
@@ -206,6 +216,7 @@ AddrSpace::BindUserThread()
     verrou->P();
   }
   mutex->V();
+
 }
 
 void
@@ -216,4 +227,5 @@ AddrSpace::UnbindUserThread()
     verrou->V();
   }
   mutex->V();
+
 }

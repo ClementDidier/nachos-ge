@@ -24,8 +24,8 @@
 					// execution stack, for detecting
 					// stack overflows
 
-int Thread::ThreadBitMap[MaxNThread] = {0}; // on initialize la bitmap des thread id à 0
-
+Thread * Thread::ThreadBitMap[MaxNThread] = {NULL}; // on initialize la bitmap des thread id à NULL
+Lock * Thread::LockThreadBitmap = new Lock("LockThreadBitmap");
 
 #ifdef USER_PROGRAM
 int Thread::TIDcnt = 0;
@@ -49,7 +49,6 @@ Thread::Thread (const char *threadName)
     stack = NULL;
     status = JUST_CREATED;
 #ifdef USER_PROGRAM
-
     space = NULL;
     // FBT: Need to initialize special registers of simulator to 0
     // in particular LoadReg or it could crash when switching
@@ -58,6 +57,12 @@ Thread::Thread (const char *threadName)
       TIDcntLock = new Semaphore("TIDcntLock", 1);
   for (int r=NumGPRegs; r<NumTotalRegs; r++)
       userRegisters[r] = 0;
+#endif
+
+#ifdef CHANGED
+    ThreadJoinMutex = new Lock("joinLock Thread");
+    ThreadJoinMutex->Acquire();
+    mapID = -2; // Valeur d'erreur
 #endif
 }
 
@@ -76,7 +81,6 @@ Thread::Thread (const char *threadName)
 Thread::~Thread ()
 {
     DEBUG ('t', "Deleting thread \"%s\"\n", name);
-
     ASSERT (this != currentThread);
     if (stack != NULL)
 	DeallocBoundedArray ((char *) stack, StackSize * sizeof (int));
@@ -197,6 +201,7 @@ Thread::Finish ()
     ASSERT (this == currentThread);
 
     DEBUG ('t', "Finishing thread \"%s\"\n", getName ());
+    ThreadJoinMutex->Release();
 
     // LB: Be careful to guarantee that no thread to be destroyed
     // is ever lost
@@ -442,22 +447,98 @@ Thread::RestoreUserState ()
 	machine->WriteRegister (i, userRegisters[i]);
 }
 
-bool
-Thread::isStackFull()
-{
-  return machine->ReadRegister(StackReg) <= UserStackSize;  
+// ajoute le thread "value" dans le tableau des thread
+void 
+Thread::pushThreadBitmap(Thread * value){
+  Thread::LockThreadBitmap->Acquire();
+  int i = 0;
+
+  printf("\n\ndebut push ThreadBitMap\n");
+
+  while (Thread::ThreadBitMap[i] != NULL && i < MaxNThread ){
+    printf("\n\ni = %d\n", i );
+    printf("\n\nThreadBitMap[i] = %p\n",ThreadBitMap[i]);
+    i++;
+  }
+  if(i >= MaxNThread){
+    Thread::LockThreadBitmap->Release();
+    ASSERT(false);
+  }
+
+  Thread::ThreadBitMap[i] = value;
+  Thread::LockThreadBitmap->Release();
+}
+
+// vérifie si le thread #id est dans le tableau
+bool 
+Thread::checkThreadBitmap(int indice){
+  Thread::LockThreadBitmap->Acquire();
+  int i = 0;
+  while (Thread::ThreadBitMap[i]->getTID() != indice && i < MaxNThread){
+    i++;
+  }
+
+  if(Thread::ThreadBitMap[i]->getTID() == indice){
+    Thread::LockThreadBitmap->Release();
+    return true;
+  }
+  else{
+    Thread::LockThreadBitmap->Release();
+    return false;
+  }
+}
+
+// vérifie si le thread #id est dans le tableau
+Thread *
+Thread::findThreadBitmap(int indice){
+  Thread::LockThreadBitmap->Acquire();
+  int i = 0;
+  while (Thread::ThreadBitMap[i]->getTID() != indice && i < MaxNThread){
+    i++;
+  }
+
+  if(Thread::ThreadBitMap[i]->getTID() == indice){
+    Thread::LockThreadBitmap->Release();
+    return ThreadBitMap[i];
+  }
+  else{
+    Thread::LockThreadBitmap->Release();
+    return NULL;
+  }
 }
 
 void 
-Thread::setThreadBitmap(int id, int value){
-  ThreadBitMap[id] = value;
+Thread::deleteThreadBitmap(Thread * ThreadP){
+  Thread::LockThreadBitmap->Acquire();
+  int i = 0;
+
+  while (Thread::ThreadBitMap[i] != ThreadP && i < MaxNThread){
+    i++;
+  }
+
+  if(Thread::ThreadBitMap[i] == ThreadP)
+  {
+    Thread::ThreadBitMap[i] = NULL;
+    Thread::LockThreadBitmap->Release();
+  }
+  else
+  {
+    Thread::LockThreadBitmap->Release();
+    ASSERT(false);
+  }
 }
 
-int 
-Thread::getThreadBitmap(int id){
-  return ThreadBitMap[id];
-}
+int Thread::attendre(int tid){
+  Thread * ThreadToJoin = Thread::findThreadBitmap(tid);
 
+  if (ThreadToJoin->ThreadJoinMutex == NULL){
+    return 1;
+  }
+
+  ThreadToJoin->ThreadJoinMutex->Acquire();
+
+  return 0;
+}
 #endif
 
 

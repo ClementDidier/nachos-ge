@@ -3,6 +3,7 @@
  * \brief Permet la création et l'execution de thread utilisateurs
  *
 */
+#ifdef CHANGED
 #include "userthread.h"
 #include "system.h"
 #include "addrspace.h"
@@ -14,6 +15,7 @@
  * \brief Permet de passer plusieurs paramètres a StartUserThread
  * \param f Fonction que doit executer le thread utilisateurs
  * \param arg Arguments passés à cette Fonction
+ * \param pt L'adresse mémoire du thread
 */
 
 struct userThreadParams
@@ -30,15 +32,20 @@ struct userThreadParams
 */
 static void StartUserThread(int f)
 {
-	int spr = machine->ReadRegister (StackReg);
+	
 	currentThread->space->InitRegisters();
 	currentThread->space->RestoreState();
 	struct userThreadParams * params = (struct userThreadParams *) f;
 	machine->WriteRegister (PCReg, params->f);
 	machine->WriteRegister (NextPCReg, params->f + 4);
 	machine->WriteRegister (4, params->arg);
-	machine->WriteRegister (StackReg, spr - (PageSize*3));
+	int spr = machine->ReadRegister (StackReg);
+	machine->WriteRegister (StackReg, spr - (UserStackSize * currentThread->mapID));
+	spr = machine->ReadRegister (StackReg);
+
 	//machine->WriteRegister (RetAddrReg, UserThreadExit);
+	currentThread->space->mapLock->Release();
+	Thread::pushThreadBitmap(currentThread);
 	delete params;
 	machine->Run();
 }
@@ -53,17 +60,28 @@ static void StartUserThread(int f)
 */
 int do_UserThreadCreate(int f, int arg)
 {
+	currentThread->space->BindUserThread();
+	currentThread->space->mapLock->Acquire();
 	int tid;
-	if (currentThread->isStackFull())
+	Thread *newThread = new Thread ("Thread Noyau");
+	newThread->mapID = currentThread->space->threadMap->Find();
+
+	if (newThread->mapID == -1)
+	{
+		currentThread->space->mapLock->Release();
+		currentThread->space->UnbindUserThread();
 		return -1;
+	}
+	ASSERT(newThread->mapID >= 0);
+
 	struct userThreadParams * params = new(userThreadParams);
 	params->arg = arg;
 	params->f = f;
-	Thread *newThread = new Thread ("Thread Noyau");
-	currentThread->space->BindUserThread();
-	tid = newThread->Fork (StartUserThread, (int) params);
-	Thread::setThreadBitmap(tid, 1);
+
+	tid = newThread->Fork (StartUserThread, (int) params); // return this au lieu du tid
+
 	return tid;
+
 }
 /**
  * \fn int do_UserThreadExit()
@@ -72,31 +90,37 @@ int do_UserThreadCreate(int f, int arg)
 */
 int do_UserThreadExit()
 {
-	Thread::setThreadBitmap(currentThread->getTID(), 0);
+	currentThread->space->mapLock->Acquire();
+	Thread::deleteThreadBitmap(currentThread);
+	currentThread->space->threadMap->Clear(currentThread->mapID);
+	currentThread->space->mapLock->Release();
 	currentThread->space->UnbindUserThread();
-	currentThread->space = NULL;
+	//currentThread->space = NULL;
 	currentThread->Finish();
 	return 0;
 }
 
+
 int do_UserThreadJoin(int tid)
 {
-	currentThread->space->mutex->P();
-
-	if(tid > MaxNThread || tid < 1){
-		return -1;
+	currentThread->space->mapLock->Acquire();
+	// on vérifie si le numéro du thread est impossible
+	if(tid > MaxNThread || tid < 1 || Thread::checkThreadBitmap(tid) == false){
+		currentThread->space->mapLock->Release();
+		ASSERT(false);
 	}
 
-	if(Thread::getThreadBitmap(tid) == 0){
-		return 1;
+	if(Thread::checkThreadBitmap(tid) == false || tid == currentThread->getTID()){
+		currentThread->space->mapLock->Release();
+		return 1; // si le thread n'existe plus ou si c'est le thread 0
 	}
 
-	while(Thread::getThreadBitmap(tid) == 1){
-		currentThread->space->mutex->V();
-		currentThread->Yield();
-		currentThread->space->mutex->P();
-	}
-		return 1;
+	currentThread->space->mapLock->Release();
+	Thread::attendre(tid);
+	
+	return 1;
 
-	currentThread->space->mutex->V();
+	
 }
+
+#endif
