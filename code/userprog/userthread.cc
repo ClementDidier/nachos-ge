@@ -22,6 +22,7 @@ struct userThreadParams
 {
 	int arg;
 	int f;
+	int retaddr;
 };
 /**
  * \fn static void StartUserThread(int f)
@@ -32,18 +33,18 @@ struct userThreadParams
 */
 static void StartUserThread(int f)
 {
-	
+
 	currentThread->space->InitRegisters();
 	currentThread->space->RestoreState();
 	struct userThreadParams * params = (struct userThreadParams *) f;
 	machine->WriteRegister (PCReg, params->f);
 	machine->WriteRegister (NextPCReg, params->f + 4);
 	machine->WriteRegister (4, params->arg);
+	machine->WriteRegister (RetAddrReg, params->retaddr);
 	int spr = machine->ReadRegister (StackReg);
 	machine->WriteRegister (StackReg, spr - (UserStackSize * currentThread->mapID));
 	spr = machine->ReadRegister (StackReg);
 
-	//machine->WriteRegister (RetAddrReg, UserThreadExit);
 	currentThread->space->mapLock->Release();
 	delete params;
 	machine->Run();
@@ -70,9 +71,11 @@ int do_UserThreadCreate(int f, int arg)
 		return -1;
 	}
 	ASSERT(newThread->mapID >= 0);
+	struct argRetparams * addret = (struct argRetparams *) arg;
 
 	struct userThreadParams * params = new(userThreadParams);
-	params->arg = arg;
+	params->arg = addret->arg;
+	params->retaddr = addret->retaddr;
 	params->f = f;
 	newThread->Fork (StartUserThread, (int) params);
 
@@ -87,15 +90,13 @@ int do_UserThreadCreate(int f, int arg)
  * \brief Stop et désalloue le thread
  * \return Retourn qqch
 */
-int do_UserThreadExit()
+void do_UserThreadExit()
 {
 	currentThread->space->mapLock->Acquire();
 	currentThread->space->threadMap->Clear(currentThread->mapID);
 	currentThread->space->mapLock->Release();
 	currentThread->space->UnbindUserThread();
-	//currentThread->space = NULL;
 	currentThread->Finish();
-	return 0;
 }
 
 #endif

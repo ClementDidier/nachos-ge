@@ -6,7 +6,12 @@
 #ifdef CHANGED
 
 struct userThreadParams;
+
+struct argRetparams{
+  int arg;
+  int retaddr;
+};
 extern int do_UserThreadCreate(int f, int arg);
-extern int do_UserThreadExit();
+extern void do_UserThreadExit();
 
 #endif
