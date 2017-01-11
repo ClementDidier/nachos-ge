@@ -50,18 +50,39 @@ SwapHeader (NoffHeader * noffH)
 }
 
 #ifdef CHANGED
+/**
+ * \fn static void ReadAtVirtual(OpenFile *executable, int virtualaddr, int numBytes,
+ *  int position, TranslationEntry *pageTable, unsigned numPages)
+ * \brief Effectu une lecture du fichier donné et écrit en mémoire la portion voulue
+ * \param executable Le fichier contenant le code du processus à mettre en mémoire
+ * \param virtualaddr L'adresse virtuelle de stockage des données
+ * \param numBytes La taille des données à stocker en mémoire
+ * \param position La position (offset) dans la page de stockage
+ * \param pageTable La table des pages mémoire
+ * \param numPages La taille de la table des pages
+ *
+*/
 static void ReadAtVirtual(OpenFile *executable, int virtualaddr, int numBytes,
     int position, TranslationEntry *pageTable, unsigned numPages)//numPages = nb pages dans la table
 {
+  TranslationEntry * oldEntry = machine->pageTable;
+  unsigned oldNumPages = numPages;
+
+  machine->pageTable = pageTable;
+  machine->pageTableSize = numPages;
+
   char buffer[numBytes];
   executable->ReadAt(buffer, numBytes, position);
-  //int page = pageTable[virtualaddr].virtualPage; //numPages été utilisé avant mais c'est le nb max de pages
-  //printf("page : %d, numBytes : %d\n", page, numBytes);
-  //WriteMem prend une adresse virtuelle donc je vois pas pourquoi on lui passerai autre chose
-
+  
   int i;
   for(i = 0; i < numBytes; i++)
-    machine->WriteMem(virtualaddr, 1, (int)buffer[i]);//machine->WriteMem(page, 1, (int)buffer[i]);
+  {
+    int g = (int)buffer[i];
+    machine->WriteMem(virtualaddr + i, 1, g);
+  }
+
+  machine->pageTable = oldEntry;
+  machine->pageTableSize = oldNumPages;
 }
 #endif
 
