@@ -135,6 +135,7 @@ Lock::Release ()
 {
     IntStatus oldLevel = interrupt->SetLevel (IntOff);
     ASSERT(mutex->checkUnTocken());
+    //ASSERT(this->isHeldByCurrentThread() == false);
     ThreadP = NULL;
     mutex->V();
     (void) interrupt->SetLevel (oldLevel);
@@ -165,11 +166,18 @@ void
 Condition::Wait (Lock * conditionLock)
 {
     IntStatus oldLevel = interrupt->SetLevel (IntOff);
-    LThreads->Append(((void *) currentThread));
-    conditionLock->Release();
-    (void) interrupt->SetLevel (oldLevel);
-    currentThread->Sleep();
-    conditionLock->Acquire();
+    if(LThreads->IsEmpty () == false)
+    {
+        LThreads->Append(((void *) currentThread));
+        conditionLock->Release();
+        currentThread->Sleep();
+        (void) interrupt->SetLevel (oldLevel);
+        conditionLock->Acquire();
+    }
+    else{
+        (void) interrupt->SetLevel (oldLevel);
+    }
+
      
 }
 
@@ -177,15 +185,11 @@ void
 Condition::Signal (Lock * conditionLock)
 {
     IntStatus oldLevel = interrupt->SetLevel (IntOff);
-    if(conditionLock->isHeldByCurrentThread()){
-        if(LThreads->IsEmpty () == false)
-        {
-            scheduler->ReadyToRun ((Thread *)LThreads->Remove());
-        }
+    if(LThreads->IsEmpty () == false)
+    {
+        scheduler->ReadyToRun ((Thread *)LThreads->Remove());
     }
-    else{
-        ASSERT(false);
-    }
+    //ASSERT(this->isHeldByCurrentThread() == false);
     (void) interrupt->SetLevel (oldLevel);
 }
 
@@ -193,14 +197,10 @@ void
 Condition::Broadcast (Lock * conditionLock)
 {
     IntStatus oldLevel = interrupt->SetLevel (IntOff);
-    if(conditionLock->isHeldByCurrentThread()){
-        while(LThreads->IsEmpty () == false)
-        {
-            scheduler->ReadyToRun ((Thread *) LThreads->Remove());
-        }
+    while(LThreads->IsEmpty () == false)
+    {
+        scheduler->ReadyToRun ((Thread *) LThreads->Remove());
     }
-    else{
-        ASSERT(false);
-    }
+    //ASSERT(this->isHeldByCurrentThread() == false);
     (void) interrupt->SetLevel (oldLevel);
 }

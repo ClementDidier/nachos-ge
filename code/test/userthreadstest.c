@@ -27,11 +27,13 @@ main()
 {
 	//PutString("<---->");
 	int tid = UserThreadCreate(aff, (void *) 4);
+	int tid2 = UserThreadCreate(aff, (void *) 4);
 	PutString("\nTID du Thread Créé :");
 	PutInt(tid);
 	PutString("\n");
 
 	UserThreadJoin(tid);
+	UserThreadJoin(tid2);
 
 	PutString("\n");
 	PutString("\n");

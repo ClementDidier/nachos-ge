@@ -105,9 +105,10 @@ int do_UserThreadJoin(int tid)
 {
 	currentThread->space->mapLock->Acquire();
 	// on vérifie si le numéro du thread est impossible
-	if(tid > MaxNThread || tid < 1 || Thread::checkThreadBitmap(tid) == false){
+	if(tid > MaxNThread || tid < 1){
 		currentThread->space->mapLock->Release();
 		ASSERT(false);
+		return -1; // never reached
 	}
 
 	if(Thread::checkThreadBitmap(tid) == false || tid == currentThread->getTID()){

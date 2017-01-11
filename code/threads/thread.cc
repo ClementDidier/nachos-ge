@@ -453,11 +453,7 @@ Thread::pushThreadBitmap(Thread * value){
   Thread::LockThreadBitmap->Acquire();
   int i = 0;
 
-  printf("\n\ndebut push ThreadBitMap\n");
-
   while (Thread::ThreadBitMap[i] != NULL && i < MaxNThread ){
-    printf("\n\ni = %d\n", i );
-    printf("\n\nThreadBitMap[i] = %p\n",ThreadBitMap[i]);
     i++;
   }
   if(i >= MaxNThread){
@@ -471,40 +467,38 @@ Thread::pushThreadBitmap(Thread * value){
 
 // vérifie si le thread #id est dans le tableau
 bool 
-Thread::checkThreadBitmap(int indice){
+Thread::checkThreadBitmap(int tid){
   Thread::LockThreadBitmap->Acquire();
   int i = 0;
-  while (Thread::ThreadBitMap[i]->getTID() != indice && i < MaxNThread){
+  bool trouve = false;
+  while (trouve == false && i < MaxNThread){
+    if(Thread::ThreadBitMap[i] != NULL){
+      if(Thread::ThreadBitMap[i]->getTID() == tid){
+       trouve = true;
+      }
+    }
     i++;
   }
-
-  if(Thread::ThreadBitMap[i]->getTID() == indice){
-    Thread::LockThreadBitmap->Release();
-    return true;
-  }
-  else{
-    Thread::LockThreadBitmap->Release();
-    return false;
-  }
+  Thread::LockThreadBitmap->Release();
+  return trouve;
 }
 
 // vérifie si le thread #id est dans le tableau
 Thread *
-Thread::findThreadBitmap(int indice){
+Thread::findThreadBitmap(int tid){
   Thread::LockThreadBitmap->Acquire();
   int i = 0;
-  while (Thread::ThreadBitMap[i]->getTID() != indice && i < MaxNThread){
+  bool trouve = false;
+  while (trouve == false && i < MaxNThread){
+    if(Thread::ThreadBitMap[i] != NULL){
+      if(Thread::ThreadBitMap[i]->getTID() == tid){
+       trouve = true;
+      }
+    }
     i++;
   }
-
-  if(Thread::ThreadBitMap[i]->getTID() == indice){
-    Thread::LockThreadBitmap->Release();
-    return ThreadBitMap[i];
-  }
-  else{
-    Thread::LockThreadBitmap->Release();
-    return NULL;
-  }
+  Thread::LockThreadBitmap->Release();
+  return Thread::ThreadBitMap[i--];
 }
 
 void 

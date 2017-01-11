@@ -11,6 +11,13 @@
 
 #include "copyright.h"
 #include "system.h"
+#include "synch.h"
+
+struct structTestCond{
+    Condition * cond;
+    Lock * mutex;
+    int which;
+};
 
 //----------------------------------------------------------------------
 // SimpleThread
@@ -22,16 +29,21 @@
 //----------------------------------------------------------------------
 
 void
-SimpleThread (int which)
+SimpleThread (int condstrct)
 {
+    struct structTestCond * condParams = (struct structTestCond * )condstrct;
     int num;
-
+    int which = condParams->which;
     for (num = 0; num < 5; num++)
-      {
-	  printf ("*** thread %d looped %d times\n", which, num);
-        if(num%2 == 0)
-    	   currentThread->Yield ();
-      }
+        {
+            condParams->mutex->Acquire();
+            condParams->cond->Wait(condParams->mutex);
+	        printf ("*** thread %d looped %d times\n", which, num);
+             currentThread->Yield();
+            condParams->mutex->Release();
+            condParams->cond->Broadcast(condParams->mutex);
+
+    }
 }
 
 //----------------------------------------------------------------------
@@ -43,16 +55,32 @@ SimpleThread (int which)
 void
 ThreadTest ()
 {
+    struct structTestCond paramsCond1;
+    struct structTestCond paramsCond2;
+
+    Lock * condLock = new Lock("condLock");
+    Condition * testCond = new Condition("testCond");
+
     DEBUG ('t', "Entering SimpleTest\n");
+
+    paramsCond1.cond = testCond;
+    paramsCond1.mutex = condLock;
+    paramsCond1.which = 1;
+    paramsCond2.cond = testCond;
+    paramsCond2.mutex = condLock;
+    paramsCond2.which = 2;
 
     Thread *t = new Thread ("forked thread");
 
-    t->Fork (SimpleThread, 1);
+    t->Fork (SimpleThread, (int)&paramsCond1);
     
-
     Thread *t2 = new Thread ("forked thread");
 
-    t2->Fork (SimpleThread, 2);
+    t2->Fork (SimpleThread, (int)&paramsCond2);
     
-    SimpleThread (0);
+    //SimpleThread (0);
+
+    while(1){
+        currentThread->Yield();
+    }
 }
