@@ -2,29 +2,24 @@
 
 void threadHandler(void * arg)
 {
-	int n = *(int *) arg;
-	char c = (char)n;
+	char * c = (char*)arg;
 	int i;
 	for(i = 0; i <10; i++)
-		PutChar(c);
+		PutChar(*c);
 
 	UserThreadExit();
 }
 
 int main()
 {
-	UserThreadCreate(threadHandler, (void *) 'a');
-	UserThreadCreate(threadHandler, (void *) 'b');
-	UserThreadCreate(threadHandler, (void *) 'c');
+	char a = 'a', b = 'b';
+
+	UserThreadCreate(threadHandler, (void *) &a);
+	UserThreadCreate(threadHandler, (void *) &b);
 
 	int i;
-	for(i = 0; i < 500000; i++)
-	{}
-	UserThreadCreate(threadHandler, (void *) 'm');
-	UserThreadCreate(threadHandler, (void *) 'i');
-
-	for(i = 0; i < 500000; i++)
-	{}
+	for(i = 0; i < 5000; i++) { } // Attente
+	PutChar('\n');
 
 	Halt();
 	

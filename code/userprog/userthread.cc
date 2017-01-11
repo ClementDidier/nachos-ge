@@ -41,8 +41,6 @@ static void StartUserThread(int f)
 	machine->WriteRegister (4, params->arg);
 	int spr = machine->ReadRegister (StackReg);
 	machine->WriteRegister (StackReg, spr - (UserStackSize * currentThread->mapID));
-	spr = machine->ReadRegister (StackReg);
-
 	//machine->WriteRegister (RetAddrReg, UserThreadExit);
 	currentThread->space->mapLock->Release();
 	delete params;
