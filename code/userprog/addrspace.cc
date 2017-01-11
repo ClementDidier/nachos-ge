@@ -51,16 +51,17 @@ SwapHeader (NoffHeader * noffH)
 
 #ifdef CHANGED
 static void ReadAtVirtual(OpenFile *executable, int virtualaddr, int numBytes,
-    int position, TranslationEntry *pageTable, unsigned numPages)
+    int position, TranslationEntry *pageTable, unsigned numPages)//numPages = nb pages dans la table
 {
   char buffer[numBytes];
   executable->ReadAt(buffer, numBytes, position);
-  int virtualAddr = (int)(pageTable + numPages);
-  printf("virtualaddr : %d, numBytes : %d\n", virtualAddr, numBytes);
+  //int page = pageTable[virtualaddr].virtualPage; //numPages été utilisé avant mais c'est le nb max de pages
+  //printf("page : %d, numBytes : %d\n", page, numBytes);
+  //WriteMem prend une adresse virtuelle donc je vois pas pourquoi on lui passerai autre chose
 
   int i;
   for(i = 0; i < numBytes; i++)
-    machine->WriteMem(virtualAddr, 1, (int)buffer[i]);
+    machine->WriteMem(virtualaddr, 1, (int)buffer[i]);//machine->WriteMem(page, 1, (int)buffer[i]);
 }
 #endif
 
@@ -130,7 +131,7 @@ AddrSpace::AddrSpace (OpenFile * executable)
 			      noffH.code.size, noffH.code.inFileAddr);*/
         #ifdef CHANGED
         ReadAtVirtual(executable, noffH.code.virtualAddr, noffH.code.size, 
-          noffH.code.inFileAddr, pageTable, 0); // TODO : numPage à reflechir
+          noffH.code.inFileAddr, pageTable, numPages);
 
         #endif
       }
@@ -145,7 +146,7 @@ AddrSpace::AddrSpace (OpenFile * executable)
 
         #ifdef CHANGED
         ReadAtVirtual(executable, noffH.initData.virtualAddr, noffH.initData.size, 
-          noffH.initData.inFileAddr, pageTable, 0); // TODO : numPage à reflechir
+          noffH.initData.inFileAddr, pageTable, numPages);
         #endif
       }
       verrou = new Semaphore("verrouHalt", 1);
