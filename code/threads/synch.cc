@@ -115,7 +115,7 @@ Lock::Lock (const char *debugName)
 {
     name = debugName;
     mutex = new Semaphore("mutex lock" , 1);
-    ThreadP = currentThread;
+    ThreadP = NULL; // There is no thread acquire Lock at start
 }
 
 Lock::~Lock ()
@@ -125,13 +125,19 @@ Lock::~Lock ()
 void
 Lock::Acquire ()
 {
+    IntStatus oldLevel = interrupt->SetLevel (IntOff);
     mutex->P();
+    ThreadP = currentThread; // Lock is acquired by ThreadP
+    (void) interrupt->SetLevel (oldLevel);
 }
 void
 Lock::Release ()
 {
+    IntStatus oldLevel = interrupt->SetLevel (IntOff);
     ASSERT(mutex->checkUnTocken());
+    ThreadP = NULL;
     mutex->V();
+    (void) interrupt->SetLevel (oldLevel);
 }
 
 bool
