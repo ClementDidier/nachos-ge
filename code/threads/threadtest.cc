@@ -34,16 +34,19 @@ SimpleThread (int condstrct)
     struct structTestCond * condParams = (struct structTestCond * )condstrct;
     int num;
     int which = condParams->which;
+    printf("\ndébut thread #%d\n",which);
     for (num = 0; num < 5; num++)
-        {
+    {
+            printf("\ndebut for thread #%d\n",which);
             condParams->mutex->Acquire();
             condParams->cond->Wait(condParams->mutex);
 	        printf ("*** thread %d looped %d times\n", which, num);
-             currentThread->Yield();
+            currentThread->Yield();
             condParams->mutex->Release();
             condParams->cond->Broadcast(condParams->mutex);
-
+            printf("\nfin for thread #%d\n",which);
     }
+    printf("\nfin thread #%d\n",which);
 }
 
 //----------------------------------------------------------------------

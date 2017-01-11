@@ -24,8 +24,8 @@
 					// execution stack, for detecting
 					// stack overflows
 
-Thread * Thread::ThreadBitMap[MaxNThread] = {NULL}; // on initialize la bitmap des thread id à NULL
-Lock * Thread::LockThreadBitmap = new Lock("LockThreadBitmap");
+Thread * Thread::ThreadList[MaxNThread] = {NULL}; // on initialize la bitmap des thread id à NULL
+Lock * Thread::LockThreadList = new Lock("LockThreadList");
 
 #ifdef USER_PROGRAM
 int Thread::TIDcnt = 0;
@@ -60,8 +60,6 @@ Thread::Thread (const char *threadName)
 #endif
 
 #ifdef CHANGED
-    ThreadJoinMutex = new Lock("joinLock Thread");
-    ThreadJoinMutex->Acquire();
     mapID = -2; // Valeur d'erreur
 #endif
 }
@@ -131,6 +129,7 @@ Thread::Fork (VoidFunctionPtr func, int arg)
     // LB: Observe that currentThread->space may be NULL at that time.
     this->space = currentThread->space;
     setTID();
+
 #endif // USER_PROGRAM
 
     IntStatus oldLevel = interrupt->SetLevel (IntOff);
@@ -201,7 +200,6 @@ Thread::Finish ()
     ASSERT (this == currentThread);
 
     DEBUG ('t', "Finishing thread \"%s\"\n", getName ());
-    ThreadJoinMutex->Release();
 
     // LB: Be careful to guarantee that no thread to be destroyed
     // is ever lost
@@ -449,87 +447,88 @@ Thread::RestoreUserState ()
 
 // ajoute le thread "value" dans le tableau des thread
 void 
-Thread::pushThreadBitmap(Thread * value){
-  Thread::LockThreadBitmap->Acquire();
+Thread::pushThreadList(Thread * value){
+  Thread::LockThreadList->Acquire();
   int i = 0;
 
-  while (Thread::ThreadBitMap[i] != NULL && i < MaxNThread ){
+  while (Thread::ThreadList[i] != NULL && i < MaxNThread ){
     i++;
   }
   if(i >= MaxNThread){
-    Thread::LockThreadBitmap->Release();
+    Thread::LockThreadList->Release();
     ASSERT(false);
   }
 
-  Thread::ThreadBitMap[i] = value;
-  Thread::LockThreadBitmap->Release();
+  Thread::ThreadList[i] = value;
+  Thread::LockThreadList->Release();
 }
 
 // vérifie si le thread #id est dans le tableau
 bool 
-Thread::checkThreadBitmap(int tid){
-  Thread::LockThreadBitmap->Acquire();
+Thread::checkThreadList(int tid){
+  Thread::LockThreadList->Acquire();
   int i = 0;
   bool trouve = false;
   while (trouve == false && i < MaxNThread){
-    if(Thread::ThreadBitMap[i] != NULL){
-      if(Thread::ThreadBitMap[i]->getTID() == tid){
+    if(Thread::ThreadList[i] != NULL){
+      if(Thread::ThreadList[i]->getTID() == tid){
        trouve = true;
       }
     }
     i++;
   }
-  Thread::LockThreadBitmap->Release();
+  Thread::LockThreadList->Release();
   return trouve;
 }
 
 // vérifie si le thread #id est dans le tableau
 Thread *
-Thread::findThreadBitmap(int tid){
-  Thread::LockThreadBitmap->Acquire();
+Thread::findThreadList(int tid){
+  Thread::LockThreadList->Acquire();
   int i = 0;
   bool trouve = false;
   while (trouve == false && i < MaxNThread){
-    if(Thread::ThreadBitMap[i] != NULL){
-      if(Thread::ThreadBitMap[i]->getTID() == tid){
+    if(Thread::ThreadList[i] != NULL){
+      if(Thread::ThreadList[i]->getTID() == tid){
        trouve = true;
       }
     }
     i++;
   }
-  Thread::LockThreadBitmap->Release();
-  return Thread::ThreadBitMap[i--];
+  Thread::LockThreadList->Release();
+  return Thread::ThreadList[i--];
 }
 
 void 
-Thread::deleteThreadBitmap(Thread * ThreadP){
-  Thread::LockThreadBitmap->Acquire();
+Thread::deleteThreadList(Thread * ThreadP){
+  Thread::LockThreadList->Acquire();
   int i = 0;
 
-  while (Thread::ThreadBitMap[i] != ThreadP && i < MaxNThread){
+  while (Thread::ThreadList[i] != ThreadP && i < MaxNThread){
     i++;
   }
 
-  if(Thread::ThreadBitMap[i] == ThreadP)
+  if(Thread::ThreadList[i] == ThreadP)
   {
-    Thread::ThreadBitMap[i] = NULL;
-    Thread::LockThreadBitmap->Release();
+    Thread::ThreadList[i] = NULL;
+    Thread::LockThreadList->Release();
   }
   else
   {
-    Thread::LockThreadBitmap->Release();
+    Thread::LockThreadList->Release();
     ASSERT(false);
   }
 }
 
 int Thread::attendre(int tid){
-  Thread * ThreadToJoin = Thread::findThreadBitmap(tid);
+  Thread * ThreadToJoin = Thread::findThreadList(tid);
 
   if (ThreadToJoin->ThreadJoinMutex == NULL){
     return 1;
   }
 
   ThreadToJoin->ThreadJoinMutex->Acquire();
+  ThreadToJoin->ThreadJoinMutex->Release();
 
   return 0;
 }

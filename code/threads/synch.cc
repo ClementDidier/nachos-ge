@@ -135,7 +135,7 @@ Lock::Release ()
 {
     IntStatus oldLevel = interrupt->SetLevel (IntOff);
     ASSERT(mutex->checkUnTocken());
-    //ASSERT(this->isHeldByCurrentThread() == false);
+    ASSERT(this->isHeldByCurrentThread());
     ThreadP = NULL;
     mutex->V();
     (void) interrupt->SetLevel (oldLevel);
@@ -189,7 +189,7 @@ Condition::Signal (Lock * conditionLock)
     {
         scheduler->ReadyToRun ((Thread *)LThreads->Remove());
     }
-    //ASSERT(this->isHeldByCurrentThread() == false);
+    //ASSERT(conditionLock->isHeldByCurrentThread());
     (void) interrupt->SetLevel (oldLevel);
 }
 
@@ -201,6 +201,6 @@ Condition::Broadcast (Lock * conditionLock)
     {
         scheduler->ReadyToRun ((Thread *) LThreads->Remove());
     }
-    //ASSERT(this->isHeldByCurrentThread() == false);
+    //ASSERT(conditionLock->isHeldByCurrentThread());
     (void) interrupt->SetLevel (oldLevel);
 }

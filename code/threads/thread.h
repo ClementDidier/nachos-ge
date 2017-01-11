@@ -90,7 +90,7 @@ class Thread
   public:
       Thread (const char *debugName);	// initialize a Thread
      ~Thread ();		// deallocate a Thread
-    static Thread * ThreadBitMap[MaxNThread];
+    static Thread * ThreadList[MaxNThread];
     // NOTE -- thread being deleted
     // must not be running when delete
     // is called
@@ -119,13 +119,13 @@ class Thread
     }
 
     int getTID();
-    static void pushThreadBitmap(Thread * value);
-    static bool checkThreadBitmap(int tid); 
-    static Thread * findThreadBitmap(int tid); 
-    static void deleteThreadBitmap(Thread * ThreadP);
+    static void pushThreadList(Thread * value);
+    static bool checkThreadList(int tid); 
+    static Thread * findThreadList(int tid); 
+    static void deleteThreadList(Thread * ThreadP);
     static int attendre(int tid);
     Lock * ThreadJoinMutex;
-    static Lock * LockThreadBitmap;
+    static Lock * LockThreadList;
 
     #ifdef CHANGED
     int mapID;

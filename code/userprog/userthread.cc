@@ -32,7 +32,6 @@ struct userThreadParams
 */
 static void StartUserThread(int f)
 {
-	
 	currentThread->space->InitRegisters();
 	currentThread->space->RestoreState();
 	struct userThreadParams * params = (struct userThreadParams *) f;
@@ -42,10 +41,10 @@ static void StartUserThread(int f)
 	int spr = machine->ReadRegister (StackReg);
 	machine->WriteRegister (StackReg, spr - (UserStackSize * currentThread->mapID));
 	spr = machine->ReadRegister (StackReg);
-
+	currentThread->ThreadJoinMutex = new Lock("joinLock Thread");
+    currentThread->ThreadJoinMutex->Acquire();
 	//machine->WriteRegister (RetAddrReg, UserThreadExit);
-	currentThread->space->mapLock->Release();
-	Thread::pushThreadBitmap(currentThread);
+	Thread::pushThreadList(currentThread);
 	delete params;
 	machine->Run();
 }
@@ -79,7 +78,7 @@ int do_UserThreadCreate(int f, int arg)
 	params->f = f;
 
 	tid = newThread->Fork (StartUserThread, (int) params); // return this au lieu du tid
-
+	currentThread->space->mapLock->Release();
 	return tid;
 
 }
@@ -90,11 +89,12 @@ int do_UserThreadCreate(int f, int arg)
 */
 int do_UserThreadExit()
 {
+	Thread::deleteThreadList(currentThread);
 	currentThread->space->mapLock->Acquire();
-	Thread::deleteThreadBitmap(currentThread);
 	currentThread->space->threadMap->Clear(currentThread->mapID);
 	currentThread->space->mapLock->Release();
 	currentThread->space->UnbindUserThread();
+	currentThread->ThreadJoinMutex->Release();
 	//currentThread->space = NULL;
 	currentThread->Finish();
 	return 0;
@@ -103,20 +103,17 @@ int do_UserThreadExit()
 
 int do_UserThreadJoin(int tid)
 {
-	currentThread->space->mapLock->Acquire();
+
+	if(Thread::checkThreadList(tid) == false || tid == currentThread->getTID()){
+		return 1; // si le thread n'existe plus ou si c'est le thread courrant
+	}
+
 	// on vérifie si le numéro du thread est impossible
-	if(tid > MaxNThread || tid < 1){
-		currentThread->space->mapLock->Release();
+	if(tid < 1){
 		ASSERT(false);
 		return -1; // never reached
 	}
-
-	if(Thread::checkThreadBitmap(tid) == false || tid == currentThread->getTID()){
-		currentThread->space->mapLock->Release();
-		return 1; // si le thread n'existe plus ou si c'est le thread 0
-	}
-
-	currentThread->space->mapLock->Release();
+	
 	Thread::attendre(tid);
 	
 	return 1;
