@@ -22,9 +22,7 @@
 #include "synch.h"
 #define UserStackSize		1024	// increase this as necessary!
 
-#ifdef CHANGED
 #include "bitmap.h"
-#endif
 #define MaxThread 4
 
 
@@ -59,16 +57,12 @@ class AddrSpace
     Semaphore *mutex; // Ne dois JAMAIS depasser 1 token;
     Semaphore *verrou;
 
-    #ifdef CHANGED
     Lock* mapLock;
     BitMap* threadMap;
-    #endif
 
   private:
 
       int NbActiveThreads; //Est protégé par le mutex
-
-      int tid;
 
       TranslationEntry * pageTable;	// Assume linear page table translation
     // for now!

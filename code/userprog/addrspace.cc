@@ -22,9 +22,7 @@
 
 #include <strings.h>		/* for bzero */
 
-#ifdef CHANGED
 #include "bitmap.h"
-#endif
 
 //----------------------------------------------------------------------
 // SwapHeader
@@ -49,7 +47,6 @@ SwapHeader (NoffHeader * noffH)
     noffH->uninitData.inFileAddr = WordToHost (noffH->uninitData.inFileAddr);
 }
 
-#ifdef CHANGED
 /**
  * \fn static void ReadAtVirtual(OpenFile *executable, int virtualaddr, int numBytes,
  *  int position, TranslationEntry *pageTable, unsigned numPages)
@@ -84,7 +81,6 @@ static void ReadAtVirtual(OpenFile *executable, int virtualaddr, int numBytes,
   machine->pageTable = oldEntry;
   machine->pageTableSize = oldNumPages;
 }
-#endif
 
 //----------------------------------------------------------------------
 // AddrSpace::AddrSpace
@@ -159,11 +155,9 @@ AddrSpace::AddrSpace (OpenFile * executable)
 		 noffH.code.virtualAddr, noffH.code.size);
 	  /*executable->ReadAt (&(machine->mainMemory[noffH.code.virtualAddr]),
 			      noffH.code.size, noffH.code.inFileAddr);*/
-        #ifdef CHANGED
+
         ReadAtVirtual(executable, noffH.code.virtualAddr, noffH.code.size, 
           noffH.code.inFileAddr, pageTable, numPages);
-
-        #endif
       }
     if (noffH.initData.size > 0)
       {
@@ -174,20 +168,16 @@ AddrSpace::AddrSpace (OpenFile * executable)
 			       [noffH.initData.virtualAddr]),
 			      noffH.initData.size, noffH.initData.inFileAddr);*/
 
-        #ifdef CHANGED
         ReadAtVirtual(executable, noffH.initData.virtualAddr, noffH.initData.size, 
           noffH.initData.inFileAddr, pageTable, numPages);
-        #endif
       }
       verrou = new Semaphore("verrouHalt", 1);
       mutex = new Semaphore("mutexNbActiveThread", 1);
       NbActiveThreads = 1;
 
-      #ifdef CHANGED
       mapLock = new Lock("bitmap lock");
       threadMap = new BitMap(MaxThread);
       threadMap->Mark(0);
-      #endif
 }
 
 //----------------------------------------------------------------------

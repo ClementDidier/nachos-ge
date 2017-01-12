@@ -33,6 +33,12 @@
 //      "initialValue" is the initial value of the semaphore.
 //----------------------------------------------------------------------
 
+/**
+ * \fn Semaphore::Semaphore (const char *debugName, int initialValue)
+ * \brief Initialize a semaphore, so that it can be used for synchronization.
+ * \param "debugName" is an arbitrary name, useful for debugging.
+ * \param "initialValue" is the initial value of the semaphore.
+*/
 Semaphore::Semaphore (const char *debugName, int initialValue)
 {
     name = debugName;
@@ -45,12 +51,22 @@ Semaphore::Semaphore (const char *debugName, int initialValue)
 //      De-allocate semaphore, when no longer needed.  Assume no one
 //      is still waiting on the semaphore!
 //----------------------------------------------------------------------
-
+/**
+ * \fn Semaphore::~Semaphore ()
+ * \brief De-allocate semaphore, when no longer needed.  Assume no one
+ *     is still waiting on the semaphore!
+*/
 Semaphore::~Semaphore ()
 {
     delete queue;
 }
 
+/**
+ * \fn bool Semaphore::checkUnTocken()
+ * \brief vérifie si il n'y a qu'un seul token dans la sémaphore.
+ * \return retourne vrai si la sémaphore ne contient qu'un token, faux sinon
+ * \exception 
+*/
 bool
 Semaphore::checkUnTocken(){
     IntStatus oldLevel = interrupt->SetLevel (IntOff);
@@ -71,6 +87,15 @@ Semaphore::checkUnTocken(){
 //      when it is called.
 //----------------------------------------------------------------------
 
+/**
+ * \fn void Semaphore::P ()
+ * \brief Wait until semaphore value > 0, then decrement.  Checking the
+      value and decrementing must be done atomically, so we
+      need to disable interrupts before checking the value.
+
+      Note that Thread::Sleep assumes that interrupts are disabled
+      when it is called.
+*/
 void
 Semaphore::P ()
 {
@@ -95,6 +120,13 @@ Semaphore::P ()
 //      are disabled when it is called.
 //----------------------------------------------------------------------
 
+/**
+ * \fn void Semaphore::V ()
+ * \brief Increment semaphore value, waking up a waiter if necessary.
+      As with P(), this operation must be atomic, so we need to disable
+      interrupts.  Scheduler::ReadyToRun() assumes that threads
+      are disabled when it is called.
+*/
 void
 Semaphore::V ()
 {
@@ -111,6 +143,11 @@ Semaphore::V ()
 // Dummy functions -- so we can compile our later assignments
 // Note -- without a correct implementation of Condition::Wait(),
 // the test case in the network assignment won't work!
+/**
+ * \fn Lock::Lock (const char *debugName)
+ * \brief Initialise une sémaphore à 1 jeton représentant un mutex simple. Le pointeur du thread appelant est initialisé à NULL
+ * \param debugName un nom éventuellement utilisable pour des opération de débugguages.
+*/
 Lock::Lock (const char *debugName)
 {
     name = debugName;
@@ -118,10 +155,20 @@ Lock::Lock (const char *debugName)
     ThreadP = NULL; // There is no thread acquire Lock at start
 }
 
+/**
+ * \fn Lock::~Lock ()
+ * \brief détruit la sémaphore utilisé par le mutex et détruit l'objet
+ *  On assume que le lock n'est plus utilisé
+*/
 Lock::~Lock ()
 {
     delete mutex;
 }
+
+/**
+ * \fn void Lock::Acquire ()
+ * \brief aquiert le verrou (prend un jeron dans la semaphore)
+*/
 void
 Lock::Acquire ()
 {
@@ -130,6 +177,13 @@ Lock::Acquire ()
     ThreadP = currentThread; // Lock is acquired by ThreadP
     (void) interrupt->SetLevel (oldLevel);
 }
+
+/**
+ * \fn void Lock::Release ()
+ * \brief libère le verrou, défini à NULL le pointeur du thread ayant acqui le verrou.
+ * \exception invalide un assert si le thread qui tente de libérer le verrou (mutex) n'est pas le thread appelant.
+    invalide un assert en cas de plusieurs libération (si le nombre de jeton dépasse 1 dans la sémaphore après libération).
+*/
 void
 Lock::Release ()
 {
@@ -141,6 +195,12 @@ Lock::Release ()
     (void) interrupt->SetLevel (oldLevel);
 }
 
+/**
+ * \fn bool Lock::isHeldByCurrentThread ()
+ * \brief 
+ * \param 
+ * \return true si le thread courrant à acqui le verrou, false sinon
+*/
 bool
 Lock::isHeldByCurrentThread ()
 {
@@ -151,21 +211,39 @@ Lock::isHeldByCurrentThread ()
     return false;
 }
 
+/**
+ * \fn Condition::Condition (const char *debugName).
+ * \brief créé une list pour la file d'attente et initialise la condition.
+ * \param debugName nom de la condition pour debug.
+*/
 Condition::Condition (const char *debugName)
 {
     LThreads = new List;
-    condMutex = new Lock("conditionLock");
+    name = debugName;
 }
 
+/**
+ * \fn Condition::~Condition ()
+ * \brief détruit la liste d'attente et l'objet condition
+ *  On assume que la condition n'est plus utilisé
+*/
 Condition::~Condition ()
 {
     delete LThreads;
-    delete condMutex;
 }
+
+/**
+ * \fn void Condition::Wait (Lock * conditionLock)
+ * \brief vérifie si des threads sont en attente dans la file, si aucun n'est dans la file, alors on peut continuer, sinon on place le thread dans la file d'attente.
+ *  le lock doit être acqui par le thread courrant
+ * \param conditionLock lock(mutex) asscié à la condition. Doit être obtenu par le thread appelant.
+ * \exception invalide un assert si conditionLock n'est pas obtenu par le thread courrant.
+*/
 void
 Condition::Wait (Lock * conditionLock)
 {
     IntStatus oldLevel = interrupt->SetLevel (IntOff);
+    ASSERT(conditionLock->isHeldByCurrentThread());
     if(LThreads->IsEmpty () == false)
     {
         LThreads->Append(((void *) currentThread));
@@ -181,26 +259,41 @@ Condition::Wait (Lock * conditionLock)
      
 }
 
+/**
+ * \fn void Condition::Signal (Lock * conditionLock)
+ * \brief Libère le lock conditionLock et réveil le premier Thread (instance de Thread) de la file d'attente (list LThreads)
+ * \param conditionLock lock(mutex) asscié à la condition. Doit être obtenu par le thread appelant.
+ * \exception invalide un assert si conditionLock n'est pas obtenu par le thread courrant.
+*/
 void
 Condition::Signal (Lock * conditionLock)
 {
     IntStatus oldLevel = interrupt->SetLevel (IntOff);
+    ASSERT(conditionLock->isHeldByCurrentThread());
+    conditionLock->Release();
     if(LThreads->IsEmpty () == false)
     {
         scheduler->ReadyToRun ((Thread *)LThreads->Remove());
     }
-    //ASSERT(conditionLock->isHeldByCurrentThread());
     (void) interrupt->SetLevel (oldLevel);
 }
 
+/**
+ * \fn void Condition::Broadcast (Lock * conditionLock)
+ * \brief Libère le lock conditionLock et réveil tout les Thread (instance de Thread) mis en attente dans la condition
+ * \param conditionLock lock(mutex) asscié à la condition. Doit être obtenu par le thread appelant.
+ * \exception invalide un assert si conditionLock n'est pas obtenu par le thread courrant.
+*/
 void
 Condition::Broadcast (Lock * conditionLock)
 {
     IntStatus oldLevel = interrupt->SetLevel (IntOff);
+    ASSERT(conditionLock->isHeldByCurrentThread());
+    conditionLock->Release();
     while(LThreads->IsEmpty () == false)
     {
         scheduler->ReadyToRun ((Thread *) LThreads->Remove());
     }
-    //ASSERT(conditionLock->isHeldByCurrentThread());
+    
     (void) interrupt->SetLevel (oldLevel);
 }

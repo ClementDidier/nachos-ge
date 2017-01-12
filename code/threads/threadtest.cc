@@ -42,7 +42,6 @@ SimpleThread (int condstrct)
             condParams->cond->Wait(condParams->mutex);
 	        printf ("*** thread %d looped %d times\n", which, num);
             currentThread->Yield();
-            condParams->mutex->Release();
             condParams->cond->Broadcast(condParams->mutex);
             printf("\nfin for thread #%d\n",which);
     }

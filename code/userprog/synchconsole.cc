@@ -2,7 +2,6 @@
  * \file synchconsole.cc
  * \brief Émulation d'une console
 */
-#ifdef CHANGED
 
 #define EOL '\0'
 #define NL '\n'
@@ -175,5 +174,3 @@ void SynchConsole::SynchGetInt(int * n)
 		ASSERT(FALSE);
 	}
 }
-
-#endif // CHANGED

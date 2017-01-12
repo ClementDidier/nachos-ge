@@ -127,9 +127,7 @@ class Thread
     Lock * ThreadJoinMutex;
     static Lock * LockThreadList;
 
-    #ifdef CHANGED
     int mapID;
-    #endif
 
 
   private:
@@ -162,9 +160,6 @@ class Thread
 #endif
 };
 
-#ifdef USER_PROGRAM
-
-#endif
 // Magical machine-dependent routines, defined in switch.s
 
 extern "C"

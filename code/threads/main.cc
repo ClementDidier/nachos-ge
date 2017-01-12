@@ -61,10 +61,8 @@ extern void Print (char *file), PerformanceTest (void);
 extern void StartProcess (char *file);
 extern void ConsoleTest (char *in, char *out);
 
-#ifdef CHANGED
 extern void SynchConsoleTest (char *in, char *out);
 extern void SynchStringTest(char *in, char *out);
-#endif
 
 extern void MailTest (int networkID);
 
@@ -121,7 +119,6 @@ main (int argc, char **argv)
 			// Nachos will loop forever waiting 
 			// for console input
 		}
-		#ifdef CHANGED
 		else if (!strcmp (*argv, "-sc"))
 	    {			// test the console
 	    	if (argc == 1)
@@ -150,7 +147,6 @@ main (int argc, char **argv)
 			// Nachos will loop forever waiting 
 			// for console input
 		}
-		#endif
 #endif // USER_PROGRAM
 #ifdef FILESYS
 		if (!strcmp (*argv, "-cp"))
