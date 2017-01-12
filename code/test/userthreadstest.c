@@ -12,7 +12,13 @@ void print(char c, int n)
 
 void aff(void * x)
 {
-	PutString("abc");
+	int i = 5;
+	PutInt(i);
+	while(i <= 50){
+		i++;
+		PutInt(i);
+		PutString("\n");
+	}
 	UserThreadExit();
 }
 
@@ -20,11 +26,19 @@ int
 main()
 {
 	//PutString("<---->");
-	UserThreadCreate(aff, (void *) 4);
+	int tid = UserThreadCreate(aff, (void *) 4);
+	int tid2 = UserThreadCreate(aff, (void *) 4);
+	PutString("\nTID du Thread Créé :");
+	PutInt(tid);
+	PutString("\n");
 
-	//PutString("<||||>");
-	//while(1)
-//		;
+	UserThreadJoin(tid);
+	UserThreadJoin(tid2);
+
+	PutString("\n");
+	PutString("\n");
+	PutString("\n");
+
 	Halt ();
 
 	return 0;

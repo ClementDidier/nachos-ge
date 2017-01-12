@@ -22,6 +22,7 @@ struct userThreadParams
 {
 	int arg;
 	int f;
+	int retaddr;
 };
 /**
  * \fn static void StartUserThread(int f)
@@ -32,20 +33,24 @@ struct userThreadParams
 */
 static void StartUserThread(int f)
 {
-	
+
 	currentThread->space->InitRegisters();
 	currentThread->space->RestoreState();
 	struct userThreadParams * params = (struct userThreadParams *) f;
 	machine->WriteRegister (PCReg, params->f);
 	machine->WriteRegister (NextPCReg, params->f + 4);
 	machine->WriteRegister (4, params->arg);
+	machine->WriteRegister (RetAddrReg, params->retaddr);
 	int spr = machine->ReadRegister (StackReg);
 	machine->WriteRegister (StackReg, spr - (UserStackSize * currentThread->mapID));
-	//machine->WriteRegister (RetAddrReg, UserThreadExit);
-	currentThread->space->mapLock->Release();
+	spr = machine->ReadRegister (StackReg);
+	currentThread->ThreadJoinMutex = new Lock("joinLock Thread");
+  currentThread->ThreadJoinMutex->Acquire();
+	Thread::pushThreadList(currentThread);
 	delete params;
 	machine->Run();
 }
+
 /**
  * \fn int do_UserThreadCreate(int f, int arg)
  * \brief Gère l'initialisation et la gestion d'un thread utilisateur
@@ -58,6 +63,7 @@ int do_UserThreadCreate(int f, int arg)
 {
 	currentThread->space->BindUserThread();
 	currentThread->space->mapLock->Acquire();
+	int tid;
 	Thread *newThread = new Thread ("Thread Noyau");
 	newThread->mapID = currentThread->space->threadMap->Find();
 
@@ -68,32 +74,53 @@ int do_UserThreadCreate(int f, int arg)
 		return -1;
 	}
 	ASSERT(newThread->mapID >= 0);
+	struct argRetparams * addret = (struct argRetparams *) arg;
 
 	struct userThreadParams * params = new(userThreadParams);
-	params->arg = arg;
+	params->arg = addret->arg;
+	params->retaddr = addret->retaddr;
 	params->f = f;
-	newThread->Fork (StartUserThread, (int) params);
 
-	/*int sr = machine->ReadRegister(StackReg);
-	params->pt = sr - (UserStackSize + PageSize * 3);
-	machine->WriteRegister(StackReg, params->pt);*/
+	tid = newThread->Fork (StartUserThread, (int) params); // return this au lieu du tid
+	currentThread->space->mapLock->Release();
+	return tid;
 
-	return 0;
 }
 /**
  * \fn int do_UserThreadExit()
  * \brief Stop et désalloue le thread
  * \return Retourn qqch
 */
-int do_UserThreadExit()
+void do_UserThreadExit()
 {
+	Thread::deleteThreadList(currentThread);
 	currentThread->space->mapLock->Acquire();
 	currentThread->space->threadMap->Clear(currentThread->mapID);
 	currentThread->space->mapLock->Release();
 	currentThread->space->UnbindUserThread();
-	//currentThread->space = NULL;
+	currentThread->ThreadJoinMutex->Release();
 	currentThread->Finish();
-	return 0;
+}
+
+
+int do_UserThreadJoin(int tid)
+{
+
+	if(Thread::checkThreadList(tid) == false || tid == currentThread->getTID()){
+		return 1; // si le thread n'existe plus ou si c'est le thread courrant
+	}
+
+	// on vérifie si le numéro du thread est impossible
+	if(tid < 1){
+		ASSERT(false);
+		return -1; // never reached
+	}
+
+	Thread::attendre(tid);
+
+	return 1;
+
+
 }
 
 #endif

@@ -29,6 +29,9 @@
 #include "system.h"
 #include "syscall.h"
 #include "userthread.h"
+#include "usersemaphore.h"
+#include "synch.h"
+
 
 //----------------------------------------------------------------------
 // UpdatePC : Increments the Program Counter register in order to resume
@@ -44,7 +47,6 @@ UpdatePC ()
   pc += 4;
   machine->WriteRegister (NextPCReg, pc);
 }
-
 
 //----------------------------------------------------------------------
 // ExceptionHandler
@@ -163,17 +165,56 @@ ExceptionHandler (ExceptionType which)
       }
       case SC_UserThreadCreate:
       {
+        struct argRetparams* params = new struct argRetparams;
         int f = machine->ReadRegister(4);
-        int arg = machine->ReadRegister(5);
-        //int retaddr = machine->ReadRegister(6)
-        machine->WriteRegister(2, do_UserThreadCreate(f, arg));
+        params->arg = machine->ReadRegister(5);
+        params->retaddr = machine->ReadRegister(6);
+        machine->WriteRegister(2, do_UserThreadCreate(f, (int) params));
         DEBUG('a', "Appel systeme SC_UserThreadCreate réalisé\n");
         break;
       }
       case SC_UserThreadExit:
       {
-        machine->WriteRegister(2,do_UserThreadExit());
+        do_UserThreadExit();
         DEBUG('a', "Appel systeme SC_UserThreadExit réalisé\n");
+        break;
+      }
+      case SC_UserThreadJoin:
+      {
+        int tid = machine->ReadRegister(4);
+        machine->WriteRegister(2,do_UserThreadJoin(tid));
+        DEBUG('a', "Appel systeme SC_UserThreadJoin réalisé\n");
+        break;
+      }
+      case SC_UserSemCreate:
+      {
+        int arg = machine->ReadRegister(4);
+        int arg2 = machine->ReadRegister(5);
+        char f[MAX_SEM_NAME_SIZE];
+        synchconsole->copyStringFromMachine(arg, f, MAX_SEM_NAME_SIZE);
+        machine->WriteRegister(2,(int) do_UserSemCreate(f,arg2));
+        DEBUG('a', "Appel systeme SC_UserSemCreate réalisé\n");
+        break;
+      }
+      case SC_UserSemP:
+      {
+        Semaphore* f = (Semaphore *) machine->ReadRegister(4);
+        do_UserSemP(f);
+        DEBUG('a', "Appel systeme SC_SemP réalisé\n");
+        break;
+      }
+      {
+        case SC_UserSemV:
+        Semaphore* f = (Semaphore *)machine->ReadRegister(4);
+        do_UserSemV(f);
+        DEBUG('a', "Appel systeme SC_UserSemV réalisé\n");
+        break;
+      }
+      case SC_UserSemDelete:
+      {
+        Semaphore* f = (Semaphore *)machine->ReadRegister(4);
+        do_UserSemDelete(f);
+        DEBUG('a', "Appel systeme SC_UserSemDelete réalisé\n");
         break;
       }
       default:
