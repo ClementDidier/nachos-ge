@@ -185,7 +185,6 @@ ExceptionHandler (ExceptionType which)
         int arg2 = machine->ReadRegister(5);
         char f[MAX_SEM_NAME_SIZE];
         synchconsole->copyStringFromMachine(arg, f, MAX_SEM_NAME_SIZE);
-        printf(f);
         machine->WriteRegister(2,(int) do_UserSemCreate(f,arg2));
         DEBUG('a', "Appel systeme SC_UserSemCreate réalisé\n");
         break;
