@@ -1,17 +1,51 @@
 #include "frameprovider.h"
 
-FrameProvider::FrameProvider(){
+#define RANDOMLY TRUE
+
+FrameProvider::FrameProvider()
+{
 	frameMap = new BitMap(NumPhysPages);
 
 }
 
-FrameProvider::~FrameProvider(){
+FrameProvider::~FrameProvider()
+{
 	delete frameMap;
 }
 
-int FrameProvider::FrameProvider::GetEmptyFrame(){
-	int pageIndex = frameMap->Find();
-	if(pageIndex == -1){
+int FrameProvider::FrameProvider::GetEmptyFrame()
+{
+	int pageIndex = -1;
+
+	// Selection de l'index du cadre aléatoirement ou par first find
+	if(RANDOMLY)
+	{
+		/**************** Aléatoire *****************/
+		RandomInit(1);
+		int availIndex[NumPhysPages];
+		int i, index = 0;
+		for(i = 0; i < NumPhysPages; i++)
+		{
+			if(!frameMap->Test(i))
+			{
+				availIndex[index++] = i;
+			}
+		}
+
+		if(index > 0)
+		{
+			pageIndex = availIndex[Random() % index];
+			frameMap->Mark(pageIndex);
+		}
+		/********************************************/
+	}
+	else
+	{
+		pageIndex = frameMap->Find();
+	}
+
+	if(pageIndex == -1)
+	{
 		DEBUG('a', "Impossible de récupérer la page physique\n");
 		ASSERT(FALSE);
 	}
@@ -19,10 +53,12 @@ int FrameProvider::FrameProvider::GetEmptyFrame(){
 	return pageIndex;
 }
 
-void FrameProvider::ReleaseFrame(int frame){
+void FrameProvider::ReleaseFrame(int frame)
+{
 	frameMap->Clear(frame);
 }
 
-int FrameProvider::NumAvailFrame(){
+int FrameProvider::NumAvailFrame()
+{
 	return frameMap->NumClear();
 }

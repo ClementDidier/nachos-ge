@@ -4,7 +4,6 @@
 #include "bitmap.h"
 #include "machine.h"
 #include "system.h"
-#include <string.h>
 
 class BitMap;
 

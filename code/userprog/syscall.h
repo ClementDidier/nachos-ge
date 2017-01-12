@@ -41,6 +41,7 @@
 #define SC_PutInt			16
 #define SC_UserThreadCreate	17
 #define SC_UserThreadExit	18
+#define SC_ForkExec			19
 
 #ifdef IN_USER_MODE
 
@@ -195,6 +196,13 @@ int UserThreadCreate(void f(void *arg), void *arg);
  *
  */
 void UserThreadExit();
+
+/**
+ * \fn int ForkExec(char *s)
+ * \brief Créer un thread système et lance le programme donné avec le thread crée
+ * \param s Le nom du fichier executable à lancer
+ */
+int ForkExec(char *s);
 
 #endif // IN_USER_MODE
 

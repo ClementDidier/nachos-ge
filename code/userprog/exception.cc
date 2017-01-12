@@ -176,6 +176,12 @@ ExceptionHandler (ExceptionType which)
         DEBUG('a', "Appel systeme SC_UserThreadExit réalisé\n");
         break;
       }
+      case SC_ForkExec:
+      {
+        // TODO
+        DEBUG('a', "Appel systeme SC_ForkExec réalisé\n");
+        break;
+      }
       default:
       {
         printf("Unexpected user mode exception %d %d\n", which, type);
