@@ -60,8 +60,10 @@ main()
   semEmpty = UserSemCreate("Empty",1);
   PutString("Semaphore créés\n");
 
-	UserThreadCreate(producer,  (void *) 2);
+	UserThreadCreate(producer,  (void *) 3);
   UserThreadCreate(consummer, (void *) 1);
+  UserThreadCreate(consummer, (void *) 2);
+
   PutString("jobs done");
 
 //	Halt ();
