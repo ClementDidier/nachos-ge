@@ -20,7 +20,10 @@
 // Copyright (c) 1992-1993 The Regents of the University of California.
 // All rights reserved.  See copyright.h for copyright notice and limitation
 // of liability and disclaimer of warranty provisions.
-
+/**
+ * \file synch.cc
+ * \brief implémente des structures de synchronisation (lock,condition et sémaphore)
+ */
 #include "copyright.h"
 #include "synch.h"
 #include "system.h"

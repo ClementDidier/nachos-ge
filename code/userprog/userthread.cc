@@ -1,5 +1,5 @@
 /**
- * \file userthread.h
+ * \file userthread.cc
  * \brief Permet la création et l'execution de thread utilisateurs
  *
 */

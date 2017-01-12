@@ -5,8 +5,6 @@ void threadHandler(void * arg)
 	int n = *(int *) arg;
 	//char c = (char)n;
 	PutChar((char)n);
-
-	UserThreadExit();
 }
 
 int main()

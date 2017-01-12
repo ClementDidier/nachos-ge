@@ -51,7 +51,7 @@
 // The SPARC and MIPS only need 10 registers, but the Snake needs 18.
 // For simplicity, this is just the max over all architectures.
 #define MachineStateSize 18
-#define MaxNThread (MemorySize/1024)+2
+#define MaxNThread (MemorySize/1024)+2 // set 1024 to the stack size of an user Thread
 
 
 // Size of the thread's private execution stack.

@@ -3,8 +3,6 @@
 void threadHandler(void * arg)
 {
 	PutString("Une chaîne de caractères affichée de façon contigüe...\n");
-	//PutInt(((int) arg) * 10);
-	UserThreadExit();
 }
 
 int main()
@@ -14,7 +12,7 @@ int main()
 		UserThreadCreate(threadHandler, (void *) i);
 
 
-	while(1) { }
+	Halt();
 
 	return 0;
 }

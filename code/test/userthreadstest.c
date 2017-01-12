@@ -19,7 +19,6 @@ void aff(void * x)
 		PutInt(i);
 		PutString("\n");
 	}
-	UserThreadExit();
 }
 
 int
