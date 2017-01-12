@@ -147,7 +147,6 @@ class Condition
 
   private:
     const char *name;
-    Lock * condMutex;
     List * LThreads;
     // plus some other stuff you'll need to define
 };
