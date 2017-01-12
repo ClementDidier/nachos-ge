@@ -219,7 +219,15 @@ ExceptionHandler (ExceptionType which)
       }
       case SC_ForkExec:
       {
-        // TODO
+        // lecture de l'adresse de la chaine de caractères MIPS
+        int arg = machine->ReadRegister (4);
+
+        // Buffer de la chaine de caractères LINUX (initialement vide et de taille maximale)
+        char buffer[MAX_STRING_SIZE];
+
+        // Conversion String MIPS --> String LINUX
+        synchconsole->copyStringFromMachine(arg, buffer, MAX_STRING_SIZE);
+        frameProvider->ForkExec(buffer);
         DEBUG('a', "Appel systeme SC_ForkExec réalisé\n");
         break;
       }

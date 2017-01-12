@@ -4,6 +4,7 @@
 #include "bitmap.h"
 #include "machine.h"
 #include "system.h"
+#include "thread.h"
 
 class BitMap;
 
@@ -47,6 +48,13 @@ class FrameProvider
 		 * \brief Retourne le nombre de cadres libres
 		 */
 		int NumAvailFrame();
+
+		/**
+		 * \fn int ForkExec(char *s)
+		 * \brief Créer un thread système et lance le programme donné avec le thread crée
+		 * \param s Le nom du fichier executable à lancer
+		 */
+		int ForkExec(char *s);
 
 	private:
 		BitMap *frameMap;

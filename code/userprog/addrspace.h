@@ -54,6 +54,7 @@ class AddrSpace
      *
     */
     void UnbindUserThread();
+
     Semaphore *mutex; // Ne dois JAMAIS depasser 1 token;
     Semaphore *verrou;
 

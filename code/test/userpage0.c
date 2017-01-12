@@ -20,7 +20,7 @@ int main()
 	UserThreadCreate(threadHandler, (void *) &b);
 	UserThreadCreate(threadHandler, (void *) &c);
 
-	Halt();
+	//Halt();
 
 	return 0;
 }

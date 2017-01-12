@@ -62,3 +62,28 @@ int FrameProvider::NumAvailFrame()
 {
 	return frameMap->NumClear();
 }
+
+int FrameProvider::ForkExec(char *s)
+{
+	OpenFile *executable = fileSystem->Open (s);
+	Thread* t = new Thread("forked thread");
+	AddrSpace *space;
+
+    if (executable == NULL)
+      {
+	  printf ("Unable to open file %s\n", s);
+	  return -1;
+      }
+    space = new AddrSpace (executable);
+    t->space = space;
+
+    delete executable;		// close file
+
+    space->InitRegisters ();	// set the initial register values
+    space->RestoreState ();	// load page table register
+    currentThread = t;
+    //t->Fork(0, 0);
+
+    machine->Run ();		// jump to the user progam
+    return 0;
+}
