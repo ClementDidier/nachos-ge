@@ -20,6 +20,8 @@
 #include "copyright.h"
 #include "filesys.h"
 #include "synch.h"
+#include "thread.h"
+
 #define UserStackSize		1024	// increase this as necessary!
 
 #include "bitmap.h"
@@ -27,6 +29,7 @@
 
 
 class Semaphore; //Declaration de l'existence de Semaphore
+class Thread;
 class Lock;
 class AddrSpace
 {
@@ -56,9 +59,17 @@ class AddrSpace
     void UnbindUserThread();
     Semaphore *mutex; // Ne dois JAMAIS depasser 1 token;
     Semaphore *verrou;
-
-    Lock* mapLock;
+    Thread * ThreadList[MaxThread];
+    Lock * mapLock;
     BitMap* threadMap;
+
+
+    void pushThreadList(Thread * value);
+    bool checkThreadList(int tid);
+    Thread * findThreadList(int tid);
+    void deleteThreadList(Thread * ThreadP);
+    int attendre(int tid);
+    Lock * LockThreadList;
 
   private:
 

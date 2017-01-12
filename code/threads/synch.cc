@@ -1,4 +1,4 @@
-// synch.cc 
+// synch.cc
 //      Routines for synchronizing threads.  Three kinds of
 //      synchronization routines are defined here: semaphores, locks
 //      and condition variables (the implementation of the last two
@@ -68,7 +68,7 @@ Semaphore::~Semaphore ()
  * \fn bool Semaphore::checkUnTocken()
  * \brief vérifie si il n'y a qu'un seul token dans la sémaphore.
  * \return retourne vrai si la sémaphore ne contient qu'un token, faux sinon
- * \exception 
+ * \exception
 */
 bool
 Semaphore::checkUnTocken(){
@@ -200,8 +200,8 @@ Lock::Release ()
 
 /**
  * \fn bool Lock::isHeldByCurrentThread ()
- * \brief 
- * \param 
+ * \brief
+ * \param
  * \return true si le thread courrant à acqui le verrou, false sinon
 */
 bool
@@ -259,7 +259,7 @@ Condition::Wait (Lock * conditionLock)
         (void) interrupt->SetLevel (oldLevel);
     }
 
-     
+
 }
 
 /**
@@ -297,6 +297,6 @@ Condition::Broadcast (Lock * conditionLock)
     {
         scheduler->ReadyToRun ((Thread *) LThreads->Remove());
     }
-    
+
     (void) interrupt->SetLevel (oldLevel);
 }
