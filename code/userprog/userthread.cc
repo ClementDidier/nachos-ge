@@ -3,7 +3,6 @@
  * \brief Permet la création et l'execution de thread utilisateurs
  *
 */
-#ifdef CHANGED
 #include "userthread.h"
 #include "system.h"
 #include "addrspace.h"
@@ -122,5 +121,3 @@ int do_UserThreadJoin(int tid)
 
 
 }
-
-#endif

@@ -30,9 +30,8 @@ Lock * Thread::LockThreadList = new Lock("LockThreadList");
 #ifdef USER_PROGRAM
 int Thread::TIDcnt = 0;
 Semaphore * Thread::TIDcntLock = new Semaphore("hih",1);
-
-
 #endif
+
 //----------------------------------------------------------------------
 // Thread::Thread
 //      Initialize a thread control block, so that we can then call
@@ -59,9 +58,7 @@ Thread::Thread (const char *threadName)
       userRegisters[r] = 0;
 #endif
 
-#ifdef CHANGED
     mapID = -2; // Valeur d'erreur
-#endif
 }
 
 //----------------------------------------------------------------------

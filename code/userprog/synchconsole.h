@@ -4,7 +4,6 @@
  *
 */
 
-#ifdef CHANGED
 #ifndef SYNCHCONSOLE_H
 #define SYNCHCONSOLE_H
 
@@ -95,4 +94,3 @@ private:
 };
 
 #endif // SYNCHCONSOLE_H
-#endif // CHANGED

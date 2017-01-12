@@ -13,6 +13,7 @@
 #include "console.h"
 #include "addrspace.h"
 #include "synch.h"
+#include "synchconsole.h"
 
 
 #define EOL '\0'
@@ -97,8 +98,6 @@ ConsoleTest (char *in, char *out)
     }
 }
 
-#ifdef CHANGED
-#include "synchconsole.h"
 void
 SynchConsoleTest (char *in, char *out)
 {
@@ -123,4 +122,3 @@ SynchStringTest (char *in, char *out)
 
     delete [] buffer;
 }
-#endif //CHANGED

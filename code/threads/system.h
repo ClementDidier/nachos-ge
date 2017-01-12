@@ -35,16 +35,13 @@ extern Timer *timer;		// the hardware alarm clock
 #include "machine.h"
 extern Machine *machine;	// user program memory and registers
 
-#ifdef CHANGED
 #include "synchconsole.h"
 extern SynchConsole *synchconsole;
-#endif
 
 class FrameProvider;
 
 #include "frameprovider.h"
 extern FrameProvider *frameProvider;
-
 #endif
 
 #ifdef FILESYS_NEEDED		// FILESYS or FILESYS_STUB
