@@ -44,11 +44,13 @@ static void StartUserThread(int f)
 	int spr = machine->ReadRegister (StackReg);
 	machine->WriteRegister (StackReg, spr - (UserStackSize * currentThread->mapID));
 	spr = machine->ReadRegister (StackReg);
-
-	currentThread->space->mapLock->Release();
+	currentThread->ThreadJoinMutex = new Lock("joinLock Thread");
+  currentThread->ThreadJoinMutex->Acquire();
+	Thread::pushThreadList(currentThread);
 	delete params;
 	machine->Run();
 }
+
 /**
  * \fn int do_UserThreadCreate(int f, int arg)
  * \brief Gère l'initialisation et la gestion d'un thread utilisateur
@@ -61,6 +63,7 @@ int do_UserThreadCreate(int f, int arg)
 {
 	currentThread->space->BindUserThread();
 	currentThread->space->mapLock->Acquire();
+	int tid;
 	Thread *newThread = new Thread ("Thread Noyau");
 	newThread->mapID = currentThread->space->threadMap->Find();
 
@@ -77,13 +80,11 @@ int do_UserThreadCreate(int f, int arg)
 	params->arg = addret->arg;
 	params->retaddr = addret->retaddr;
 	params->f = f;
-	newThread->Fork (StartUserThread, (int) params);
 
-	/*int sr = machine->ReadRegister(StackReg);
-	params->pt = sr - (UserStackSize + PageSize * 3);
-	machine->WriteRegister(StackReg, params->pt);*/
+	tid = newThread->Fork (StartUserThread, (int) params); // return this au lieu du tid
+	currentThread->space->mapLock->Release();
+	return tid;
 
-	return 0;
 }
 /**
  * \fn int do_UserThreadExit()
@@ -92,11 +93,34 @@ int do_UserThreadCreate(int f, int arg)
 */
 void do_UserThreadExit()
 {
+	Thread::deleteThreadList(currentThread);
 	currentThread->space->mapLock->Acquire();
 	currentThread->space->threadMap->Clear(currentThread->mapID);
 	currentThread->space->mapLock->Release();
 	currentThread->space->UnbindUserThread();
+	currentThread->ThreadJoinMutex->Release();
 	currentThread->Finish();
+}
+
+
+int do_UserThreadJoin(int tid)
+{
+
+	if(Thread::checkThreadList(tid) == false || tid == currentThread->getTID()){
+		return 1; // si le thread n'existe plus ou si c'est le thread courrant
+	}
+
+	// on vérifie si le numéro du thread est impossible
+	if(tid < 1){
+		ASSERT(false);
+		return -1; // never reached
+	}
+
+	Thread::attendre(tid);
+
+	return 1;
+
+
 }
 
 #endif

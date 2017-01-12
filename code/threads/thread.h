@@ -40,6 +40,7 @@
 #include "copyright.h"
 #include "utility.h"
 #include "machine.h"
+#include "synch.h"
 
 
 #ifdef USER_PROGRAM
@@ -50,6 +51,7 @@
 // The SPARC and MIPS only need 10 registers, but the Snake needs 18.
 // For simplicity, this is just the max over all architectures.
 #define MachineStateSize 18
+#define MaxNThread (MemorySize/1024)+2
 
 
 // Size of the thread's private execution stack.
@@ -75,6 +77,8 @@ extern void ThreadPrint (int arg);
 //  Some threads also belong to a user address space; threads
 //  that only run in the kernel have a NULL address space.
 class AddrSpace; // Decl
+class Semaphore;
+class Lock;
 class Thread
 {
   private:
@@ -86,12 +90,13 @@ class Thread
   public:
       Thread (const char *debugName);	// initialize a Thread
      ~Thread ();		// deallocate a Thread
+    static Thread * ThreadList[MaxNThread];
     // NOTE -- thread being deleted
     // must not be running when delete
     // is called
 
     // basic thread operations
-    void Fork (VoidFunctionPtr func, int arg);	// Make thread run (*func)(arg)
+    int Fork (VoidFunctionPtr func, int arg);	// Make thread run (*func)(arg)
     void Yield ();		// Relinquish the CPU if any
     // other thread is runnable
     void Sleep ();		// Put the thread to sleep and
@@ -113,9 +118,19 @@ class Thread
 	printf ("%s, ", name);
     }
 
+    int getTID();
+    static void pushThreadList(Thread * value);
+    static bool checkThreadList(int tid); 
+    static Thread * findThreadList(int tid); 
+    static void deleteThreadList(Thread * ThreadP);
+    static int attendre(int tid);
+    Lock * ThreadJoinMutex;
+    static Lock * LockThreadList;
+
     #ifdef CHANGED
     int mapID;
     #endif
+
 
   private:
     // some of the private data for this class is listed above
@@ -134,17 +149,22 @@ class Thread
 // A thread running a user program actually has *two* sets of CPU registers --
 // one for its state while executing user code, one for its state
 // while executing kernel code.
-
     int userRegisters[NumTotalRegs];	// user-level CPU register state
 
   public:
+    int TID;
+    static int TIDcnt;
+    static Semaphore* TIDcntLock;
     void SaveUserState ();	// save user-level register state
     void RestoreUserState ();	// restore user-level register state
-
     AddrSpace *space;		// User code this thread is running.
+    void setTID();
 #endif
 };
 
+#ifdef USER_PROGRAM
+
+#endif
 // Magical machine-dependent routines, defined in switch.s
 
 extern "C"

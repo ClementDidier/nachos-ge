@@ -179,6 +179,13 @@ ExceptionHandler (ExceptionType which)
         DEBUG('a', "Appel systeme SC_UserThreadExit réalisé\n");
         break;
       }
+      case SC_UserThreadJoin:
+      {
+        int tid = machine->ReadRegister(4);
+        machine->WriteRegister(2,do_UserThreadJoin(tid));
+        DEBUG('a', "Appel systeme SC_UserThreadJoin réalisé\n");
+        break;
+      }
       case SC_UserSemCreate:
       {
         int arg = machine->ReadRegister(4);

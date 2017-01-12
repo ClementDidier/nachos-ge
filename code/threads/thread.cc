@@ -24,6 +24,15 @@
 					// execution stack, for detecting
 					// stack overflows
 
+Thread * Thread::ThreadList[MaxNThread] = {NULL}; // on initialize la bitmap des thread id à NULL
+Lock * Thread::LockThreadList = new Lock("LockThreadList");
+
+#ifdef USER_PROGRAM
+int Thread::TIDcnt = 0;
+Semaphore * Thread::TIDcntLock = new Semaphore("hih",1);
+
+
+#endif
 //----------------------------------------------------------------------
 // Thread::Thread
 //      Initialize a thread control block, so that we can then call
@@ -31,6 +40,7 @@
 //
 //      "threadName" is an arbitrary string, useful for debugging.
 //----------------------------------------------------------------------
+
 
 Thread::Thread (const char *threadName)
 {
@@ -43,7 +53,9 @@ Thread::Thread (const char *threadName)
     // FBT: Need to initialize special registers of simulator to 0
     // in particular LoadReg or it could crash when switching
     // user threads.
-    for (int r=NumGPRegs; r<NumTotalRegs; r++)
+  if (TIDcntLock == NULL)
+      TIDcntLock = new Semaphore("TIDcntLock", 1);
+  for (int r=NumGPRegs; r<NumTotalRegs; r++)
       userRegisters[r] = 0;
 #endif
 
@@ -67,12 +79,18 @@ Thread::Thread (const char *threadName)
 Thread::~Thread ()
 {
     DEBUG ('t', "Deleting thread \"%s\"\n", name);
-
     ASSERT (this != currentThread);
     if (stack != NULL)
 	DeallocBoundedArray ((char *) stack, StackSize * sizeof (int));
 }
 
+#ifdef USER_PROGRAM
+void Thread::setTID(){
+  TIDcntLock->P();
+  TID = ++TIDcnt;
+  TIDcntLock->V();
+}
+#endif
 //----------------------------------------------------------------------
 // Thread::Fork
 //      Invoke (*func)(arg), allowing caller and callee to execute
@@ -93,7 +111,7 @@ Thread::~Thread ()
 //      "arg" is a single argument to be passed to the procedure.
 //----------------------------------------------------------------------
 
-void
+int
 Thread::Fork (VoidFunctionPtr func, int arg)
 {
     DEBUG ('t', "Forking thread \"%s\" with func = 0x%x, arg = %d\n",
@@ -110,6 +128,7 @@ Thread::Fork (VoidFunctionPtr func, int arg)
 
     // LB: Observe that currentThread->space may be NULL at that time.
     this->space = currentThread->space;
+    setTID();
 
 #endif // USER_PROGRAM
 
@@ -117,6 +136,19 @@ Thread::Fork (VoidFunctionPtr func, int arg)
     scheduler->ReadyToRun (this);	// ReadyToRun assumes that interrupts
     // are disabled!
     (void) interrupt->SetLevel (oldLevel);
+    #ifdef USER_PROGRAM
+    return this->TID;
+    #else
+    return 0;
+    #endif
+}
+
+int
+Thread::getTID(){
+  #ifdef USER_PROGRAM
+  return this->TID;
+  #endif
+  return -1;
 }
 
 //----------------------------------------------------------------------
@@ -411,6 +443,94 @@ Thread::RestoreUserState ()
 {
     for (int i = 0; i < NumTotalRegs; i++)
 	machine->WriteRegister (i, userRegisters[i]);
+}
+
+// ajoute le thread "value" dans le tableau des thread
+void 
+Thread::pushThreadList(Thread * value){
+  Thread::LockThreadList->Acquire();
+  int i = 0;
+
+  while (Thread::ThreadList[i] != NULL && i < MaxNThread ){
+    i++;
+  }
+  if(i >= MaxNThread){
+    Thread::LockThreadList->Release();
+    ASSERT(false);
+  }
+
+  Thread::ThreadList[i] = value;
+  Thread::LockThreadList->Release();
+}
+
+// vérifie si le thread #id est dans le tableau
+bool 
+Thread::checkThreadList(int tid){
+  Thread::LockThreadList->Acquire();
+  int i = 0;
+  bool trouve = false;
+  while (trouve == false && i < MaxNThread){
+    if(Thread::ThreadList[i] != NULL){
+      if(Thread::ThreadList[i]->getTID() == tid){
+       trouve = true;
+      }
+    }
+    i++;
+  }
+  Thread::LockThreadList->Release();
+  return trouve;
+}
+
+// vérifie si le thread #id est dans le tableau
+Thread *
+Thread::findThreadList(int tid){
+  Thread::LockThreadList->Acquire();
+  int i = 0;
+  bool trouve = false;
+  while (trouve == false && i < MaxNThread){
+    if(Thread::ThreadList[i] != NULL){
+      if(Thread::ThreadList[i]->getTID() == tid){
+       trouve = true;
+      }
+    }
+    i++;
+  }
+  Thread::LockThreadList->Release();
+  return Thread::ThreadList[i--];
+}
+
+void 
+Thread::deleteThreadList(Thread * ThreadP){
+  Thread::LockThreadList->Acquire();
+  int i = 0;
+
+  while (Thread::ThreadList[i] != ThreadP && i < MaxNThread){
+    i++;
+  }
+
+  if(Thread::ThreadList[i] == ThreadP)
+  {
+    Thread::ThreadList[i] = NULL;
+    Thread::LockThreadList->Release();
+  }
+  else
+  {
+    Thread::LockThreadList->Release();
+    ASSERT(false);
+  }
+}
+
+int Thread::attendre(int tid){
+  Thread * ThreadToJoin = Thread::findThreadList(tid);
+
+  if (ThreadToJoin->ThreadJoinMutex == NULL){
+    return 1;
+  }
+
+  ThreadToJoin->ThreadJoinMutex->Acquire();
+  ThreadToJoin->ThreadJoinMutex->Release();
+
+  return 0;
 }
 #endif
 

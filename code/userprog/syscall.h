@@ -40,11 +40,11 @@
 #define SC_PutInt			16
 #define SC_UserThreadCreate	17
 #define SC_UserThreadExit	18
-#define SC_UserSemCreate 19
-#define SC_UserSemP 20
-#define SC_UserSemV 21
-#define SC_UserSemDelete 22
-
+#define SC_UserThreadJoin	19
+#define SC_UserSemCreate 20
+#define SC_UserSemP 21
+#define SC_UserSemV 22
+#define SC_UserSemDelete 23
 
 #ifdef IN_USER_MODE
 
@@ -200,10 +200,13 @@ int UserThreadCreate(void f(void *arg), void *arg);
  */
 void UserThreadExit();
 
+void UserThreadJoin(int tid);
+
 sem_t * UserSemCreate(char * name, int nb);
 void UserSemP(sem_t * sem);
 void UserSemV(sem_t * sem);
 void UserSemDelete(sem_t * sem);
+
 #endif // IN_USER_MODE
 
 #endif /* SYSCALL_H */

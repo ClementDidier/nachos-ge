@@ -51,6 +51,16 @@ Semaphore::~Semaphore ()
     delete queue;
 }
 
+bool
+Semaphore::checkUnTocken(){
+    IntStatus oldLevel = interrupt->SetLevel (IntOff);
+    if (value > 1){
+        return false;
+    }
+    (void) interrupt->SetLevel (oldLevel);
+    return true;
+}
+
 //----------------------------------------------------------------------
 // Semaphore::P
 //      Wait until semaphore value > 0, then decrement.  Checking the
@@ -105,7 +115,7 @@ Lock::Lock (const char *debugName)
 {
     name = debugName;
     mutex = new Semaphore("mutex lock" , 1);
-    //tid = currentThread->getTID();
+    ThreadP = NULL; // There is no thread acquire Lock at start
 }
 
 Lock::~Lock ()
@@ -115,42 +125,82 @@ Lock::~Lock ()
 void
 Lock::Acquire ()
 {
+    IntStatus oldLevel = interrupt->SetLevel (IntOff);
     mutex->P();
+    ThreadP = currentThread; // Lock is acquired by ThreadP
+    (void) interrupt->SetLevel (oldLevel);
 }
 void
 Lock::Release ()
 {
+    IntStatus oldLevel = interrupt->SetLevel (IntOff);
+    ASSERT(mutex->checkUnTocken());
+    ASSERT(this->isHeldByCurrentThread());
+    ThreadP = NULL;
     mutex->V();
+    (void) interrupt->SetLevel (oldLevel);
 }
 
-/*bool
+bool
 Lock::isHeldByCurrentThread ()
 {
-    if(tid == currentThread->getTID())
+    if(ThreadP == currentThread)
     {
         return true;
     }
     return false;
-}*/
+}
 
 Condition::Condition (const char *debugName)
 {
+    LThreads = new List;
+    condMutex = new Lock("conditionLock");
 }
 
 Condition::~Condition ()
 {
+    delete LThreads;
+    delete condMutex;
 }
 void
 Condition::Wait (Lock * conditionLock)
 {
-    ASSERT (FALSE);
+    IntStatus oldLevel = interrupt->SetLevel (IntOff);
+    if(LThreads->IsEmpty () == false)
+    {
+        LThreads->Append(((void *) currentThread));
+        conditionLock->Release();
+        currentThread->Sleep();
+        (void) interrupt->SetLevel (oldLevel);
+        conditionLock->Acquire();
+    }
+    else{
+        (void) interrupt->SetLevel (oldLevel);
+    }
+
+     
 }
 
 void
 Condition::Signal (Lock * conditionLock)
 {
+    IntStatus oldLevel = interrupt->SetLevel (IntOff);
+    if(LThreads->IsEmpty () == false)
+    {
+        scheduler->ReadyToRun ((Thread *)LThreads->Remove());
+    }
+    //ASSERT(conditionLock->isHeldByCurrentThread());
+    (void) interrupt->SetLevel (oldLevel);
 }
+
 void
 Condition::Broadcast (Lock * conditionLock)
 {
+    IntStatus oldLevel = interrupt->SetLevel (IntOff);
+    while(LThreads->IsEmpty () == false)
+    {
+        scheduler->ReadyToRun ((Thread *) LThreads->Remove());
+    }
+    //ASSERT(conditionLock->isHeldByCurrentThread());
+    (void) interrupt->SetLevel (oldLevel);
 }

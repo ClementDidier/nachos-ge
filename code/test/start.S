@@ -195,6 +195,14 @@ UserThreadExit:
 	j	$31
 	.end UserThreadExit
 
+  .globl UserThreadJoin
+	.ent	UserThreadJoin
+UserThreadJoin:
+	addiu $2,$0,SC_UserThreadJoin
+	syscall
+	j	$31
+	.end UserThreadJoin
+
   .globl UserSemCreate
 	.ent	UserSemCreate
   UserSemCreate:
@@ -226,6 +234,8 @@ UserThreadExit:
   	syscall
   	j	$31
   	.end UserSemDelete
+
+
 /* dummy function to keep gcc happy */
         .globl  __main
         .ent    __main
