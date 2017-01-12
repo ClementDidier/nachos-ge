@@ -24,8 +24,6 @@
 					// execution stack, for detecting
 					// stack overflows
 
-Thread * Thread::ThreadList[MaxNThread] = {NULL}; // on initialize la bitmap des thread id à NULL
-Lock * Thread::LockThreadList = new Lock("LockThreadList");
 
 #ifdef USER_PROGRAM
 int Thread::TIDcnt = 0;
@@ -57,7 +55,6 @@ Thread::Thread (const char *threadName)
   for (int r=NumGPRegs; r<NumTotalRegs; r++)
       userRegisters[r] = 0;
 #endif
-
     mapID = -2; // Valeur d'erreur
 }
 
@@ -82,6 +79,7 @@ Thread::~Thread ()
 }
 
 #ifdef USER_PROGRAM
+
 void Thread::setTID(){
   TIDcntLock->P();
   TID = ++TIDcnt;
@@ -442,93 +440,4 @@ Thread::RestoreUserState ()
 	machine->WriteRegister (i, userRegisters[i]);
 }
 
-// ajoute le thread "value" dans le tableau des thread
-void 
-Thread::pushThreadList(Thread * value){
-  Thread::LockThreadList->Acquire();
-  int i = 0;
-
-  while (Thread::ThreadList[i] != NULL && i < MaxNThread ){
-    i++;
-  }
-  if(i >= MaxNThread){
-    Thread::LockThreadList->Release();
-    ASSERT(false);
-  }
-
-  Thread::ThreadList[i] = value;
-  Thread::LockThreadList->Release();
-}
-
-// vérifie si le thread #id est dans le tableau
-bool 
-Thread::checkThreadList(int tid){
-  Thread::LockThreadList->Acquire();
-  int i = 0;
-  bool trouve = false;
-  while (trouve == false && i < MaxNThread){
-    if(Thread::ThreadList[i] != NULL){
-      if(Thread::ThreadList[i]->getTID() == tid){
-       trouve = true;
-      }
-    }
-    i++;
-  }
-  Thread::LockThreadList->Release();
-  return trouve;
-}
-
-// vérifie si le thread #id est dans le tableau
-Thread *
-Thread::findThreadList(int tid){
-  Thread::LockThreadList->Acquire();
-  int i = 0;
-  bool trouve = false;
-  while (trouve == false && i < MaxNThread){
-    if(Thread::ThreadList[i] != NULL){
-      if(Thread::ThreadList[i]->getTID() == tid){
-       trouve = true;
-      }
-    }
-    i++;
-  }
-  Thread::LockThreadList->Release();
-  return Thread::ThreadList[i--];
-}
-
-void 
-Thread::deleteThreadList(Thread * ThreadP){
-  Thread::LockThreadList->Acquire();
-  int i = 0;
-
-  while (Thread::ThreadList[i] != ThreadP && i < MaxNThread){
-    i++;
-  }
-
-  if(Thread::ThreadList[i] == ThreadP)
-  {
-    Thread::ThreadList[i] = NULL;
-    Thread::LockThreadList->Release();
-  }
-  else
-  {
-    Thread::LockThreadList->Release();
-    ASSERT(false);
-  }
-}
-
-int Thread::attendre(int tid){
-  Thread * ThreadToJoin = Thread::findThreadList(tid);
-
-  if (ThreadToJoin->ThreadJoinMutex == NULL){
-    return 1;
-  }
-
-  ThreadToJoin->ThreadJoinMutex->Acquire();
-  ThreadToJoin->ThreadJoinMutex->Release();
-
-  return 0;
-}
 #endif
-
-

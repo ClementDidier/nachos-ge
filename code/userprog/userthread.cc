@@ -36,20 +36,28 @@ struct userThreadParams
 */
 static void StartUserThread(int f)
 {
+	printf("abcfdfdfdfdf\n");
 
 	currentThread->space->InitRegisters();
 	currentThread->space->RestoreState();
+
 	struct userThreadParams * params = (struct userThreadParams *) f;
 	machine->WriteRegister (PCReg, params->f);
 	machine->WriteRegister (NextPCReg, params->f + 4);
 	machine->WriteRegister (4, params->arg);
+	printf("abcéééééé\n");
+
 	machine->WriteRegister (RetAddrReg, params->retaddr);
 	int spr = machine->ReadRegister (StackReg);
 	machine->WriteRegister (StackReg, spr - (UserStackSize * currentThread->mapID));
 	spr = machine->ReadRegister (StackReg);
+	printf("abcéédddddddddddéééé\n");
+
 	currentThread->ThreadJoinMutex = new Lock("joinLock Thread");
   currentThread->ThreadJoinMutex->Acquire();
-	Thread::pushThreadList(currentThread);
+	currentThread->space->pushThreadList(currentThread);
+	printf("abcééééééZDQEFQEFESGESG\n");
+
 	delete params;
 	machine->Run();
 }
@@ -83,6 +91,7 @@ int do_UserThreadCreate(int f, int arg)
 		currentThread->space->UnbindUserThread();
 		return -1;
 	}
+
 	ASSERT(newThread->mapID >= 0);
 	struct argRetparams * addret = (struct argRetparams *) arg;
 
@@ -108,7 +117,7 @@ int do_UserThreadCreate(int f, int arg)
 */
 void do_UserThreadExit()
 {
-	Thread::deleteThreadList(currentThread);
+	currentThread->space->deleteThreadList(currentThread);
 	currentThread->space->mapLock->Acquire();
 	currentThread->space->threadMap->Clear(currentThread->mapID);
 	currentThread->space->mapLock->Release();
@@ -130,7 +139,7 @@ void do_UserThreadExit()
 int do_UserThreadJoin(int tid)
 {
 
-	if(Thread::checkThreadList(tid) == false){
+	if(currentThread->space->checkThreadList(tid) == false){
 		return 2; // si le thread n'existe plus
 	}
 
@@ -144,7 +153,7 @@ int do_UserThreadJoin(int tid)
 		return -1; // never reached
 	}
 
-	Thread::attendre(tid);
+	currentThread->space->attendre(tid);
 
 	return 1;
 }

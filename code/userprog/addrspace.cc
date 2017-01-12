@@ -70,7 +70,7 @@ static void ReadAtVirtual(OpenFile *executable, int virtualaddr, int numBytes,
 
   char buffer[numBytes];
   executable->ReadAt(buffer, numBytes, position);
-  
+
   int i;
   for(i = 0; i < numBytes; i++)
   {
@@ -131,7 +131,7 @@ AddrSpace::AddrSpace (OpenFile * executable)
       DEBUG('a', "Nombre de pages physiques insuffisant\n");
       ASSERT(FALSE);
     }
-    
+
     for (i = 0; i < numPages; i++)
       {
 	  pageTable[i].virtualPage = i;	// for now, virtual page # = phys page #
@@ -156,7 +156,7 @@ AddrSpace::AddrSpace (OpenFile * executable)
 	  /*executable->ReadAt (&(machine->mainMemory[noffH.code.virtualAddr]),
 			      noffH.code.size, noffH.code.inFileAddr);*/
 
-        ReadAtVirtual(executable, noffH.code.virtualAddr, noffH.code.size, 
+        ReadAtVirtual(executable, noffH.code.virtualAddr, noffH.code.size,
           noffH.code.inFileAddr, pageTable, numPages);
       }
     if (noffH.initData.size > 0)
@@ -168,16 +168,27 @@ AddrSpace::AddrSpace (OpenFile * executable)
 			       [noffH.initData.virtualAddr]),
 			      noffH.initData.size, noffH.initData.inFileAddr);*/
 
-        ReadAtVirtual(executable, noffH.initData.virtualAddr, noffH.initData.size, 
+        ReadAtVirtual(executable, noffH.initData.virtualAddr, noffH.initData.size,
           noffH.initData.inFileAddr, pageTable, numPages);
       }
+
       verrou = new Semaphore("verrouHalt", 1);
       mutex = new Semaphore("mutexNbActiveThread", 1);
       NbActiveThreads = 1;
 
-      mapLock = new Lock("bitmap lock");
+
+      //mapLock = new Lock("Map lock");
+      mapLock = NULL;
+      mapLock = new Lock("mapLock");
+      printf("kikooo %p\n", this);
+
       threadMap = new BitMap(MaxThread);
       threadMap->Mark(0);
+      int j;
+      for (j = 0;j<MaxThread;++j)
+        ThreadList[j] = NULL; // on initialize la bitmap des thread id à NULL
+
+      LockThreadList = new Lock("LockThreadList");
 }
 
 //----------------------------------------------------------------------
@@ -274,4 +285,94 @@ AddrSpace::UnbindUserThread()
   }
   mutex->V();
 
+}
+
+// ajoute le thread "value" dans le tableau des thread
+void
+AddrSpace::pushThreadList(Thread * value){
+  LockThreadList->Acquire();
+  int i = 0;
+
+  while (ThreadList[i] != NULL && i < MaxThread ){
+    i++;
+  }
+  if(i >= MaxThread){
+    LockThreadList->Release();
+    ASSERT(false);
+  }
+
+  ThreadList[i] = value;
+  LockThreadList->Release();
+}
+
+// vérifie si le thread #id est dans le tableau
+bool
+AddrSpace::checkThreadList(int tid){
+  LockThreadList->Acquire();
+  int i = 0;
+  bool trouve = false;
+  while (trouve == false && i < MaxThread){
+    if(ThreadList[i] != NULL){
+      if(ThreadList[i]->getTID() == tid){
+       trouve = true;
+      }
+    }
+    i++;
+  }
+  LockThreadList->Release();
+  return trouve;
+}
+
+// vérifie si le thread #id est dans le tableau
+Thread *
+AddrSpace::findThreadList(int tid){
+  LockThreadList->Acquire();
+  int i = 0;
+  bool trouve = false;
+  while (trouve == false && i < MaxThread){
+    if(ThreadList[i] != NULL){
+      if(ThreadList[i]->getTID() == tid){
+       trouve = true;
+      }
+    }
+    i++;
+  }
+  LockThreadList->Release();
+  return ThreadList[i--];
+}
+
+void
+AddrSpace::deleteThreadList(Thread * ThreadP){
+  LockThreadList->Acquire();
+  int i = 0;
+
+  while (ThreadList[i] != ThreadP && i < MaxThread){
+    i++;
+  }
+
+  if(ThreadList[i] == ThreadP)
+  {
+    ThreadList[i] = NULL;
+    LockThreadList->Release();
+  }
+  else
+  {
+    LockThreadList->Release();
+    ASSERT(false);
+  }
+}
+
+int AddrSpace::attendre(int tid){
+  Thread * ThreadToJoin = findThreadList(tid);
+  if (ThreadToJoin == NULL){
+    return 2;
+  }
+  if (ThreadToJoin->ThreadJoinMutex == NULL){
+    return 1;
+  }
+
+  ThreadToJoin->ThreadJoinMutex->Acquire();
+  ThreadToJoin->ThreadJoinMutex->Release();
+
+  return 0;
 }
