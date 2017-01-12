@@ -32,6 +32,7 @@ Machine *machine;		// user program memory and registers
 
 #ifdef CHANGED
 SynchConsole *synchconsole;
+FrameProvider *frameProvider;
 #endif
 
 #endif
@@ -164,6 +165,7 @@ Initialize (int argc, char **argv)
     machine = new Machine (debugUserProg);	// this must come first
     #ifdef CHANGED
     	synchconsole = new SynchConsole(NULL, NULL);
+        frameProvider = new FrameProvider();
     #endif
 #endif
 
@@ -197,6 +199,7 @@ Cleanup ()
 
     #ifdef CHANGED
     	delete synchconsole;
+        delete frameProvider;
     #endif
 #endif
 

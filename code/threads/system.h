@@ -40,6 +40,11 @@ extern Machine *machine;	// user program memory and registers
 extern SynchConsole *synchconsole;
 #endif
 
+class FrameProvider;
+
+#include "frameprovider.h"
+extern FrameProvider *frameProvider;
+
 #endif
 
 #ifdef FILESYS_NEEDED		// FILESYS or FILESYS_STUB

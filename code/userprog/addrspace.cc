@@ -127,10 +127,17 @@ AddrSpace::AddrSpace (OpenFile * executable)
 	   numPages, size);
 // first, set up the translation
     pageTable = new TranslationEntry[numPages];
+    ASSERT(frameProvider->NumAvailFrame() >= 0);
+    if((unsigned)frameProvider->NumAvailFrame() < numPages)
+    {
+      printf("NumAvailFrame : %d   numPages : %d\n", frameProvider->NumAvailFrame(), numPages);
+      DEBUG('a', "Nombre de pages physiques insuffisant\n");
+      ASSERT(FALSE);
+    }
     for (i = 0; i < numPages; i++)
       {
 	  pageTable[i].virtualPage = i;	// for now, virtual page # = phys page #
-	  pageTable[i].physicalPage = (i + 1) % numPages;
+	  pageTable[i].physicalPage = frameProvider->GetEmptyFrame();;
 	  pageTable[i].valid = TRUE;
 	  pageTable[i].use = FALSE;
 	  pageTable[i].dirty = FALSE;

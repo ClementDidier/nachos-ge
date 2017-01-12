@@ -9,20 +9,20 @@ FrameProvider::~FrameProvider(){
 	delete frameMap;
 }
 
-int FrameProvider::GetEmptyFrame(){
+int FrameProvider::FrameProvider::GetEmptyFrame(){
 	int pageIndex = frameMap->Find();
 	if(pageIndex == -1){
-		DEBUG('a', "Nombre de pages physiques inssufisant");
+		DEBUG('a', "Impossible de récupérer la page physique\n");
 		ASSERT(FALSE);
 	}
 	bzero(machine->mainMemory + pageIndex * PageSize, PageSize);
 	return pageIndex;
 }
 
-void ReleaseFrame(int frame){
+void FrameProvider::ReleaseFrame(int frame){
 	frameMap->Clear(frame);
 }
 
-int NumAvailFrame(){
+int FrameProvider::NumAvailFrame(){
 	return frameMap->NumClear();
 }

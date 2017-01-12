@@ -1,9 +1,12 @@
-#ifndef ADDRSPACE_H
-#define ADDRSPACE_H
+#ifndef FRAMEPROVIDER_H
+#define FRAMEPROVIDER_H
 
 #include "bitmap.h"
 #include "machine.h"
-#include "string.h"
+#include "system.h"
+#include <string.h>
+
+class BitMap;
 
 /**
  * \class FrameProvider
@@ -47,10 +50,9 @@ class FrameProvider
 		int NumAvailFrame();
 
 	private:
-		Bitmap frameMap;
+		BitMap *frameMap;
+
+};
 
 
-}
-
-
-#endif // ADDRSPACE_H
+#endif // FRAMEPROVIDER_H
