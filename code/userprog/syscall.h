@@ -14,7 +14,7 @@
  * \brief Définit les appels systems et les déclares pour être utilisés.
  */
 
-#ifndef SYSCALLS_H || DOXYGEN
+#ifndef SYSCALLS_H
 #define SYSCALLS_H
 #define sem_t void
 #define MAX_SEM_NAME_SIZE 30
@@ -47,6 +47,7 @@
 #define SC_UserSemP 21
 #define SC_UserSemV 22
 #define SC_UserSemDelete 23
+#define SC_ForkExec			24
 
 #ifdef IN_USER_MODE
 
@@ -341,6 +342,13 @@ void UserSemV(sem_t * sem);
    * \param sem Semaphore qui doit être détruite, doit  crée par UserSemCreate
   */
 void UserSemDelete(sem_t * sem);
+
+/**
+ * \fn int ForkExec(char *s)
+ * \brief Créer un thread système et lance le programme donné avec le thread crée
+ * \param s Le nom du fichier executable à lancer
+ */
+int ForkExec(char *s);
 
 #endif // IN_USER_MODE
 

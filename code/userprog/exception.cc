@@ -203,8 +203,8 @@ ExceptionHandler (ExceptionType which)
         DEBUG('a', "Appel systeme SC_SemP réalisé\n");
         break;
       }
+      case SC_UserSemV:
       {
-        case SC_UserSemV:
         Semaphore* f = (Semaphore *)machine->ReadRegister(4);
         do_UserSemV(f);
         DEBUG('a', "Appel systeme SC_UserSemV réalisé\n");
@@ -215,6 +215,12 @@ ExceptionHandler (ExceptionType which)
         Semaphore* f = (Semaphore *)machine->ReadRegister(4);
         do_UserSemDelete(f);
         DEBUG('a', "Appel systeme SC_UserSemDelete réalisé\n");
+        break;
+      }
+      case SC_ForkExec:
+      {
+        // TODO
+        DEBUG('a', "Appel systeme SC_ForkExec réalisé\n");
         break;
       }
       default:
