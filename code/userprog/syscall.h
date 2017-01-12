@@ -17,6 +17,8 @@
 #ifndef SYSCALLS_H
 #define SYSCALLS_H
 #define sem_t void
+#define MAX_SEM_NAME_SIZE 30
+
 
 /* system call codes -- used by the stubs to tell the kernel which system call
  * is being asked for
