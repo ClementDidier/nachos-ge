@@ -3,7 +3,6 @@
  * \brief Permet la création et l'execution de thread utilisateurs
 */
 
-
 struct userThreadParams;
 
 struct argRetparams{

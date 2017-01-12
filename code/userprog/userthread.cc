@@ -8,7 +8,7 @@
 #include "addrspace.h"
 #include "machine.h"
 #include "syscall.h"
-
+#include "thread.h"
 
 /**
  * \struct userThreadParams
@@ -36,29 +36,21 @@ struct userThreadParams
 */
 static void StartUserThread(int f)
 {
-	printf("abcfdfdfdfdf\n");
-
 	currentThread->space->InitRegisters();
 	currentThread->space->RestoreState();
-
 	struct userThreadParams * params = (struct userThreadParams *) f;
 	machine->WriteRegister (PCReg, params->f);
 	machine->WriteRegister (NextPCReg, params->f + 4);
 	machine->WriteRegister (4, params->arg);
-	printf("abcéééééé\n");
-
 	machine->WriteRegister (RetAddrReg, params->retaddr);
 	int spr = machine->ReadRegister (StackReg);
 	machine->WriteRegister (StackReg, spr - (UserStackSize * currentThread->mapID));
 	spr = machine->ReadRegister (StackReg);
-	printf("abcéédddddddddddéééé\n");
-
 	currentThread->ThreadJoinMutex = new Lock("joinLock Thread");
-  currentThread->ThreadJoinMutex->Acquire();
-	currentThread->space->pushThreadList(currentThread);
-	printf("abcééééééZDQEFQEFESGESG\n");
-
+    currentThread->ThreadJoinMutex->Acquire();
+	currentThread->space->pushMeInThreadList();
 	delete params;
+	Thread::OpOnUserThreadSem->V();
 	machine->Run();
 }
 
@@ -79,6 +71,7 @@ static void StartUserThread(int f)
 */
 int do_UserThreadCreate(int f, int arg)
 {
+	Thread::OpOnUserThreadSem->P();
 	currentThread->space->BindUserThread();
 	currentThread->space->mapLock->Acquire();
 	int tid;
@@ -117,12 +110,14 @@ int do_UserThreadCreate(int f, int arg)
 */
 void do_UserThreadExit()
 {
+	Thread::OpOnUserThreadSem->P();
 	currentThread->space->deleteThreadList(currentThread);
 	currentThread->space->mapLock->Acquire();
 	currentThread->space->threadMap->Clear(currentThread->mapID);
 	currentThread->space->mapLock->Release();
 	currentThread->space->UnbindUserThread();
 	currentThread->ThreadJoinMutex->Release();
+	Thread::OpOnUserThreadSem->V();
 	currentThread->Finish();
 }
 
@@ -138,17 +133,20 @@ void do_UserThreadExit()
 */
 int do_UserThreadJoin(int tid)
 {
-
+	Thread::OpOnUserThreadSem->P();
 	if(currentThread->space->checkThreadList(tid) == false){
+		Thread::OpOnUserThreadSem->V();
 		return 2; // si le thread n'existe plus
 	}
 
 	if(tid == currentThread->getTID()){
+		Thread::OpOnUserThreadSem->V();
 		return 3; // si le thread est le thread courrant
 	}
 
 	// on vérifie si le numéro du thread est impossible
 	if(tid < 1){
+		Thread::OpOnUserThreadSem->V();
 		ASSERT(false);
 		return -1; // never reached
 	}

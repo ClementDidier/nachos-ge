@@ -27,8 +27,10 @@
 
 #ifdef USER_PROGRAM
 int Thread::TIDcnt = 0;
-Semaphore * Thread::TIDcntLock = new Semaphore("hih",1);
+Semaphore * Thread::TIDcntLock = new Semaphore("TIDcntLock",1);
+Semaphore * Thread::OpOnUserThreadSem = new Semaphore("OpOnUserThreadSem",1);
 #endif
+
 
 //----------------------------------------------------------------------
 // Thread::Thread

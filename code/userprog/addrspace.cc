@@ -174,19 +174,16 @@ AddrSpace::AddrSpace (OpenFile * executable)
 
       verrou = new Semaphore("verrouHalt", 1);
       mutex = new Semaphore("mutexNbActiveThread", 1);
+      GCThreadVerrou = new List;
       NbActiveThreads = 1;
-
-
-      //mapLock = new Lock("Map lock");
       mapLock = NULL;
       mapLock = new Lock("mapLock");
-      printf("kikooo %p\n", this);
-
       threadMap = new BitMap(MaxThread);
       threadMap->Mark(0);
       int j;
-      for (j = 0;j<MaxThread;++j)
+      for (j = 0;j<MaxThread;++j){
         ThreadList[j] = NULL; // on initialize la bitmap des thread id à NULL
+      }
 
       LockThreadList = new Lock("LockThreadList");
 }
@@ -287,12 +284,13 @@ AddrSpace::UnbindUserThread()
 
 }
 
-// ajoute le thread "value" dans le tableau des thread
+// ajoute le thread "currentThread" dans le tableau des thread
 void
-AddrSpace::pushThreadList(Thread * value){
+AddrSpace::pushMeInThreadList(){
   LockThreadList->Acquire();
   int i = 0;
 
+  // recherche d'un emplacement...
   while (ThreadList[i] != NULL && i < MaxThread ){
     i++;
   }
@@ -301,7 +299,19 @@ AddrSpace::pushThreadList(Thread * value){
     ASSERT(false);
   }
 
-  ThreadList[i] = value;
+  ThreadList[i] = currentThread;
+
+  // initialisation du "Garbage Collector" des verrou de join inutilisé
+
+  struct compteurVerrou * newCompteur = new struct compteurVerrou;
+
+  newCompteur->tid = currentThread->getTID();
+  newCompteur->compteur = 0;
+  newCompteur->mutexJoin = currentThread->ThreadJoinMutex;
+
+  GCThreadVerrou->Append ((void *) newCompteur);
+
+  // fin
   LockThreadList->Release();
 }
 
@@ -338,7 +348,7 @@ AddrSpace::findThreadList(int tid){
     i++;
   }
   LockThreadList->Release();
-  return ThreadList[i--];
+  return ThreadList[--i];
 }
 
 void
@@ -362,17 +372,74 @@ AddrSpace::deleteThreadList(Thread * ThreadP){
   }
 }
 
+struct compteurVerrou * AddrSpace::findCompteurVerrou(int tid){
+  printf("je cherche un thread au tid = %d\n",tid);
+  if (GCThreadVerrou->IsEmpty()){
+    printf("is empty :'(\n");
+    return NULL;
+  }
+
+  struct compteurVerrou * first = (struct compteurVerrou *)GCThreadVerrou->Remove();
+  GCThreadVerrou->Append((void *) first); // on replace first en fin de liste
+
+  if(first->tid == tid){
+    return first;
+  }
+
+  struct compteurVerrou * test = (struct compteurVerrou *)GCThreadVerrou->Remove();
+
+  while(test != first){ // temps qu'on a pas parcouru toute la liste...
+    printf("je test un thread au tid = %d\n",test->tid);
+    GCThreadVerrou->Append((void *)test);
+    if(test->tid == tid){
+      return test;
+    }
+    else{
+      test = (struct compteurVerrou *)GCThreadVerrou->Remove();
+    }
+  }
+  printf("pas trouvé :'(\n");
+  return NULL; // pas trouvé
+
+}
+
 int AddrSpace::attendre(int tid){
   Thread * ThreadToJoin = findThreadList(tid);
+  Lock * mutexJoin = ThreadToJoin->ThreadJoinMutex;
+
   if (ThreadToJoin == NULL){
-    return 2;
-  }
-  if (ThreadToJoin->ThreadJoinMutex == NULL){
+    Thread::OpOnUserThreadSem->V();
     return 1;
   }
+  if (mutexJoin == NULL){
+    Thread::OpOnUserThreadSem->V();
+    return 2;
+  }
 
-  ThreadToJoin->ThreadJoinMutex->Acquire();
-  ThreadToJoin->ThreadJoinMutex->Release();
+  // dans les 2 cas précédent nous n'avons pas eu besoin de prendre le mutex !
 
+  struct compteurVerrou * structCompteur = findCompteurVerrou(tid);
+
+  if(structCompteur == NULL){
+    Thread::OpOnUserThreadSem->V();
+    ASSERT(false);
+    return -1;
+  }
+  // dans le cas précédent on a pas trouvé le compteur d'un thread actif, c'est une erreur.
+
+  structCompteur->compteur = structCompteur->compteur + 1; // on s'ajoute en temps que thread attendant
+
+  Thread::OpOnUserThreadSem->V();
+
+  structCompteur->mutexJoin->Acquire();
+
+    structCompteur->compteur = structCompteur->compteur-1;
+    if(structCompteur->compteur == 0){
+      delete structCompteur->mutexJoin;
+      delete structCompteur;
+    }
+    else{
+      structCompteur->mutexJoin->Release();
+    }
   return 0;
 }

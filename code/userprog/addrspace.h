@@ -19,6 +19,7 @@
 
 #include "copyright.h"
 #include "filesys.h"
+#include "list.h"
 #include "synch.h"
 #include "thread.h"
 
@@ -27,10 +28,16 @@
 #include "bitmap.h"
 #define MaxThread 4
 
+class Lock;
+struct compteurVerrou{
+  int tid;
+  int compteur;
+  Lock * mutexJoin;
+};
+
 
 class Semaphore; //Declaration de l'existence de Semaphore
 class Thread;
-class Lock;
 class AddrSpace
 {
   public:
@@ -47,7 +54,6 @@ class AddrSpace
     /**
      * \fn void BindUserThread()
      * \brief Lie un thread à cette AddrSpace
-     * \return retourne le numéro du thread
      *
     */
     void BindUserThread();
@@ -61,15 +67,17 @@ class AddrSpace
     Semaphore *mutex; // Ne dois JAMAIS depasser 1 token;
     Semaphore *verrou;
     Thread * ThreadList[MaxThread];
+    List * GCThreadVerrou; // on ne connait pas le nombre de thread supprimé qui ont des verroux en attente...
     Lock * mapLock;
     BitMap* threadMap;
 
 
-    void pushThreadList(Thread * value);
+    void pushMeInThreadList();
     bool checkThreadList(int tid);
     Thread * findThreadList(int tid);
     void deleteThreadList(Thread * ThreadP);
     int attendre(int tid);
+    struct compteurVerrou * findCompteurVerrou(int tid);
     Lock * LockThreadList;
 
   private:
