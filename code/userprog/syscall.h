@@ -11,7 +11,11 @@
 */
 /**
  * \file syscall.h
- * \brief Définit les appels systems et les déclares pour être utilisés.
+ * \brief Nachos system call interface.  These are Nachos kernel operations
+ * 	that can be invoked from user programs, by trapping to the kernel
+ *	via the "syscall" instruction.
+ *
+ *	This file is included by user programs and by the Nachos kernel.
  */
 
 #ifndef SYSCALLS_H
@@ -92,7 +96,8 @@ typedef int SpaceId;
 
 /**
  * \fn SpaceId Exec (char *name);
- * \brief TODO
+ * \brief Run the executable, stored in the Nachos file "name", and return the
+  * address space identifier
  * \param name TODO
  * \return TODO
  *
@@ -108,7 +113,8 @@ SpaceId Exec (char *name);
 
  /**
   * \fn int Join (SpaceId id);
-  * \brief TODO
+  * \brief  Only return once the the user program "id" has finished.
+   * Return the exit status.
   * \param id TODO
   * \return TODO
  */
@@ -138,7 +144,7 @@ typedef int OpenFileId;
 
 /**
  * \fn void Create (char *name)
- * \brief TODO
+ * \brief Create a Nachos file, with "name"
  * \param name TODO
  * \return TODO
 */
@@ -148,7 +154,8 @@ void Create (char *name);
 
 /**
  * \fn OpenFileId Open (char *name)
- * \brief TODO
+ * \brief Open the Nachos file "name", and return an "OpenFileId" that can
+  * be used to read and write to the file.
  * \param name TODO
  * \return TODO
 */
@@ -160,7 +167,7 @@ OpenFileId Open (char *name);
 
 /**
  * \fn void Write (char *buffer, int size, OpenFileId id)
- * \brief TODO
+ * \brief Write "size" bytes from "buffer" to the open file.
  * \param buffer TODO
  * \param size TODO
  * \param id TODO
@@ -171,7 +178,11 @@ void Write (char *buffer, int size, OpenFileId id);
 
 /**
  * \fn int Read (char *buffer, int size, OpenFileId id)
- * \brief TODO
+ * \brief Read "size" bytes from the open file into "buffer".
+  * Return the number of bytes actually read -- if the open file isn't
+  * long enough, or if it is an I/O device, and there aren't enough
+  * characters to read, return whatever is available (for I/O devices,
+  * you should always wait until you can return at least one character).
  * \param buffer TODO
  * \param size TODO
  * \param id TODO
@@ -188,7 +199,7 @@ int Read (char *buffer, int size, OpenFileId id);
 
 /**
  * \fn void void Close (OpenFileId id)
- * \brief TODO
+ * \brief Close the file, we're done reading and writing to it.
  * \param name TODO
  * \return TODO
 */
@@ -203,7 +214,9 @@ void Close (OpenFileId id);
 
  /**
   * \fn void Fork (void (*func) ())
-  * \brief TODO
+  * \brief User-level thread operations: Fork and Yield.  To allow multiple
+   * threads to run within a user program. Fork a thread to run a procedure ("func") in the *same* address space
+   * as the current thread.
   * \param  TODO
  */
 
@@ -214,7 +227,9 @@ void Fork (void (*func) ());
 
 /**
  * \fn void void Yield ()
- * \brief TODO
+ * \brief User-level thread operations: Fork and Yield.  To allow multiple
+  * threads to run within a user program. Yield the CPU to another runnable thread, whether in this address space
+   * or not.
 */
 
 /* Yield the CPU to another runnable thread, whether in this address space
@@ -225,7 +240,7 @@ void Yield ();
 /**
  * \fn void PutChar(char c)
  * \brief Ecrit un caractère sur la console standard.
- * La fonction grantit un affichage synchorne
+ * La fonction grantit un affichage synchorne d'un caractère.
  * \param c Le paramètre doit être de type char.
  */
 void PutChar(char c);
@@ -233,6 +248,7 @@ void PutChar(char c);
 /**
  * \fn char GetChar()
  * \brief Obtient un caractère depuis l'entrée de la console standard et le retourne.
+ *
  * \return Retourne le caractère entré dans la console
  */
 char GetChar();
@@ -249,7 +265,8 @@ void PutString(const char *s);
 /**
  * \fn void GetString(char *s, int n)
  * \brief Obtient une chaîne de caractère de taille maximale définie depuis l'entrée
- * de la console standard
+ * de la console standard. L'utilisateur choisit la taille du buffer de reception.
+ * Il choisit donc la taille de la chaine à recuperer
  * \param s Buffer dans lequel les données lues seront écrites, il doit etre initialisé
  * et doit pouvoir contenir n place
  * \param n Corresepond à la taille maximale de la chaine de caracteres
@@ -259,7 +276,7 @@ void GetString(char *s, int n);
 
 /**
  * \fn void PutInt(int n)
- * \brief Ecrit un entier sur la console standard
+ * \brief Ecrit un entier sur la console standard.
  * \param n Entier a écrire sur la console
  */
 void PutInt(int n);
@@ -275,10 +292,11 @@ void GetInt(int * n);
  * \fn int UserThreadCreate(void f(void *arg), void *arg)
  * \brief Demande la création d'un thread utilisateur au système qui executer la
  * fonction dont le pointeur sera passé en paramètre et qui transmetra a cette
- * fonction l'argument passé en 2nd paramètre (un void *)
- * \param f Pointeur vers une fonction à 1 argument
+ * fonction l'argument passé en 2nd paramètre (un void *) qui devra etre récuperé
+ * comme un void étoile, et casté dans son type d'origine
+ * \param f Pointeur vers une fonction à 1 argument (de profil void f (void *) )
  * \param arg Argument à passer a la fonction f, a caster en void*
- * \return Retour le TID du thread créé ou -1 si la création a échouée
+ * \return Retour le TID du thread créé ou -1 si la création a échouée (Manque de place dans la mémoire etc)
  */
 int UserThreadCreate(void f(void *arg), void *arg);
 
@@ -287,7 +305,8 @@ int UserThreadCreate(void f(void *arg), void *arg);
  * \brief Demande la terminaison du thread utilisateur actuel, elle peut etre
  * retardée si d'autres processus sont en création/terminaison, les données du
  * processus seront détruites et son espace mis à disposition pour de nouveaux
- * threads
+ * threads. Si d'autres threads attendent la fin de l'execution de ce thread
+ * (UserThreadJoin), ils reprendront peu après l'appel de cette fonction.
  *
  */
 void UserThreadExit();
@@ -295,11 +314,14 @@ void UserThreadExit();
 /**
  * \fn void UserThreadJoin(int tid)
  * \brief Attend la terminaison du thread dont le TID est passé en paramètre,
- * si ce thread n'existe pas, la fonction laisse passer l'utilisateur, si un thread
+ * si ce thread n'existe pas (Déjà terminé, ou TID n'appartenant a aucun thread),
+   la fonction laisse passer l'utilisateur, si un thread
  * essaye de s'attendre lui meme, il passe aussi. Dans les 2 derniers cas, la fonction
- * retourne 1, si l'utilisateur essaye de rejoindre un PID impossible (< 1), la fonction
- * le laisse passer et retourne -1, enfin, si l'utilisateur attend le thread spécifié
- * comme il le faut, la fonction retourne 0 a la fin de l'execution
+ * retourne 1, si l'utilisateur essaye de rejoindre un TID impossible (< 1, donc soit
+ *  le thread 0, le thread père, soit un TID négatif), la fonction
+ * le laisse passer et retourne -1, enfin, si l'utilisateur peut attendre le thread spécifié
+ * comme il le faut, il se met en attente et la fonction retourne 0 lorsque le thread spécifié
+ * s'est terminé et que le thread a fini d'attendre.
  *
  * \param tid Thread ID du thread a attendre
  * \return Retourn 1 si le thread n'existe pas ou est le thread actuel, -1 si le
@@ -310,7 +332,10 @@ int UserThreadJoin(int tid);
 
 /**
  * \fn sem_t * UserSemCreate(char * name, int nb)
- * \brief créer une semaphore de type sem_t et renvoie un pointeur vers elle.
+ * \brief Créer une semaphore de type sem_t et renvoie un pointeur vers elle.
+ * Il est necessaire de passer en paramètre un nom ainsi que le nombre de tokens
+ * que possède cette semaphore. Cette semaphore devra ensuite être détruite par
+ * UserSemDelete.
  * \param name nom de la semaphore, ne doit pas dépasser MAX_SEM_NAME_SIZE caractères
  * \param nb Nombre de token a passer a la sémaphore, doit etre égal ou supérieur
  * a zéro
@@ -322,7 +347,7 @@ sem_t * UserSemCreate(char * name, int nb);
  * \fn void UserSemP(sem_t * sem)
  * \brief Consome un token de la semaphore ou attend qu'un token soit entré si
  * il n'y en a pas de disponible. Un pointeur vers une sémaphore crée par
- * UserSemCreate doit etre passé en paramètre
+ * UserSemCreate doit etre passé en paramètre.
  * \param sem Semaphore qui doit recevoir l'opération P(), doit  crée par UserSemCreate
 */
 void UserSemP(sem_t * sem);
