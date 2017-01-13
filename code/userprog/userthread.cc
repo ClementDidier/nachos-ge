@@ -116,7 +116,7 @@ void do_UserThreadExit()
 	currentThread->space->threadMap->Clear(currentThread->mapID);
 	currentThread->space->mapLock->Release();
 	currentThread->space->UnbindUserThread();
-	currentThread->ThreadJoinMutex->Release();
+	currentThread->space->checkIfWaitingThread(currentThread->getTID());
 	Thread::OpOnUserThreadSem->V();
 	currentThread->Finish();
 }

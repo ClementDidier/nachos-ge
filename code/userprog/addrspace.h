@@ -79,6 +79,7 @@ class AddrSpace
     int attendre(int tid);
     struct compteurVerrou * findCompteurVerrou(int tid);
     Lock * LockThreadList;
+    int checkIfWaitingThread (int tid);
 
   private:
 
