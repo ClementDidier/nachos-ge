@@ -25,6 +25,14 @@
 
 #define UserStackSize		1024	// increase this as necessary!
 
+#define noThreadJoinFound 1
+#define noMutexJoinFound 2
+#define successWait 3
+
+#define structCompteurNotFound 1;
+#define structCompteurDeleted 2;
+#define structCompteurInUse 3;
+
 #include "bitmap.h"
 #define MaxThread 4
 
