@@ -446,24 +446,3 @@ int AddrSpace::attendre(int tid){
     }
   return 0;
 }
-
-
-// assume mutexJoin->Acquire()
-// Thread::OpOnUserThreadSem->V()
-int AddrSpace::checkIfWaitingThread(int tid){
-  struct compteurVerrou * structCompteur = findCompteurVerrou(tid);
-  if(structCompteur == NULL){
-    structCompteur->mutexJoin->Release();
-    return 1;
-  }
-  if(structCompteur->compteur == 0){
-    structCompteur->mutexJoin->Release();
-    delete structCompteur->mutexJoin;
-    delete structCompteur;
-    return 2;
-  }
-  else{
-    structCompteur->mutexJoin->Release();
-    return 3;
-  }
-}
