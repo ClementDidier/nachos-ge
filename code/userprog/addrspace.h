@@ -23,7 +23,7 @@
 #define UserStackSize		1024	// increase this as necessary!
 
 #include "bitmap.h"
-#define MaxThread 4
+#define MaxThread 5
 
 
 class Semaphore; //Declaration de l'existence de Semaphore

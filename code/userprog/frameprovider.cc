@@ -1,6 +1,6 @@
 #include "frameprovider.h"
 
-#define RANDOMLY TRUE
+#define RANDOMLY FALSE
 
 FrameProvider::FrameProvider()
 {
@@ -17,6 +17,7 @@ int FrameProvider::FrameProvider::GetEmptyFrame()
 {
 	int pageIndex = -1;
 
+	//printf("Avail : %d\n", frameMap->NumClear());
 	// Selection de l'index du cadre aléatoirement ou par first find
 	if(RANDOMLY)
 	{
@@ -63,10 +64,16 @@ int FrameProvider::NumAvailFrame()
 	return frameMap->NumClear();
 }
 
+void threadHandler(int arg)
+{
+	currentThread->space->InitRegisters ();
+    currentThread->space->RestoreState ();
+
+    machine->Run();
+}
+
 int FrameProvider::ForkExec(char *s)
 {
-	scheduler->ReadyToRun(currentThread);
-	
 	OpenFile *executable = fileSystem->Open (s);
 	Thread* t = new Thread("forked thread");
 	AddrSpace *space;
@@ -78,17 +85,14 @@ int FrameProvider::ForkExec(char *s)
       }
 
     space = new AddrSpace (executable);
-    
-    space->InitRegisters ();
-    space->RestoreState ();
     t->space = space;
+    
 
     delete executable;
 
-    scheduler->ReadyToRun (t);
+    // Fork personnalisé qui ne réécrit pas sur l'AddrSpace du Thread
+    t->ForkExec(threadHandler, 0);
 
-    //scheduler->Run(t);
-    //currentThread = t;
     scheduler->Print();
     printf("\n");
 

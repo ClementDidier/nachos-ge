@@ -110,9 +110,13 @@ AddrSpace::AddrSpace (OpenFile * executable)
 
 // how big is address space?
     size = noffH.code.size + noffH.initData.size + noffH.uninitData.size + UserStackSize * MaxThread;	// we need to increase the size
+    
+
     // to leave room for the stack
     numPages = divRoundUp (size, PageSize);
     size = numPages * PageSize;
+
+    printf("DEMANDE : %d pages\n", numPages);
 
     ASSERT (numPages <= NumPhysPages);	// check we're not trying
     // to run anything too big --

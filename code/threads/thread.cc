@@ -148,6 +148,18 @@ Thread::getTID(){
   return -1;
 }
 
+void
+Thread::ForkExec (VoidFunctionPtr func, int arg)
+{
+    DEBUG ('t', "[Special] Forking thread \"%s\" with func = 0x%x, arg = %d\n", name, (int) func, arg);
+
+    StackAllocate (func, arg);
+
+    IntStatus oldLevel = interrupt->SetLevel (IntOff);
+    scheduler->ReadyToRun (this);
+    (void) interrupt->SetLevel (oldLevel);
+}
+
 //----------------------------------------------------------------------
 // Thread::CheckOverflow
 //      Check a thread's stack to see if it has overrun the space
