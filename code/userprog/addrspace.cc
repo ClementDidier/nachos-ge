@@ -175,6 +175,7 @@ AddrSpace::AddrSpace (OpenFile * executable)
       verrou = new Semaphore("verrouHalt", 1);
       mutex = new Semaphore("mutexNbActiveThread", 1);
       GCThreadVerrou = new List;
+      GCThreadVerrouLock = new Lock("Verrou pour la liste des verrous");
       NbActiveThreads = 1;
       mapLock = NULL;
       mapLock = new Lock("mapLock");
@@ -300,6 +301,7 @@ AddrSpace::pushMeInThreadList(){
   }
 
   ThreadList[i] = currentThread;
+  LockThreadList->Release();
 
   // initialisation du "Garbage Collector" des verrou de join inutilisé
 
@@ -309,10 +311,11 @@ AddrSpace::pushMeInThreadList(){
   newCompteur->compteur = 0;
   newCompteur->mutexJoin = currentThread->ThreadJoinMutex;
 
+  GCThreadVerrouLock->Acquire();
   GCThreadVerrou->Append ((void *) newCompteur);
+  GCThreadVerrouLock->Release();
 
   // fin
-  LockThreadList->Release();
 }
 
 // vérifie si le thread #id est dans le tableau
@@ -337,18 +340,18 @@ AddrSpace::checkThreadList(int tid){
 Thread *
 AddrSpace::findThreadList(int tid){
   LockThreadList->Acquire();
-  int i = 0;
-  bool trouve = false;
-  while (trouve == false && i < MaxThread){
+  int i;
+  for(i = 0; i < MaxThread; ++i)
+  {
     if(ThreadList[i] != NULL){
       if(ThreadList[i]->getTID() == tid){
-       trouve = true;
+        LockThreadList->Release();
+        return ThreadList[i];
       }
     }
-    i++;
   }
   LockThreadList->Release();
-  return ThreadList[--i];
+  return NULL;
 }
 
 void
@@ -373,9 +376,8 @@ AddrSpace::deleteThreadList(Thread * ThreadP){
 }
 
 struct compteurVerrou * AddrSpace::findCompteurVerrou(int tid){
-  printf("je cherche un thread au tid = %d\n",tid);
+  GCThreadVerrouLock->Acquire();
   if (GCThreadVerrou->IsEmpty()){
-    printf("is empty :'(\n");
     return NULL;
   }
 
@@ -383,22 +385,23 @@ struct compteurVerrou * AddrSpace::findCompteurVerrou(int tid){
   GCThreadVerrou->Append((void *) first); // on replace first en fin de liste
 
   if(first->tid == tid){
+    GCThreadVerrouLock->Release();
     return first;
   }
 
   struct compteurVerrou * test = (struct compteurVerrou *)GCThreadVerrou->Remove();
 
-  while(test != first){ // temps qu'on a pas parcouru toute la liste...
-    printf("je test un thread au tid = %d\n",test->tid);
+  while(test != first){ // tant qu'on a pas parcouru toute la liste...
     GCThreadVerrou->Append((void *)test);
     if(test->tid == tid){
+      GCThreadVerrouLock->Release();
       return test;
     }
     else{
       test = (struct compteurVerrou *)GCThreadVerrou->Remove();
     }
   }
-  printf("pas trouvé :'(\n");
+  GCThreadVerrouLock->Release();
   return NULL; // pas trouvé
 
 }

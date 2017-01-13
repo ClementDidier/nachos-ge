@@ -68,6 +68,7 @@ class AddrSpace
     Semaphore *verrou;
     Thread * ThreadList[MaxThread];
     List * GCThreadVerrou; // on ne connait pas le nombre de thread supprimé qui ont des verroux en attente...
+    Lock * GCThreadVerrouLock;
     Lock * mapLock;
     BitMap* threadMap;
 
