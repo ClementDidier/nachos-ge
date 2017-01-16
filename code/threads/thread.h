@@ -51,8 +51,6 @@
 // The SPARC and MIPS only need 10 registers, but the Snake needs 18.
 // For simplicity, this is just the max over all architectures.
 #define MachineStateSize 18
-#define MaxNThread (MemorySize/1024)+2 // set 1024 to the stack size of an user Thread
-
 
 // Size of the thread's private execution stack.
 // WATCH OUT IF THIS ISN'T BIG ENOUGH!!!!!
@@ -90,7 +88,6 @@ class Thread
   public:
       Thread (const char *debugName);	// initialize a Thread
      ~Thread ();		// deallocate a Thread
-    static Thread * ThreadList[MaxNThread];
     // NOTE -- thread being deleted
     // must not be running when delete
     // is called
@@ -119,13 +116,7 @@ class Thread
     }
 
     int getTID();
-    static void pushThreadList(Thread * value);
-    static bool checkThreadList(int tid); 
-    static Thread * findThreadList(int tid); 
-    static void deleteThreadList(Thread * ThreadP);
-    static int attendre(int tid);
     Lock * ThreadJoinMutex;
-    static Lock * LockThreadList;
 
     int mapID;
 
@@ -153,6 +144,7 @@ class Thread
     int TID;
     static int TIDcnt;
     static Semaphore* TIDcntLock;
+    static Semaphore* OpOnUserThreadSem;
     void SaveUserState ();	// save user-level register state
     void RestoreUserState ();	// restore user-level register state
     AddrSpace *space;		// User code this thread is running.

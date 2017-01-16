@@ -16,27 +16,30 @@ void aff(void * x)
 	PutInt(i);
 	while(i <= 50){
 		i++;
+		PutInt((int) x);
+		PutChar(' ');
 		PutInt(i);
 		PutString("\n");
+		if(i == 25){
+			UserThreadJoin(2);
+		}
 	}
 }
 
 int
 main()
 {
-	//PutString("<---->");
-	int tid = UserThreadCreate(aff, (void *) 4);
-	int tid2 = UserThreadCreate(aff, (void *) 4);
-	PutString("\nTID du Thread Créé :");
-	PutInt(tid);
-	PutString("\n");
+
+	int tid = UserThreadCreate(aff, (void *) 1);
+	int tid2 = UserThreadCreate(aff, (void *) 2);
+	int tid3 =UserThreadCreate(aff, (void *) 3);
+	UserThreadJoin(tid3);
+
+	PutString("\n--- tid3 doit avoir fini maintenant--- \n");
 
 	UserThreadJoin(tid);
 	UserThreadJoin(tid2);
-
-	PutString("\n");
-	PutString("\n");
-	PutString("\n");
+	UserThreadJoin(tid3);
 
 	Halt ();
 
