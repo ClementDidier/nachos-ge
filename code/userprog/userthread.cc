@@ -48,7 +48,7 @@ static void StartUserThread(int f)
 	spr = machine->ReadRegister (StackReg);
 	currentThread->ThreadJoinMutex = new Lock("joinLock Thread");
     currentThread->ThreadJoinMutex->Acquire();
-	currentThread->space->pushMeInThreadList();
+	currentThread->space->PushMeInThreadList();
 	delete params;
 	Thread::OpOnUserThreadSem->V();
 	machine->Run();
@@ -110,12 +110,12 @@ int do_UserThreadCreate(int f, int arg)
 void do_UserThreadExit()
 {
 	Thread::OpOnUserThreadSem->P();
-	currentThread->space->deleteThreadList(currentThread);
+	currentThread->space->DeleteThreadList(currentThread);
 	currentThread->space->mapLock->Acquire();
 	currentThread->space->threadMap->Clear(currentThread->mapID);
 	currentThread->space->mapLock->Release();
 	currentThread->space->UnbindUserThread();
-	currentThread->space->checkIfWaitingThread(currentThread->getTID());
+	currentThread->space->CheckIfWaitingThread(currentThread->getTID());
 	Thread::OpOnUserThreadSem->V();
 	currentThread->Finish();
 }
@@ -133,24 +133,20 @@ void do_UserThreadExit()
 int do_UserThreadJoin(int tid)
 {
 	Thread::OpOnUserThreadSem->P();
-	if(currentThread->space->checkThreadList(tid) == false){
+	if(currentThread->space->CheckThreadList(tid) == false){
 		Thread::OpOnUserThreadSem->V();
 		return 2; // si le thread n'existe plus
 	}
-
 	if(tid == currentThread->getTID()){
 		Thread::OpOnUserThreadSem->V();
 		return 3; // si le thread est le thread courrant
 	}
-
 	// on vérifie si le numéro du thread est impossible
 	if(tid < 1){
 		Thread::OpOnUserThreadSem->V();
 		ASSERT(false);
 		return -1; // never reached
 	}
-
-	currentThread->space->attendre(tid);
-
+	currentThread->space->Attendre(tid);
 	return 1;
 }

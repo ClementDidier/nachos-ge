@@ -75,22 +75,22 @@ class AddrSpace
     Semaphore *mutex; // Ne dois JAMAIS depasser 1 token;
     Semaphore *verrou;
     Thread * ThreadList[MaxThread];
-    struct compteurVerrou * GCThreadVerrou[MaxThread]; // on ne connait pas le nombre de thread supprimé qui ont des verroux en attente...
+    struct compteurVerrou * GCThreadVerrou[MaxThread*2]; // il y a au maximum Maxthread et chaque thread attend au maximum 1 autre thread...
     Lock * GCThreadVerrouLock;
     Lock * mapLock;
     BitMap* threadMap;
 
 
-    void pushMeInThreadList();
-    bool checkThreadList(int tid);
-    Thread * findThreadList(int tid);
-    void deleteThreadList(Thread * ThreadP);
-    int attendre(int tid);
-    struct compteurVerrou * findCompteurVerrou(int tid);
+    void PushMeInThreadList();
+    bool CheckThreadList(int tid);
+    Thread * FindThreadList(int tid);
+    void DeleteThreadList(Thread * ThreadP);
+    int Attendre(int tid);
+    struct compteurVerrou * FindCompteurVerrou(int tid);
     Lock * LockThreadList;
-    int checkIfWaitingThread (int tid);
+    int CheckIfWaitingThread (int tid);
     int AddInGCThreadVerrou(struct compteurVerrou *);
-    void deleteInGC(struct compteurVerrou * compteur);
+    void GarbageCollector();
 
   private:
 

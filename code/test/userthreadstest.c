@@ -1,53 +1,39 @@
 #include "syscall.h"
 
-void print(char c, int n)
-{
-	int i;
-	for (i = 0; i < n; i++)
-	{
-		PutChar((char)(c+i));
-	}
-	PutChar('\n');
-}
+#define nbthread 20
 
-void aff(void * x)
+sem_t * sem;
+
+void aff(void * t)
 {
+	int tid = (int) t;
 	int i = 1;
 	while(i <= 10){
+		UserSemP(sem);
+		PutString("Thread #");
+		PutInt(tid);
+		PutString(" en cours d'exécution ; i = ");
+		PutInt(i);
+		PutChar('\n');
+		UserSemV(sem);
 		i++;
-		PutInt((int) x);
-		PutString("\n");
 	}
 }
 
 int
 main()
 {
-
-	//int maxThread = 20;
+	sem = UserSemCreate("affichages lisibles", 1);
 	int i;
-
-	/*for(i = 1; i<maxThread; i++){
-		UserThreadCreate(aff, (void *) i);
-		if(i > 1){
+	for(i = 1; i<nbthread; i++){
+		UserThreadCreate(aff, (void *) i); // on sait que tid = i
+		if(i % 3 == 0){
+			UserThreadJoin(i-2);
+			UserThreadJoin(i);
 			UserThreadJoin(i-1);
+			PutString("\n\nFin regoupement (désordonné) des Threads utilisateur \n\n");
 		}
-	}*/
-
-	i = 1;
-
-	UserThreadCreate(aff, (void *) i);
-	i++;
-	UserThreadCreate(aff, (void *) i);
-	i++;
-	UserThreadCreate(aff, (void *) i);
-	i++;
-	UserThreadJoin(2);
-	UserThreadJoin(1);
-	UserThreadJoin(3);
-	PutString("------------------------\n");
-	UserThreadCreate(aff, (void *) i);
-	PutString("------------------------\n");
+	}
 
 	return 0;
 }
