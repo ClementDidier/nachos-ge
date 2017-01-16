@@ -77,14 +77,13 @@ int do_UserThreadCreate(int f, int arg)
 	int tid;
 	Thread *newThread = new Thread ("Thread Noyau");
 	newThread->mapID = currentThread->space->threadMap->Find();
-
 	if (newThread->mapID == -1)
 	{
+		Thread::OpOnUserThreadSem->V();
 		currentThread->space->mapLock->Release();
 		currentThread->space->UnbindUserThread();
 		return -1;
 	}
-
 	ASSERT(newThread->mapID >= 0);
 	struct argRetparams * addret = (struct argRetparams *) arg;
 

@@ -82,6 +82,11 @@ Thread::~Thread ()
 
 #ifdef USER_PROGRAM
 
+/**
+ * \fn void Thread::setTID()
+ * \brief associe le TID du thread utilisateur courrant à celui du compteur
+ *  Incrémente le compteur (les opérations sont protégée par une sémaphore)
+*/
 void Thread::setTID(){
   TIDcntLock->P();
   TID = ++TIDcnt;
@@ -108,6 +113,14 @@ void Thread::setTID(){
 //      "arg" is a single argument to be passed to the procedure.
 //----------------------------------------------------------------------
 
+/**
+ * \fn void Thread::setTID()
+ * \brief associe le TID du thread utilisateur courrant à celui du compteur
+ *  Incrémente le compteur (les opérations sont protégée par une sémaphore)
+ * \params func is the procedure to run concurrently.
+ * \params arg is a single argument to be passed to the procedure.
+ * \return le tid unique du thread utulisateur
+*/
 int
 Thread::Fork (VoidFunctionPtr func, int arg)
 {
@@ -140,6 +153,11 @@ Thread::Fork (VoidFunctionPtr func, int arg)
     #endif
 }
 
+/**
+ * \fn int Thread::getTID()
+ * \brief retourne le tid de l'objet thread, (unique pour chaque thread utilisateur).
+ * \return le tid unique du thread utulisateur
+*/
 int
 Thread::getTID(){
   #ifdef USER_PROGRAM

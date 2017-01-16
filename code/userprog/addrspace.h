@@ -25,6 +25,14 @@
 
 #define UserStackSize		1024	// increase this as necessary!
 
+#define noThreadJoinFound 1
+#define noMutexJoinFound 2
+#define successWait 3
+
+#define structCompteurNotFound 1;
+#define structCompteurDeleted 2;
+#define structCompteurInUse 3;
+
 #include "bitmap.h"
 #define MaxThread 5
 
@@ -67,7 +75,7 @@ class AddrSpace
     Semaphore *mutex; // Ne dois JAMAIS depasser 1 token;
     Semaphore *verrou;
     Thread * ThreadList[MaxThread];
-    List * GCThreadVerrou; // on ne connait pas le nombre de thread supprimé qui ont des verroux en attente...
+    struct compteurVerrou * GCThreadVerrou[MaxThread]; // on ne connait pas le nombre de thread supprimé qui ont des verroux en attente...
     Lock * GCThreadVerrouLock;
     Lock * mapLock;
     BitMap* threadMap;
@@ -81,6 +89,8 @@ class AddrSpace
     struct compteurVerrou * findCompteurVerrou(int tid);
     Lock * LockThreadList;
     int checkIfWaitingThread (int tid);
+    int AddInGCThreadVerrou(struct compteurVerrou *);
+    void deleteInGC(struct compteurVerrou * compteur);
 
   private:
 
