@@ -31,6 +31,7 @@
 #include "userthread.h"
 #include "usersemaphore.h"
 #include "synch.h"
+#include "fork.h"
 
 
 //----------------------------------------------------------------------
@@ -212,7 +213,7 @@ ExceptionHandler (ExceptionType which)
 
         // Conversion String MIPS --> String LINUX
         synchconsole->copyStringFromMachine(arg, buffer, MAX_STRING_SIZE);
-        frameProvider->ForkExec(buffer);
+        ForkExec(buffer);
         DEBUG('a', "Appel systeme SC_ForkExec réalisé\n");
         break;
       }
