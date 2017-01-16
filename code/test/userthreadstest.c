@@ -12,17 +12,11 @@ void print(char c, int n)
 
 void aff(void * x)
 {
-	int i = 5;
-	PutInt(i);
-	while(i <= 50){
+	int i = 1;
+	while(i <= 10){
 		i++;
 		PutInt((int) x);
-		PutChar(' ');
-		PutInt(i);
 		PutString("\n");
-		if(i == 25){
-			UserThreadJoin(2);
-		}
 	}
 }
 
@@ -30,18 +24,30 @@ int
 main()
 {
 
-	int tid = UserThreadCreate(aff, (void *) 1);
-	int tid2 = UserThreadCreate(aff, (void *) 2);
-	int tid3 =UserThreadCreate(aff, (void *) 3);
-	UserThreadJoin(tid3);
+	//int maxThread = 20;
+	int i;
 
-	PutString("\n--- tid3 doit avoir fini maintenant--- \n");
+	/*for(i = 1; i<maxThread; i++){
+		UserThreadCreate(aff, (void *) i);
+		if(i > 1){
+			UserThreadJoin(i-1);
+		}
+	}*/
 
-	UserThreadJoin(tid);
-	UserThreadJoin(tid2);
-	UserThreadJoin(tid3);
+	i = 1;
 
-	Halt ();
+	UserThreadCreate(aff, (void *) i);
+	i++;
+	UserThreadCreate(aff, (void *) i);
+	i++;
+	UserThreadCreate(aff, (void *) i);
+	i++;
+	UserThreadJoin(2);
+	UserThreadJoin(1);
+	UserThreadJoin(3);
+	PutString("------------------------\n");
+	UserThreadCreate(aff, (void *) i);
+	PutString("------------------------\n");
 
 	return 0;
 }
