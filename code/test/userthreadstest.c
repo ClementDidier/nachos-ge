@@ -34,6 +34,5 @@ main()
 			PutString("\n\nFin regoupement (désordonné) des Threads utilisateur \n\n");
 		}
 	}
-
 	return 0;
 }

@@ -243,6 +243,14 @@ ForkExec:
 	j	$31
 	.end ForkExec
 
+  .globl AssertFull
+	.ent	AssertFull
+AssertFull:
+	addiu $2,$0, SC_Assert
+	syscall
+	j	$31
+	.end AssertFull
+
 /* dummy function to keep gcc happy */
         .globl  __main
         .ent    __main

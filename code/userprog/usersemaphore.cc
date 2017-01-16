@@ -2,11 +2,11 @@
 #include "synch.h"
 
 /**
- * \fn 
- * \brief 
- * \param 
- * \return 
- * \exception 
+ * \fn
+ * \brief
+ * \param
+ * \return
+ * \exception
 */
 Semaphore * do_UserSemCreate(char * name,int nb)
 {
@@ -15,11 +15,11 @@ Semaphore * do_UserSemCreate(char * name,int nb)
 }
 
 /**
- * \fn 
- * \brief 
- * \param 
- * \return 
- * \exception 
+ * \fn
+ * \brief
+ * \param
+ * \return
+ * \exception
 */
 void do_UserSemP(Semaphore * sem)
 {
@@ -27,11 +27,11 @@ void do_UserSemP(Semaphore * sem)
 }
 
 /**
- * \fn 
- * \brief 
- * \param 
- * \return 
- * \exception 
+ * \fn
+ * \brief
+ * \param
+ * \return
+ * \exception
 */
 void do_UserSemV(Semaphore * sem)
 {
@@ -39,11 +39,11 @@ void do_UserSemV(Semaphore * sem)
 }
 
 /**
- * \fn 
- * \brief 
- * \param 
- * \return 
- * \exception 
+ * \fn
+ * \brief
+ * \param
+ * \return
+ * \exception
 */
 void do_UserSemDelete(Semaphore * sem)
 {

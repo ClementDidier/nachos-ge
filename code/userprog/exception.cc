@@ -31,6 +31,7 @@
 #include "userthread.h"
 #include "usersemaphore.h"
 #include "synch.h"
+#include "IziAssert.h"
 
 
 //----------------------------------------------------------------------
@@ -229,6 +230,19 @@ ExceptionHandler (ExceptionType which)
         synchconsole->copyStringFromMachine(arg, buffer, MAX_STRING_SIZE);
         frameProvider->ForkExec(buffer);
         DEBUG('a', "Appel systeme SC_ForkExec réalisé\n");
+        break;
+      }
+      case SC_Assert:
+      {
+        int res = machine->ReadRegister(4);
+        int res2 = machine->ReadRegister(5);
+        char res2str[MAX_STRING_SIZE];
+        synchconsole->copyStringFromMachine(res2, res2str, MAX_STRING_SIZE);
+        int res3 = machine->ReadRegister(6);
+        int res4 = machine->ReadRegister(7);
+        char res4str[MAX_STRING_SIZE];
+        synchconsole->copyStringFromMachine(res4, res4str, MAX_STRING_SIZE);
+        iziAssert(res, res2str, res3, res4str);
         break;
       }
       default:
