@@ -175,7 +175,6 @@ AddrSpace::AddrSpace (OpenFile * executable)
 
       verrou = new Semaphore("verrouHalt", 1);
       mutex = new Semaphore("mutexNbActiveThread", 1);
-      GCThreadVerrou = new List;
       GCThreadVerrouLock = new Lock("Verrou pour la liste des verrous");
       NbActiveThreads = 1;
       mapLock = NULL;
@@ -185,6 +184,7 @@ AddrSpace::AddrSpace (OpenFile * executable)
       int j;
       for (j = 0;j<MaxThread;++j){
         ThreadList[j] = NULL; // on initialize la bitmap des thread id à NULL
+        GCThreadVerrou[j] = NULL;
       }
 
       LockThreadList = new Lock("LockThreadList");
@@ -200,11 +200,9 @@ AddrSpace::~AddrSpace ()
   // LB: Missing [] for delete
   // delete pageTable;
   delete [] pageTable;
-  delete GCThreadVerrou;
   delete threadMap;
   delete mapLock;
   delete GCThreadVerrouLock;
-  delete GCThreadVerrou;
   delete verrou;
   delete mutex;
 
@@ -333,12 +331,27 @@ AddrSpace::pushMeInThreadList(){
   newCompteur->tid = currentThread->getTID();
   newCompteur->compteur = 0;
   newCompteur->mutexJoin = currentThread->ThreadJoinMutex;
-
-  GCThreadVerrouLock->Acquire();
-  GCThreadVerrou->Append ((void *) newCompteur);
-  GCThreadVerrouLock->Release();
+  
+  AddInGCThreadVerrou(newCompteur);
 
   // fin
+}
+
+int
+AddrSpace::AddInGCThreadVerrou(struct compteurVerrou * compteur)
+{
+  GCThreadVerrouLock->Acquire();
+  int i;
+  for(i = 0; i< MaxThread; i++){
+    if(GCThreadVerrou[i] == NULL){
+      GCThreadVerrou[i] = compteur;
+      GCThreadVerrouLock->Release();
+      return 1;
+    }
+  }
+  GCThreadVerrouLock->Release();
+  ASSERT(false);
+  return -1;
 }
 
 // vérifie si le thread #id est dans le tableau
@@ -426,39 +439,22 @@ AddrSpace::deleteThreadList(Thread * ThreadP){
 /**
  * \fn struct compteurVerrou * AddrSpace::findCompteurVerrou(int tid)
  * \brief cherche dans la liste GCThreadVerrou si une entrée possède le tid passé en paramètre
+ *  assume GCThreadVerrouLock->Acquire() avant l'appel...
  * \param tid : un numéro (int) the thread utilisateur 
  * \return un pointeur vers la structure compteurVerrou associé au thread utilisateur ayant ou ayant eu (= si le thread est déjà terminé) le tid passé en paramètre.
  *  Si aucune structure n'est trouvé ou si la liste est vide alors retourne NULL.
 */
-struct compteurVerrou * AddrSpace::findCompteurVerrou(int tid){
-  GCThreadVerrouLock->Acquire();
-  if (GCThreadVerrou->IsEmpty()){
-    return NULL;
-  }
+struct compteurVerrou * AddrSpace::findCompteurVerrou(int tid)
+{
 
-  struct compteurVerrou * first = (struct compteurVerrou *)GCThreadVerrou->Remove();
-  GCThreadVerrou->Append((void *) first); // on replace first en fin de liste
+  int i;
 
-  if(first->tid == tid){
-    GCThreadVerrouLock->Release();
-    return first;
-  }
-
-  struct compteurVerrou * test = (struct compteurVerrou *)GCThreadVerrou->Remove();
-
-  while(test != first){ // tant qu'on a pas parcouru toute la liste...
-    GCThreadVerrou->Append((void *)test);
-    if(test->tid == tid){
-      GCThreadVerrouLock->Release();
-      return test;
-    }
-    else{
-      test = (struct compteurVerrou *)GCThreadVerrou->Remove();
+  for (i = 0; i< MaxThread; i++){
+    if( GCThreadVerrou[i]->tid == tid ){
+      return GCThreadVerrou[i];
     }
   }
-  GCThreadVerrouLock->Release();
-  return NULL; // pas trouvé
-
+  return NULL;
 }
 
 /**
@@ -487,8 +483,9 @@ int AddrSpace::attendre(int tid){
   }
 
   // dans les 2 cas précédent nous n'avons pas eu besoin de prendre le mutex !
-
+  GCThreadVerrouLock->Acquire();
   struct compteurVerrou * structCompteur = findCompteurVerrou(tid);
+  GCThreadVerrouLock->Release();
 
   if(structCompteur == NULL){
     Thread::OpOnUserThreadSem->V();
@@ -506,6 +503,7 @@ int AddrSpace::attendre(int tid){
     structCompteur->compteur = structCompteur->compteur-1;
     if(structCompteur->compteur == 0){
       delete structCompteur->mutexJoin;
+      deleteInGC(structCompteur);
       delete structCompteur;
     }
     else{
@@ -526,19 +524,36 @@ int AddrSpace::attendre(int tid){
  * \exception Si ThreadJoinMutex n'a pas été verouillé alors une erreur sera provoqué lors du Release.
 */
 int AddrSpace::checkIfWaitingThread(int tid){
+  GCThreadVerrouLock->Acquire();
   struct compteurVerrou * structCompteur = findCompteurVerrou(tid);
+  GCThreadVerrouLock->Release();
+
   if(structCompteur == NULL){
     structCompteur->mutexJoin->Release();
     return structCompteurNotFound;
   }
+
   if(structCompteur->compteur == 0){
     structCompteur->mutexJoin->Release();
     delete structCompteur->mutexJoin;
+    deleteInGC(structCompteur);
     delete structCompteur;
     return structCompteurDeleted;
+
   }
   else{
     structCompteur->mutexJoin->Release();
     return structCompteurInUse;
   }
+}
+
+void AddrSpace::deleteInGC(struct compteurVerrou * compteur){
+  int i;
+  GCThreadVerrouLock->Acquire();
+  for(i = 1; i<MaxThread; i++){
+    if(GCThreadVerrou[i] == compteur){
+      GCThreadVerrou[i] = NULL;
+    }
+  }
+  GCThreadVerrouLock->Release();
 }
