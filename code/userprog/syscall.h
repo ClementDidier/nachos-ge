@@ -23,7 +23,6 @@
 #define sem_t void
 #define MAX_SEM_NAME_SIZE 30
 
-
 /* system call codes -- used by the stubs to tell the kernel which system call
  * is being asked for
  */
@@ -51,7 +50,8 @@
 #define SC_UserSemP 21
 #define SC_UserSemV 22
 #define SC_UserSemDelete 23
-#define SC_ForkExec			24
+#define SC_ForkExec	24
+#define SC_Assert 25
 
 #ifdef IN_USER_MODE
 
@@ -374,6 +374,9 @@ void UserSemDelete(sem_t * sem);
  * \param s Le nom du fichier executable à lancer
  */
 int ForkExec(char *s);
+
+#define Assert(res)  AssertFull(res, #res, __LINE__, __func__)
+void AssertFull(int res, const char* condition, const int lineNumber, const char* functionName);
 
 #endif // IN_USER_MODE
 

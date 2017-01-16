@@ -1,15 +1,4 @@
 #include "syscall.h"
-
-void print(char c, int n)
-{
-	int i;
-	for (i = 0; i < n; i++)
-	{
-		PutChar((char)(c+i));
-	}
-	PutChar('\n');
-}
-
 void aff(void * x)
 {
 	int i = 5;
@@ -31,8 +20,11 @@ main()
 {
 
 	int tid = UserThreadCreate(aff, (void *) 1);
+	Assert(tid != 1);
+
+	Halt();
 	int tid2 = UserThreadCreate(aff, (void *) 2);
-	int tid3 =UserThreadCreate(aff, (void *) 3);
+	int tid3 = UserThreadCreate(aff, (void *) 3);
 	UserThreadJoin(tid3);
 
 	PutString("\n--- tid3 doit avoir fini maintenant--- \n");
