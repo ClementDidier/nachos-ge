@@ -101,7 +101,7 @@ int do_UserThreadCreate(int f, int arg)
 /**
  * \fn int do_UserThreadExit()
  * \brief Supprime le thread courrant de la liste des thread actif. Ceci permet notament de pouvoir demander d'attendre un thread.
- *		Supprime le thread courrant de la bitmap des thread afin de libérer l'espace associé à ce thread utilisateur. Cette opération est protéger par un verrou
+ *		Supprime le thread courrant du tableau des thread actif afin de libérer l'espace associé à ce thread utilisateur. Cette opération est protéger par un verrou
  *		décrémente le nombre de Thread actuel du système
  *		Libère le verrou "ThreadJoinMutex". Ceci permet à d'autre thread d'aquérire ce verrou associé à ce thread. Un autre thread qui acquiert ce verrou signifie que ce thread est terminé.
  *		Termine le thread est détruit les structures associées

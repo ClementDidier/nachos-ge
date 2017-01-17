@@ -7,7 +7,7 @@
 
 int main()
 {
-	int i, g;
+	int i;
 	for(i = 47; i < 128; i++)
 	{
 		PutChar((char)i);

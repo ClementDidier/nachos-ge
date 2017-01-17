@@ -143,8 +143,7 @@ typedef int OpenFileId;
 /**
  * \fn void Create (char *name)
  * \brief Create a Nachos file, with "name"
- * \param name TODO
- * \return TODO
+ * \param name nom du fichier à créer
 */
 
 /* Create a Nachos file, with "name" */
@@ -166,9 +165,8 @@ OpenFileId Open (char *name);
  * \fn void Write (char *buffer, int size, OpenFileId id)
  * \brief Write "size" bytes from "buffer" to the open file.
  * \param buffer pointeur vers un tableau de char 
- * \param size TODO
- * \param id TODO
- * \return TODO
+ * \param size nombre de byte à écrire
+ * \param id du fichier dans lequel écrire
 */
 /* Write "size" bytes from "buffer" to the open file. */
 void Write (char *buffer, int size, OpenFileId id);
@@ -180,10 +178,10 @@ void Write (char *buffer, int size, OpenFileId id);
   * long enough, or if it is an I/O device, and there aren't enough
   * characters to read, return whatever is available (for I/O devices,
   * you should always wait until you can return at least one character).
- * \param buffer TODO
- * \param size TODO
- * \param id TODO
- * \return TODO
+ * \param buffer buffer initialisé dans lequel stocker les données lues.
+ * \param size taille maximum des données à lire dans le fichier
+ * \param id du ficheir à lire
+ * \return retourne le nombre de byte lus.
 */
 
 /* Read "size" bytes from the open file into "buffer".
@@ -197,8 +195,7 @@ int Read (char *buffer, int size, OpenFileId id);
 /**
  * \fn void void Close (OpenFileId id)
  * \brief Close the file, we're done reading and writing to it.
- * \param name TODO
- * \return TODO
+ * \param id du fichier à fermer
 */
 /* Close the file, we're done reading and writing to it. */
 void Close (OpenFileId id);
@@ -214,7 +211,7 @@ void Close (OpenFileId id);
   * \brief User-level thread operations: Fork and Yield.  To allow multiple
    * threads to run within a user program. Fork a thread to run a procedure ("func") in the *same* address space
    * as the current thread.
-  * \param  TODO
+  * \param  void (*func) () la fonction a exécuter en premier lors de la création du thread
  */
 
 /* Fork a thread to run a procedure ("func") in the *same* address space
