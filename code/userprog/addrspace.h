@@ -28,10 +28,10 @@
 #define noThreadJoinFound 1
 #define noMutexJoinFound 2
 #define successWait 3
+#define structCompteurWaseDeleted 4
 
 #define structCompteurNotFound 1;
-#define structCompteurDeleted 2;
-#define structCompteurInUse 3;
+#define structCompteurInUse 2;
 
 #include "bitmap.h"
 #define MaxThread 4

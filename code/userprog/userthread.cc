@@ -66,7 +66,7 @@ static void StartUserThread(int f)
  * \param arg Argument passé à cette fonction
  * \return Retourne le TID du thread utilisateur créé
  * \exception retourne -1 en cas d'erreur (pas assez d'espace disponible pour la création)
- *		Invalide un assert si l'on a pas pu trouver assez d'espace dans la bitmap représentant l'espace utilisé par threads.
+ *		Invalide un assert si l'on a pas pu trouver assez d'espace dans la bitmap représentant l'espace utilisé par threads une fois le test précédent réalisé.
  *
 */
 int do_UserThreadCreate(int f, int arg)

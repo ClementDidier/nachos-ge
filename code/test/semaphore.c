@@ -64,6 +64,8 @@ main()
   UserThreadCreate(consummer, (void *) 1);
   UserThreadCreate(consummer, (void *) 2);
 
+  Assert(semMutex && semFull);
+
   PutString("jobs done");
 
 //	Halt ();

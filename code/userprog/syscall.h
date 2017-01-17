@@ -96,10 +96,9 @@ typedef int SpaceId;
 
 /**
  * \fn SpaceId Exec (char *name);
- * \brief Run the executable, stored in the Nachos file "name", and return the
-  * address space identifier
- * \param name TODO
- * \return TODO
+ * \brief Run the executable, stored in the Nachos file "name" 
+ * \param name nom du fichier nachos
+ * \return return the address space identifier
  *
 */
 /* Run the executable, stored in the Nachos file "name", and return the
@@ -114,9 +113,8 @@ SpaceId Exec (char *name);
  /**
   * \fn int Join (SpaceId id);
   * \brief  Only return once the the user program "id" has finished.
-   * Return the exit status.
-  * \param id TODO
-  * \return TODO
+  * \param id id du programme a attendre
+  * \return Return the exit status.
  */
 int Join (SpaceId id);
 
@@ -156,8 +154,7 @@ void Create (char *name);
  * \fn OpenFileId Open (char *name)
  * \brief Open the Nachos file "name", and return an "OpenFileId" that can
   * be used to read and write to the file.
- * \param name TODO
- * \return TODO
+ * \param name nom du fichier nachos à créé
 */
 
 /* Open the Nachos file "name", and return an "OpenFileId" that can
@@ -168,7 +165,7 @@ OpenFileId Open (char *name);
 /**
  * \fn void Write (char *buffer, int size, OpenFileId id)
  * \brief Write "size" bytes from "buffer" to the open file.
- * \param buffer TODO
+ * \param buffer pointeur vers un tableau de char 
  * \param size TODO
  * \param id TODO
  * \return TODO
@@ -240,16 +237,16 @@ void Yield ();
 /**
  * \fn void PutChar(char c)
  * \brief Ecrit un caractère sur la console standard.
- * La fonction grantit un affichage synchorne d'un caractère.
+ * La fonction grantit un affichage synchrone d'un caractère.
  * \param c Le paramètre doit être de type char.
  */
 void PutChar(char c);
 
 /**
  * \fn char GetChar()
- * \brief Obtient un caractère depuis l'entrée de la console standard et le retourne.
- *
- * \return Retourne le caractère entré dans la console
+ * \brief Obtient un caractère depuis l'entrée de la console standard et le retourne. 
+ *  La fonction est bloquante, le thread attend une entrée utilisateur avant de poursuivre
+ * \return Retourne un char, caractère entré dans la console
  */
 char GetChar();
 
@@ -257,7 +254,7 @@ char GetChar();
  * \fn void PutString(const char *s)
  * \brief Ecrit une chaîne de caractères sur la console standard,
  * elle ne permet pas la concaténation dans l'appel de la fonction.
- *eg PutString("ab" + "bc") interdit
+ *  eg PutString("ab" + "bc") interdit.
  * \param s Chaine de caractère à entrer.
  */
 void PutString(const char *s);
@@ -266,7 +263,8 @@ void PutString(const char *s);
  * \fn void GetString(char *s, int n)
  * \brief Obtient une chaîne de caractère de taille maximale définie depuis l'entrée
  * de la console standard. L'utilisateur choisit la taille du buffer de reception.
- * Il choisit donc la taille de la chaine à recuperer
+ *  Il choisit donc la taille de la chaine à recuperer.
+ *  La fonction est bloquante, le thread attend une entrée utilisateur avant de poursuivre
  * \param s Buffer dans lequel les données lues seront écrites, il doit etre initialisé
  * et doit pouvoir contenir n place
  * \param n Corresepond à la taille maximale de la chaine de caracteres
@@ -284,19 +282,23 @@ void PutInt(int n);
 /**
  * \fn void GetInt(int * n)
  * \brief Obtient un entier sur 8bits depuis l'entrée de la console standard
- * \param n Entier codé sur 8 bits
+ *  Ne permet d'obtenir que des entier positif et inferieur ou égaux à 255.
+ *  La fonction est bloquante, le thread attend une entrée utilisateur avant de poursuivre.
+ * \param n Entier codé sur 8 bits. n pointera vers la valeur lue.
+ * \exception Invalide un assert si l'entier entrée n'est pas compris entre 0 et 255.
  */
 void GetInt(int * n);
 
 /**
  * \fn int UserThreadCreate(void f(void *arg), void *arg)
- * \brief Demande la création d'un thread utilisateur au système qui executer la
+ * \brief Demande la création d'un thread utilisateur au système qui execute la
  * fonction dont le pointeur sera passé en paramètre et qui transmetra a cette
  * fonction l'argument passé en 2nd paramètre (un void *) qui devra etre récuperé
- * comme un void étoile, et casté dans son type d'origine
- * \param f Pointeur vers une fonction à 1 argument (de profil void f (void *) )
- * \param arg Argument à passer a la fonction f, a caster en void*
- * \return Retour le TID du thread créé ou -1 si la création a échouée (Manque de place dans la mémoire etc)
+ * comme un void *, et casté dans son type d'origine par exemple.
+ * \param f Pointeur (non NULL) vers une fonction utilisateur qui sera exécutée au début du thread. La fonction ne doit prendre qu'un seul argument de type void*
+ * \param arg Argument (non NULL) à passer a la fonction f, a caster en void*
+ * \return Retourne le TID du thread créé ou -1 si la création a échouée (Manque de place dans la mémoire etc).
+ * \exception Invalide un assert si une erreur c'est produite lors de l'attribution de l'espace mémoire pour le thread utilisateur.
  */
 int UserThreadCreate(void f(void *arg), void *arg);
 
@@ -307,26 +309,24 @@ int UserThreadCreate(void f(void *arg), void *arg);
  * processus seront détruites et son espace mis à disposition pour de nouveaux
  * threads. Si d'autres threads attendent la fin de l'execution de ce thread
  * (UserThreadJoin), ils reprendront peu après l'appel de cette fonction.
- *
  */
 void UserThreadExit();
 
 /**
  * \fn void UserThreadJoin(int tid)
  * \brief Attend la terminaison du thread dont le TID est passé en paramètre,
- * si ce thread n'existe pas (Déjà terminé, ou TID n'appartenant a aucun thread),
-   la fonction laisse passer l'utilisateur, si un thread
- * essaye de s'attendre lui meme, il passe aussi. Dans les 2 derniers cas, la fonction
- * retourne 1, si l'utilisateur essaye de rejoindre un TID impossible (< 1, donc soit
- *  le thread 0, le thread père, soit un TID négatif), la fonction
- * le laisse passer et retourne -1, enfin, si l'utilisateur peut attendre le thread spécifié
- * comme il le faut, il se met en attente et la fonction retourne 0 lorsque le thread spécifié
- * s'est terminé et que le thread a fini d'attendre.
- *
+ * si ce thread n'existe pas ou plus (Déjà terminé, ou TID n'appartenant a aucun thread),
+ * la fonction laisse passer l'utilisateur.
+ * si un thread essaye de s'attendre lui meme, il passe aussi. 
+ * si l'utilisateur essaye de rejoindre un TID impossible (< 1, donc soit
+ * le thread 0, le thread père, soit un TID négatif), la fonction le laisse continuer, 
+ * enfin, si un thread possède le tid passé en paramètre existe et est en cours d'éxécution ou si d'autre thread attende ce thread, 
+ * la fonction place le thread courrant en attente jusqu'a ce que le thread soit terminé.
  * \param tid Thread ID du thread a attendre
- * \return Retourn 1 si le thread n'existe pas ou est le thread actuel, -1 si le
- * TID est impossible et 0 si l'execution s'est déroulée correctement
- *
+ * \return Retourne -1 si le tid est inférieur (strict) à 1
+ *  Retourne 1 si la fonction a attendue le thread ayant le tid passé en paramètre (le thread #tid était en exécution)
+ *  Retourne 2 si aucun thread n'avait le tid passé en paramètre.
+ *  Retourne 3 si l'on tente de s'attendre soit même.
  */
 int UserThreadJoin(int tid);
 
@@ -375,7 +375,22 @@ void UserSemDelete(sem_t * sem);
  */
 int ForkExec(char *s);
 
+/**
+ * \fn AssertFull(int res, const char* condition, const int lineNumber, const char* functionName);
+ * \brief version simplifié du assert utilisateur () ne termine pas le programme et affiche des informations sur l'évaluation du assert,
+ *  permet de spécifier un test boolean, la description, le numéro de ligne et le nom de la fonction sont renseigné automatiquement.
+ * \param res (int) : entier boolean a vérifier
+ */
 #define Assert(res)  AssertFull(res, #res, __LINE__, __func__)
+
+/**
+ * \fn AssertFull(int res, const char* condition, const int lineNumber, const char* functionName);
+ * \brief version complète de assert, permet de modifier tous les details sur tous les paramètres affichable par iziassert.
+ * \param res (int) : entier boolean a vérifier
+ * \param condition (const char *) : description du test
+ * \param lineNumber (int) : numéro de la ligne à indiquer.
+ * \param functionName (const char *): nom de la fonction appelant AssertFull
+ */
 void AssertFull(int res, const char* condition, const int lineNumber, const char* functionName);
 
 #endif // IN_USER_MODE
