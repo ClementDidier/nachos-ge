@@ -143,6 +143,8 @@ class Thread
   public:
     int TID;
     static int TIDcnt;
+    int PID;
+    static int PIDcnt;
     static Semaphore* TIDcntLock;
     static Semaphore* OpOnUserThreadSem;
     void SaveUserState ();	// save user-level register state

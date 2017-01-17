@@ -76,6 +76,7 @@ int do_UserThreadCreate(int f, int arg)
 	currentThread->space->mapLock->Acquire();
 	int tid;
 	Thread *newThread = new Thread ("Thread Noyau");
+	newThread->PID = currentThread->PID;
 	newThread->mapID = currentThread->space->threadMap->Find();
 	if (newThread->mapID == -1)
 	{
