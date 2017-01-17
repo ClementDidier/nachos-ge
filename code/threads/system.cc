@@ -18,6 +18,7 @@ Interrupt *interrupt;		// interrupt status
 Statistics *stats;		// performance metrics
 Timer *timer;			// the hardware timer device,
 					// for invoking context switches
+int processList[NumPhysPages];
 
 #ifdef FILESYS_NEEDED
 FileSystem *fileSystem;
@@ -158,10 +159,17 @@ Initialize (int argc, char **argv)
     interrupt->Enable ();
     CallOnUserAbort (Cleanup);	// if user hits ctl-C
 
+    int i = 0;
+    for(i = 0; i < NumPhysPages; i++){
+        processList[i] = -1;
+    }
+
 #ifdef USER_PROGRAM
     machine = new Machine (debugUserProg);	// this must come first
     synchconsole = new SynchConsole(NULL, NULL);
     frameProvider = new FrameProvider();
+    currentThread->PID = Thread::PIDcnt++;
+    processList[0] = currentThread->PID;
 #endif
 
 #ifdef FILESYS

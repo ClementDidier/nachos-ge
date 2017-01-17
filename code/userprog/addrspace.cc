@@ -24,7 +24,6 @@
 
 #include "bitmap.h"
 
-
 //----------------------------------------------------------------------
 // SwapHeader
 //      Do little endian to big endian conversion on the bytes in the

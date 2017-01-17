@@ -10,4 +10,6 @@
  */
 int ForkExec(char* s);
 
+void ProcessExit();
+
 #endif //FORK_H

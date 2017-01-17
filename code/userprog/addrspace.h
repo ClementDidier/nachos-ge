@@ -22,6 +22,7 @@
 #include "list.h"
 #include "synch.h"
 #include "thread.h"
+#include "machine.h"
 
 #define UserStackSize		1024	// increase this as necessary!
 

@@ -83,11 +83,13 @@ ExceptionHandler (ExceptionType which)
     {
       case SC_Exit:
       {
+        ProcessExit();
+        //printf("fhsqddsjhfds\n");
         break;
       }
       case SC_Halt:
       {
-        currentThread->space->verrou->P();
+        scheduler->Print();
         DEBUG('a', "Shutdown, initiated by user program.\n");
         interrupt->Halt();
         break;
