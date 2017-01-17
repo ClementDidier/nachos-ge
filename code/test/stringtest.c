@@ -1,3 +1,9 @@
+/**
+ * \file stringtest.c
+ * \brief Récupère des données de l'utilisateur via GetInt et affiche un (ou plusieurs)
+ * train(s) grace a l'appel de PutString
+ */
+
 #include "syscall.h"
 
 #define largeur 100

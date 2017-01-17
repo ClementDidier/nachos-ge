@@ -1,22 +1,18 @@
-#include "syscall.h"
+/**
+ * \file putchartest.c
+ * \brief Affiche les caractères de 47 à 127 sur la table ASCII grace à PutChar.
+ */
 
-void threadHandler(void * arg)
-{
-	int n = *(int *) arg;
-	//char c = (char)n;
-	PutChar((char)n);
-}
+#include "syscall.h"
 
 int main()
 {
 	int i, g;
 	for(i = 47; i < 128; i++)
 	{
-		UserThreadCreate(threadHandler, (void *) &i);
-
-		for(g = 0; g < 5000; g++) {} // Attente
+		PutChar((char)i);
 	}
-	
+
 	Halt();
 	return 0;
 }
