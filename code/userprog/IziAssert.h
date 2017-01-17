@@ -34,6 +34,6 @@ void iziAssert(bool success, const char* condition, const int lineNumber, const 
       strcat(str, tmp);
       strcat(str, "\n\033[0m");
       strcat(str, "\n");
-      printf("%s",str);
+      printf("\n%s",str);
 
     }
