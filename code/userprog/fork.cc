@@ -18,6 +18,7 @@ int ForkExec(char* s)
 	t->PID = Thread::PIDcnt;
 	t->PIDcnt++;
 	int i;
+	processListLock->Acquire();
 	for(i = 0; i < NumPhysPages; i++)
 	{
 		if(processList[i] == -1)
@@ -27,6 +28,7 @@ int ForkExec(char* s)
 		}
 
 	}
+	processListLock->Release();
     if (executable == NULL)
     {
 		printf ("Unable to open file %s\n", s);
@@ -51,6 +53,7 @@ void ProcessExit()
 	//printf("JE MEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEURS\n");
 	//while(1){}
 	int i;
+	processListLock->Acquire();
 	for(i = 0; i < NumPhysPages; i++){
 		if(processList[i] == currentThread->PID){
 			processList[i] = -1;
@@ -59,9 +62,11 @@ void ProcessExit()
 	}
 
 	for(i = 0; i < NumPhysPages; i++){
-		if(processList[i] >= 0)
+		if(processList[i] >= 0){
+			processListLock->Release();
 			currentThread->Finish();
+		}
 	}
-	
+	processListLock->Release();
 	interrupt->Halt();
 }

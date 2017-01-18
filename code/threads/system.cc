@@ -19,6 +19,7 @@ Statistics *stats;		// performance metrics
 Timer *timer;			// the hardware timer device,
 					// for invoking context switches
 int processList[NumPhysPages];
+Lock* processListLock;
 
 #ifdef FILESYS_NEEDED
 FileSystem *fileSystem;
@@ -163,6 +164,8 @@ Initialize (int argc, char **argv)
     for(i = 0; i < NumPhysPages; i++){
         processList[i] = -1;
     }
+
+    processListLock = new Lock("Lock processList");
 
 #ifdef USER_PROGRAM
     machine = new Machine (debugUserProg);	// this must come first
