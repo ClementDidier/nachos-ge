@@ -32,6 +32,7 @@
 #include "usersemaphore.h"
 #include "synch.h"
 #include "IziAssert.h"
+#include "fork.h"
 
 
 //----------------------------------------------------------------------
@@ -77,32 +78,19 @@ ExceptionHandler (ExceptionType which)
 {
   int type = machine->ReadRegister (2);
 
-  #ifndef CHANGED
-
-  if ((which == SyscallException) && (type == SC_Halt))
-  {
-    DEBUG ('a', "Shutdown, initiated by user program.\n");
-    interrupt->Halt ();
-  }
- else
- {
-    printf ("Unexpected user mode exception %d %d\n", which, type);
-    ASSERT (FALSE);
- }
-
-  #else
-
   if(which == SyscallException)
   {
     switch(type)
     {
       case SC_Exit:
       {
+        ProcessExit();
+        //printf("fhsqddsjhfds\n");
         break;
       }
       case SC_Halt:
       {
-        currentThread->space->verrou->P();
+        scheduler->Print();
         DEBUG('a', "Shutdown, initiated by user program.\n");
         interrupt->Halt();
         break;
@@ -228,7 +216,7 @@ ExceptionHandler (ExceptionType which)
 
         // Conversion String MIPS --> String LINUX
         synchconsole->copyStringFromMachine(arg, buffer, MAX_STRING_SIZE);
-        frameProvider->ForkExec(buffer);
+        ForkExec(buffer);
         DEBUG('a', "Appel systeme SC_ForkExec réalisé\n");
         break;
       }
@@ -253,7 +241,6 @@ ExceptionHandler (ExceptionType which)
       }
     }
   }
-  #endif
     // LB: Do not forget to increment the pc before returning!
   UpdatePC ();
     // End of addition

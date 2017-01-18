@@ -233,6 +233,7 @@ Interrupt::Idle()
     DEBUG('i', "Machine idle.  No interrupts to do.\n");
     printf("No threads ready or runnable, and no pending interrupts.\n");
     printf("Assuming the program completed.\n");
+    scheduler->Print();
     Halt();
 }
 

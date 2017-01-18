@@ -24,7 +24,6 @@
 
 #include "bitmap.h"
 
-
 //----------------------------------------------------------------------
 // SwapHeader
 //      Do little endian to big endian conversion on the bytes in the
@@ -111,9 +110,13 @@ AddrSpace::AddrSpace (OpenFile * executable)
 
 // how big is address space?
     size = noffH.code.size + noffH.initData.size + noffH.uninitData.size + UserStackSize * MaxThread;	// we need to increase the size
+    
+
     // to leave room for the stack
     numPages = divRoundUp (size, PageSize);
     size = numPages * PageSize;
+
+    printf("DEMANDE : %d pages\n", numPages);
 
     ASSERT (numPages <= NumPhysPages);	// check we're not trying
     // to run anything too big --
@@ -147,7 +150,7 @@ AddrSpace::AddrSpace (OpenFile * executable)
 
 // zero out the entire address space, to zero the unitialized data segment
 // and the stack segment
-    bzero (machine->mainMemory, size);
+    //bzero (machine->mainMemory, size);
 
 // then, copy in the code and data segments into memory
     if (noffH.code.size > 0)
