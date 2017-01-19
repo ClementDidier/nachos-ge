@@ -105,8 +105,12 @@ FileSystem::FileSystem(bool format)
     // on it!).
 
         DEBUG('f', "Writing headers back to disk.\n");
+
 	mapHdr->WriteBack(FreeMapSector);
+  //root est de type d
+  dirHdr->type = FileHeader::d;
 	dirHdr->WriteBack(DirectorySector);
+
 
     // OK to open the bitmap and directory files now
     // The file system operations assume these two files are left open
@@ -114,6 +118,24 @@ FileSystem::FileSystem(bool format)
 
         freeMapFile = new OpenFile(FreeMapSector);
         directoryFile = new OpenFile(DirectorySector);
+
+        //creation et initialisation de . et ..
+        Create(".", FileHeader::d);
+        Create("..", FileHeader::d);
+        directory->FetchFrom(directoryFile);
+        int dotSector = directory->Find(".");
+        int dotdotSector = directory->Find("..");
+        FileHeader* dotFH = new FileHeader;
+        FileHeader* dotdotFH = new FileHeader;
+        dotFH->FetchFrom(dotSector);
+        dotdotFH->FetchFrom(dotdotSector);
+        dotFH->setSector(DirectorySector, 0);
+        dotdotFH->setSector(DirectorySector, 0);
+        dotFH->WriteBack(dotSector);
+        dotdotFH->WriteBack(dotdotSector);
+
+        delete dotFH;
+        delete dotdotFH;
 
     // Once we have the files "open", we can write the initial version
     // of each file back to disk.  The directory at this point is completely
@@ -202,6 +224,7 @@ FileSystem::Create(const char *name, int initialSize, FileHeader::Type type)
 	    else {
 	    	success = TRUE;
 		// everthing worked, flush all changes back to disk
+            hdr->type = type;
     	    	hdr->WriteBack(sector);
     	    	directory->WriteBack(directoryFile);
     	    	freeMap->WriteBack(freeMapFile);
@@ -345,18 +368,43 @@ FileSystem::CreateDir(const char* name)
 {
   // prepare data of new dir
   Directory* newDir = new Directory(NumDirEntries);
-  Create(name, 0 ,FileHeader::d);
+  Create(name, 0, FileHeader::d);
   OpenFile* dirFile = Open(name);
   newDir->WriteBack(dirFile);
-
-  //fetch root dir
+  printf("caca\n");
+  //fetch root dir & get its sector
   Directory* root = new Directory(NumDirEntries);
   root->FetchFrom(directoryFile);
-
   int newDirSector = root->Find(name);
+  int rootSector = root->Find(".");
+  printf("caca\n");
+
   FileHeader* newFH = new FileHeader;
   newFH->FetchFrom(newDirSector);
-  //newFH->dataSectors[0] = newDirSector;
-  newFH->WriteBack(newDirSector);
+
+  Create(".", 0 , FileHeader::d);
+  Create("..", 0,  FileHeader::d);
+  int dotSector = newDir->Find(".");
+  printf("%d\n", dotSector);
+
+  FileHeader* dotFH = new FileHeader;
+  dotFH->FetchFrom(dotSector);
+  printf("caca4\n");
+
+  newFH->setSector(newDirSector, 0);
+  newFH->WriteBack(dotSector);
+  printf("caca2\n");
+
+  delete dotFH;
+
+  int dotdotSector = newDir->Find("..");
+  FileHeader* dotdotFH = new FileHeader;
+  dotdotFH->FetchFrom(dotdotSector);
+  dotdotFH->setSector(rootSector, 0);
+  dotdotFH->WriteBack(dotdotSector);
+  printf("caca3\n");
+
+  delete dotdotFH;
+
   return true;
 }

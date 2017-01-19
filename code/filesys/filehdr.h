@@ -63,6 +63,8 @@ class FileHeader {
 
     bool CreateDir(const char* name);
 
+    int getSector(int id);
+    void setSector(int sector, int id);
     Type type;
   private:
     int numBytes;			// Number of bytes in the file
