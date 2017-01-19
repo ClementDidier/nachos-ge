@@ -454,7 +454,7 @@ struct compteurVerrou * AddrSpace::findCompteurVerrou(int tid)
   int i;
 
   for (i = 0; i< MaxThread; i++){
-    if( GCThreadVerrou[i]->tid == tid ){
+    if(GCThreadVerrou[i] != NULL && GCThreadVerrou[i]->tid == tid ){
       return GCThreadVerrou[i];
     }
   }
