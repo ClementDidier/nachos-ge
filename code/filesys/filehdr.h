@@ -36,11 +36,12 @@
 // reading it from disk.
 
 class FileHeader {
-  enum Type {
-    f,
-    d,
-  };
+
   public:
+    enum Type {
+      f, //file
+      d, //directory
+    };
     bool Allocate(BitMap *bitMap, int fileSize);// Initialize a file header,
 						//  including allocating space
 						//  on disk for the file data
@@ -60,6 +61,9 @@ class FileHeader {
 
     void Print();			// Print the contents of the file.
 
+    bool CreateDir(const char* name);
+
+    Type type;
   private:
     int numBytes;			// Number of bytes in the file
     int numSectors;			// Number of data sectors in the file

@@ -172,7 +172,7 @@ FileSystem::FileSystem(bool format)
 //----------------------------------------------------------------------
 
 bool
-FileSystem::Create(const char *name, FileHeader::FileType type)
+FileSystem::Create(const char *name, int initialSize, FileHeader::Type type)
 {
     Directory *directory;
     BitMap *freeMap;
@@ -343,6 +343,20 @@ FileSystem::Print()
 bool
 FileSystem::CreateDir(const char* name)
 {
-  Directory* newDir;
-  Create(name,)
+  // prepare data of new dir
+  Directory* newDir = new Directory(NumDirEntries);
+  Create(name, 0 ,FileHeader::d);
+  OpenFile* dirFile = Open(name);
+  newDir->WriteBack(dirFile);
+
+  //fetch root dir
+  Directory* root = new Directory(NumDirEntries);
+  root->FetchFrom(directoryFile);
+
+  int newDirSector = root->Find(name);
+  FileHeader* newFH = new FileHeader;
+  newFH->FetchFrom(newDirSector);
+  //newFH->dataSectors[0] = newDirSector;
+  newFH->WriteBack(newDirSector);
+  return true;
 }
