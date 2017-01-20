@@ -3,35 +3,34 @@
 int
 main ()
 {
-    SpaceId newProc;
-    OpenFileId input = ConsoleInput;
-    OpenFileId output = ConsoleOutput;
-    char prompt[2], buffer[60];
+    char buffer[60];
     int i;
 
-    prompt[0] = '-';
-    prompt[1] = '-';
+    for(i = 0; i < 60; i++){
+		buffer[i] = '\0';
+	}
 
-    while (1)
-      {
-	  Write (prompt, 2, output);
+	PutString("Console utilisateur simple, q pour quitter : \n");
+	PutString("Veuillez entrer un executable (dans \\test\\) : \n");
 
-	  i = 0;
+	while (1){
+		PutString("\n->");
 
-	  do
-	    {
+		for(i = 0; i < 60; i++){
+			buffer[i] = '\0';
+		}
 
-		Read (&buffer[i], 1, input);
+		GetString(buffer, 60);
 
-	    }
-	  while (buffer[i++] != '\n');
-
-	  buffer[--i] = '\0';
-
-	  if (i > 0)
-	    {
-		newProc = Exec (buffer);
-		Join (newProc);
-	    }
-      }
+		if (buffer[0] == 'q' && buffer[1] == '\0')
+		{
+			Halt();
+		}
+		else{
+			if(buffer[0] != '\0' && buffer[0] != '\n')
+			{
+				ForkExec(buffer);
+			}
+		}
+    }
 }
