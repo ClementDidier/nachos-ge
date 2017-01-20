@@ -371,39 +371,37 @@ FileSystem::CreateDir(const char* name)
   Create(name, 0, FileHeader::d);
   OpenFile* dirFile = Open(name);
   newDir->WriteBack(dirFile);
-  printf("caca\n");
   //fetch root dir & get its sector
   Directory* root = new Directory(NumDirEntries);
   root->FetchFrom(directoryFile);
   int newDirSector = root->Find(name);
   int rootSector = root->Find(".");
-  printf("caca\n");
 
   FileHeader* newFH = new FileHeader;
   newFH->FetchFrom(newDirSector);
 
+  /* Creation de . et ..
+  * Ne marche par car on ne peut pas changer de dossier,
+  * on ne peut donc pas les creers dans le dossier que l'on vient de creers
+  * Donc ca coredump car on essaye de lire ces nouveaux dossiers dans
+  * le nouveaux dossier
+  */
+
+  // TODO : ChangeDirectory(name);
   Create(".", 0 , FileHeader::d);
   Create("..", 0,  FileHeader::d);
   int dotSector = newDir->Find(".");
-  printf("%d\n", dotSector);
-
+  int dotdotSector = newDir->Find("..");
   FileHeader* dotFH = new FileHeader;
+  FileHeader* dotdotFH = new FileHeader;
   dotFH->FetchFrom(dotSector);
-  printf("caca4\n");
-
-  newFH->setSector(newDirSector, 0);
-  newFH->WriteBack(dotSector);
-  printf("caca2\n");
+  dotdotFH->FetchFrom(dotdotSector);
+  dotFH->setSector(newDirSector, 0);
+  dotdotFH->setSector(rootSector, 0);
+  dotFH->WriteBack(dotSector);
+  dotdotFH->WriteBack(dotdotSector);
 
   delete dotFH;
-
-  int dotdotSector = newDir->Find("..");
-  FileHeader* dotdotFH = new FileHeader;
-  dotdotFH->FetchFrom(dotdotSector);
-  dotdotFH->setSector(rootSector, 0);
-  dotdotFH->WriteBack(dotdotSector);
-  printf("caca3\n");
-
   delete dotdotFH;
 
   return true;
