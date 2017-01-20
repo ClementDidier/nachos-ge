@@ -184,7 +184,16 @@ main (int argc, char **argv)
         ASSERT (argc > 1);
 	    	fileSystem->CreateDir (*(argv + 1));
 	    }
-      interrupt->Halt ();
+      else if (!strcmp (*argv, "--rmdir"))
+	    {			// make directory
+        ASSERT (argc > 1);
+	    	fileSystem->DeleteDir (*(argv + 1));
+	    }
+      else if (!strcmp (*argv, "--cd"))
+	    {			// make directory
+        ASSERT (argc > 1);
+	    	fileSystem->ChangeDir (*(argv + 1));
+	    }
 #endif // FILESYS
 #ifdef NETWORK
 	    if (!strcmp (*argv, "-o"))

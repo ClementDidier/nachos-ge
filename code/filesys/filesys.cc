@@ -373,7 +373,6 @@ FileSystem::CreateDir(const char* name)
   // prepare data of new dir
   Directory* newDir = new Directory(NumDirEntries);
   Create(name, DirectoryFileSize, FileHeader::d);
-  Create("slt", DirectoryFileSize, FileHeader::d);
   OpenFile* dirFile = Open(name);
   newDir->WriteBack(dirFile);
   //fetch root dir & get its sector
@@ -382,24 +381,22 @@ FileSystem::CreateDir(const char* name)
   root->FetchFrom(directoryFile);
   root->WriteBack(directoryFile);
   int newDirSector = root->Find(name);
-  int rootSector = root->Find(".");
-
+  int rootDotSector = root->Find(".");
+  FileHeader * rootDotFH = new FileHeader;
+  rootDotFH->FetchFrom(rootDotSector);
+  int parentSector = rootDotFH->getSector(0);
+  delete rootDotFH;
   FileHeader* newFH = new FileHeader;
   newFH->FetchFrom(newDirSector);
 
   /* Creation de . et ..
-  * Ne marche par car on ne peut pas changer de dossier,
-  * on ne peut donc pas les creers dans le dossier que l'on vient de creers
-  * Donc ca coredump car on essaye de lire ces nouveaux dossiers dans
-  * le nouveaux dossier
   */
 
-  ChangeDirectory(name);
+  ChangeDir(name);
   Create(".", DirectoryFileSize , FileHeader::d);
   Create("..", DirectoryFileSize,  FileHeader::d);
   Directory* newDirAsRoot = new Directory(NumDirEntries);
   newDirAsRoot->FetchFrom(directoryFile);
-  this->List();
   int dotSector = newDirAsRoot->Find(".");
   int dotdotSector = newDirAsRoot->Find("..");
   if(dotSector != -1 && dotdotSector != -1){
@@ -408,22 +405,74 @@ FileSystem::CreateDir(const char* name)
     dotFH->FetchFrom(dotSector);
     dotdotFH->FetchFrom(dotdotSector);
     dotFH->setSector(newDirSector, 0);
-    dotdotFH->setSector(rootSector, 0);
+    dotdotFH->setSector(parentSector, 0);
     dotFH->WriteBack(dotSector);
     dotdotFH->WriteBack(dotdotSector);
     delete dotFH;
     delete dotdotFH;
   }
-  ChangeDirectory("..");
+  ChangeDir("..");
   return true;
 }
-
-void FileSystem::ChangeDirectory(const char * name)
+bool FileSystem::DeleteDir(const char * name)
 {
+  Directory* parentdir = new Directory(NumDirEntries);
+  parentdir->FetchFrom(directoryFile);
+  int sector;
+  if((sector = parentdir->Find(name)) < 0 ){
+    delete parentdir;
+    return false;
+  }
+  else{
+    FileHeader * dirHDR = new FileHeader;
+    dirHDR->FetchFrom(sector);
+    Directory* todeletedir = new Directory(NumDirEntries);
+    ChangeDir(name);
+    todeletedir->FetchFrom(directoryFile);
+    if(todeletedir->IsEmpty())
+    {
+      ChangeDir("..");
+
+      BitMap * bM = new BitMap(NumSectors);
+      bM->FetchFrom(freeMapFile);
+      dirHDR->Deallocate(bM);
+      bM->Clear(sector);
+      parentdir->Remove(name);
+      bM->WriteBack(freeMapFile);
+      parentdir->WriteBack(directoryFile);
+      delete bM;
+      delete dirHDR;
+      delete todeletedir;
+      return true;
+    }
+    else
+    {
+      return false;
+    }
+    delete dirHDR;
+    delete todeletedir;
+  }
+  return false;
+}
+
+
+void FileSystem::ChangeDir(const char * name)
+{
+  int sector;
+  if(name[0] == '.' && name[1] == '.' && name[2] == '\0'){
+    Directory* dir = new Directory(NumDirEntries);
+    dir->FetchFrom(directoryFile);
+    FileHeader* fh = new FileHeader;
+    sector = dir->Find("..");
+    fh->FetchFrom(sector);
+    sector = fh->getSector(0);
+  }
+  else{
   Directory* dir = new Directory(NumDirEntries);
   dir->FetchFrom(directoryFile);
-  printf("%d\n", __LINE__ );
-  int sector = dir->Find(name);
+  sector = dir->Find(name);
+  printf("%d\n", sector );
   //delete directoryFile;
+ }
   directoryFile = new OpenFile(sector);
 }

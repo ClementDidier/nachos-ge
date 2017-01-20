@@ -61,8 +61,6 @@ class FileHeader {
 
     void Print();			// Print the contents of the file.
 
-    bool CreateDir(const char* name);
-
     int getSector(int id);
     void setSector(int sector, int id);
     Type type;
