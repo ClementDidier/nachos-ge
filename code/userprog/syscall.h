@@ -294,7 +294,8 @@ void GetInt(int * n);
  * comme un void *, et casté dans son type d'origine par exemple.
  * \param f Pointeur (non NULL) vers une fonction utilisateur qui sera exécutée au début du thread. La fonction ne doit prendre qu'un seul argument de type void*
  * \param arg Argument (non NULL) à passer a la fonction f, a caster en void*
- * \return Retourne le TID du thread créé ou -1 si la création a échouée (Manque de place dans la mémoire etc).
+ * \return Retourne le TID du thread créé ou -1 si la création a échouée (Manque de place dans la mémoire etc). 
+ * TID unique dans la machine (deux processus ne peuvent pas avoir de threads avec des TID identiques).
  * \exception Invalide un assert si une erreur c'est produite lors de l'attribution de l'espace mémoire pour le thread utilisateur.
  */
 int UserThreadCreate(void f(void *arg), void *arg);

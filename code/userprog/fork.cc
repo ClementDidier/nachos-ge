@@ -50,8 +50,6 @@ int ForkExec(char* s)
 void ProcessExit()
 {
 	currentThread->space->verrou->P();
-	//printf("JE MEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEURS\n");
-	//while(1){}
 	int i;
 	processListLock->Acquire();
 	for(i = 0; i < NumPhysPages; i++){
