@@ -15,6 +15,7 @@ int ForkExec(char* s)
 {
 	OpenFile *executable = fileSystem->Open (s);
 	Thread* t = new Thread("forked thread");
+
 	t->PID = Thread::PIDcnt;
 	t->PIDcnt++;
 	int i;
@@ -32,9 +33,12 @@ int ForkExec(char* s)
     if (executable == NULL)
     {
 		printf ("Unable to open file %s\n", s);
+		Thread::ShellProcOnlyOne->V();
+		Thread::ShellProcOnlyOne->V();
 		return -1;
     }
     printf("%d\n", t->PID);
+    printf("%d\n", t->getTID());
 
     AddrSpace *space = new AddrSpace (executable);
 
@@ -43,6 +47,7 @@ int ForkExec(char* s)
     t->Fork(ProcessHandler, (int) space);
 
     currentThread->Yield();
+    Thread::ShellProcOnlyOne->V();
 
     return t->PID;
 }
@@ -61,10 +66,12 @@ void ProcessExit()
 
 	for(i = 0; i < NumPhysPages; i++){
 		if(processList[i] >= 0){
+			Thread::ShellProcOnlyOne->V();
 			processListLock->Release();
 			currentThread->Finish();
 		}
 	}
+	Thread::ShellProcOnlyOne->V();
 	processListLock->Release();
 	interrupt->Halt();
 }

@@ -182,7 +182,7 @@ PutInt:
 	.ent	UserThreadCreate
 UserThreadCreate:
 	addiu $2,$0,SC_UserThreadCreate /* appel système sur création de thread utilisateur*/
-	addiu $6,$0,UserThreadExit /*Passage en paramètre de l'addresse du syscall de ret*/
+	addiu $6,$0,UserThreadExit /*Passage en paramètre de l addresse du syscall de ret*/
 	syscall
 	j	$31
 	.end UserThreadCreate
@@ -242,6 +242,14 @@ ForkExec:
 	syscall
 	j	$31
 	.end ForkExec
+
+	.globl SimpleShellProcJoin
+	.ent	SimpleShellProcJoin
+SimpleShellProcJoin:
+	addiu $2,$0,SC_SimpleShellProcJoin
+	syscall
+	j	$31
+	.end SimpleShellProcJoin
 
   .globl AssertFull
 	.ent	AssertFull

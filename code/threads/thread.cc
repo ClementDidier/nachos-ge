@@ -30,6 +30,7 @@ int Thread::TIDcnt = 0;
 int Thread::PIDcnt = 0;
 Semaphore * Thread::TIDcntLock = new Semaphore("TIDcntLock",1);
 Semaphore * Thread::OpOnUserThreadSem = new Semaphore("OpOnUserThreadSem",1);
+Semaphore * Thread::ShellProcOnlyOne = new Semaphore("on ne peut lancer qu'un seul proc dans le shell",0);
 #endif
 
 

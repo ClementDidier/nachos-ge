@@ -151,7 +151,9 @@ class Thread
     void RestoreUserState ();	// restore user-level register state
     AddrSpace *space;		// User code this thread is running.
     void setTID();
+    static Semaphore * ShellProcOnlyOne;
 #endif
+
 };
 
 // Magical machine-dependent routines, defined in switch.s

@@ -8,7 +8,7 @@
 
 #define largeur 100
 #define taille 68
-#define hauteur 70
+#define hauteur 150
 #define ligne1 "                                                  _,-'-._           \n"
 #define ligne2 "                                                 <_     _>          \n"
 #define ligne3 "     _____----'----________________________________`---'_______     \n"

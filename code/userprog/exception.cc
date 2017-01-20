@@ -233,6 +233,13 @@ ExceptionHandler (ExceptionType which)
         iziAssert(res, res2str, res3, res4str);
         break;
       }
+      case SC_SimpleShellProcJoin:
+      {
+        Thread::ShellProcOnlyOne->P();
+        Thread::ShellProcOnlyOne->P();
+        DEBUG('a', "Appel systeme SC_SimpleShellProcJoin réalisé\n");
+        break;
+      }
       default:
       {
         printf("Unexpected user mode exception %d %d\n", which, type);

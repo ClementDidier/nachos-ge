@@ -52,6 +52,7 @@
 #define SC_UserSemDelete 23
 #define SC_ForkExec	24
 #define SC_Assert 25
+#define SC_SimpleShellProcJoin 26
 
 #ifdef IN_USER_MODE
 
@@ -372,6 +373,15 @@ void UserSemDelete(sem_t * sem);
  * \param s Le nom du fichier executable à lancer
  */
 int ForkExec(char *s);
+
+/**
+ * \fn int SimpleShellProcJoin()
+ * \brief Utilisé pour le shell. permet d'attendre la fin d'un processus lancé avec forkexec.
+ *  permet de continuer si un processus a été créé puis a lancer par forkexec 
+ *  OU si ce processus à lancé un autre processus par forkExec (on ne gère pas les attentes multiples).
+ *  Ne permet pas d'effectuer des synchronisations complexes entre les processus.
+ */
+void SimpleShellProcJoin();
 
 /**
  * \fn AssertFull(int res, const char* condition, const int lineNumber, const char* functionName);
