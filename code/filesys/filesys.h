@@ -87,6 +87,8 @@ class FileSystem {
     void Print();			// List all the files and their contents
 
     bool CreateDir(const char* name);
+
+    void ChangeDirectory(const char* name);
   private:
    OpenFile* freeMapFile;		// Bit map of free disk blocks,
 					// represented as a file

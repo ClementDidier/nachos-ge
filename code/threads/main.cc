@@ -184,6 +184,7 @@ main (int argc, char **argv)
         ASSERT (argc > 1);
 	    	fileSystem->CreateDir (*(argv + 1));
 	    }
+      interrupt->Halt ();
 #endif // FILESYS
 #ifdef NETWORK
 	    if (!strcmp (*argv, "-o"))

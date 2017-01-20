@@ -119,6 +119,17 @@ FileSystem::FileSystem(bool format)
         freeMapFile = new OpenFile(FreeMapSector);
         directoryFile = new OpenFile(DirectorySector);
 
+
+        // Once we have the files "open", we can write the initial version
+        // of each file back to disk.  The directory at this point is completely
+        // empty; but the bitmap has been changed to reflect the fact that
+        // sectors on the disk have been allocated for the file headers and
+        // to hold the file data for the directory and bitmap.
+
+        DEBUG('f', "Writing bitmap and directory back to disk.\n");
+        freeMap->WriteBack(freeMapFile);	 // flush changes to disk
+        directory->WriteBack(directoryFile);
+
         //creation et initialisation de . et ..
         Create(".", FileHeader::d);
         Create("..", FileHeader::d);
@@ -137,15 +148,6 @@ FileSystem::FileSystem(bool format)
         delete dotFH;
         delete dotdotFH;
 
-    // Once we have the files "open", we can write the initial version
-    // of each file back to disk.  The directory at this point is completely
-    // empty; but the bitmap has been changed to reflect the fact that
-    // sectors on the disk have been allocated for the file headers and
-    // to hold the file data for the directory and bitmap.
-
-        DEBUG('f', "Writing bitmap and directory back to disk.\n");
-	freeMap->WriteBack(freeMapFile);	 // flush changes to disk
-	directory->WriteBack(directoryFile);
 
 	if (DebugIsEnabled('f')) {
 	    freeMap->Print();
@@ -219,8 +221,10 @@ FileSystem::Create(const char *name, int initialSize, FileHeader::Type type)
             success = FALSE;	// no space in directory
 	else {
     	    hdr = new FileHeader;
-	    if (!hdr->Allocate(freeMap, initialSize))
+	    if (!hdr->Allocate(freeMap, initialSize)){
+      DEBUG('f', "no space on disk for name\n", name);
             	success = FALSE;	// no space on disk for data
+            }
 	    else {
 	    	success = TRUE;
 		// everthing worked, flush all changes back to disk
@@ -368,12 +372,15 @@ FileSystem::CreateDir(const char* name)
 {
   // prepare data of new dir
   Directory* newDir = new Directory(NumDirEntries);
-  Create(name, 0, FileHeader::d);
+  Create(name, DirectoryFileSize, FileHeader::d);
+  Create("slt", DirectoryFileSize, FileHeader::d);
   OpenFile* dirFile = Open(name);
   newDir->WriteBack(dirFile);
   //fetch root dir & get its sector
+  delete dirFile;
   Directory* root = new Directory(NumDirEntries);
   root->FetchFrom(directoryFile);
+  root->WriteBack(directoryFile);
   int newDirSector = root->Find(name);
   int rootSector = root->Find(".");
 
@@ -387,22 +394,36 @@ FileSystem::CreateDir(const char* name)
   * le nouveaux dossier
   */
 
-  // TODO : ChangeDirectory(name);
-  Create(".", 0 , FileHeader::d);
-  Create("..", 0,  FileHeader::d);
-  int dotSector = newDir->Find(".");
-  int dotdotSector = newDir->Find("..");
-  FileHeader* dotFH = new FileHeader;
-  FileHeader* dotdotFH = new FileHeader;
-  dotFH->FetchFrom(dotSector);
-  dotdotFH->FetchFrom(dotdotSector);
-  dotFH->setSector(newDirSector, 0);
-  dotdotFH->setSector(rootSector, 0);
-  dotFH->WriteBack(dotSector);
-  dotdotFH->WriteBack(dotdotSector);
-
-  delete dotFH;
-  delete dotdotFH;
-
+  ChangeDirectory(name);
+  Create(".", DirectoryFileSize , FileHeader::d);
+  Create("..", DirectoryFileSize,  FileHeader::d);
+  Directory* newDirAsRoot = new Directory(NumDirEntries);
+  newDirAsRoot->FetchFrom(directoryFile);
+  this->List();
+  int dotSector = newDirAsRoot->Find(".");
+  int dotdotSector = newDirAsRoot->Find("..");
+  if(dotSector != -1 && dotdotSector != -1){
+    FileHeader* dotFH = new FileHeader;
+    FileHeader* dotdotFH = new FileHeader;
+    dotFH->FetchFrom(dotSector);
+    dotdotFH->FetchFrom(dotdotSector);
+    dotFH->setSector(newDirSector, 0);
+    dotdotFH->setSector(rootSector, 0);
+    dotFH->WriteBack(dotSector);
+    dotdotFH->WriteBack(dotdotSector);
+    delete dotFH;
+    delete dotdotFH;
+  }
+  ChangeDirectory("..");
   return true;
+}
+
+void FileSystem::ChangeDirectory(const char * name)
+{
+  Directory* dir = new Directory(NumDirEntries);
+  dir->FetchFrom(directoryFile);
+  printf("%d\n", __LINE__ );
+  int sector = dir->Find(name);
+  //delete directoryFile;
+  directoryFile = new OpenFile(sector);
 }
