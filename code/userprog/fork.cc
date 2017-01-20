@@ -37,14 +37,14 @@ int ForkExec(char* s)
     printf("%d\n", t->PID);
 
     AddrSpace *space = new AddrSpace (executable);
-    
+
     delete executable;
 
     t->Fork(ProcessHandler, (int) space);
 
     currentThread->Yield();
 
-    return 0;
+    return t->PID;
 }
 
 void ProcessExit()
