@@ -38,6 +38,7 @@
 #include "copyright.h"
 #include "openfile.h"
 #include "filehdr.h"
+#include "filemap.h"
 
 #ifdef FILESYS_STUB 		// Temporarily implement file system calls as
 				// calls to UNIX, until the real file system
@@ -79,7 +80,7 @@ class FileSystem {
 					// Create a file (UNIX creat)
 
     OpenFile* Open(const char *name); 	// Open a file (UNIX open)
-
+    void Close(const char *name);
     bool Remove(const char *name); 	// Delete a file (UNIX unlink)
 
     void List();			// List all the files in the file system
@@ -95,6 +96,7 @@ class FileSystem {
 					// represented as a file
    OpenFile* directoryFile;		// "Root" directory -- list of
 					// file names, represented as a file
+   FileMap* OpenedFiles;
 };
 
 #endif // FILESYS

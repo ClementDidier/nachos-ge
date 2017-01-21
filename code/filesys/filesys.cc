@@ -148,7 +148,7 @@ FileSystem::FileSystem(bool format)
         delete dotFH;
         delete dotdotFH;
 
-
+  OpenedFiles = new FileMap;
 	if (DebugIsEnabled('f')) {
 	    freeMap->Print();
 	    directory->Print();
@@ -255,17 +255,36 @@ OpenFile *
 FileSystem::Open(const char *name)
 {
     Directory *directory = new Directory(NumDirEntries);
-    OpenFile *openFile = NULL;
+    //OpenFile *openFile = NULL;
     int sector;
 
     DEBUG('f', "Opening file %s\n", name);
     directory->FetchFrom(directoryFile);
     sector = directory->Find(name);
-    if (sector >= 0)
-	openFile = new OpenFile(sector);	// name was found in directory
-    delete directory;
-    return openFile;				// return NULL if not found
+    if (sector >= 0){
+  	  //openFile = new OpenFile(sector);	// name was found in directory
+      delete directory;
+      return OpenedFiles->Add(sector, new OpenFile(sector));				// return NULL if not found
+    }
+  return NULL;
 }
+
+void FileSystem::Close(const char *name)
+{
+  Directory *directory = new Directory(NumDirEntries);
+  //OpenFile *openFile = NULL;
+  int sector;
+
+  DEBUG('f', "Opening file %s\n", name);
+  directory->FetchFrom(directoryFile);
+  sector = directory->Find(name);
+  if (sector >= 0){
+  //openFile = new OpenFile(sector);	// name was found in directory
+  delete directory;
+  OpenedFiles->Delete(sector);
+  }
+}
+
 
 //----------------------------------------------------------------------
 // FileSystem::Remove
