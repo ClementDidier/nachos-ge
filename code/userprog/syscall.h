@@ -53,6 +53,7 @@
 #define SC_ForkExec	24
 #define SC_Assert 25
 #define SC_SimpleShellProcJoin 26
+#define SC_GetCharInt 27
 
 #ifdef IN_USER_MODE
 
@@ -382,6 +383,8 @@ int ForkExec(char *s);
  *  Ne permet pas d'effectuer des synchronisations complexes entre les processus.
  */
 void SimpleShellProcJoin();
+
+int GetCharInt();
 
 /**
  * \fn AssertFull(int res, const char* condition, const int lineNumber, const char* functionName);

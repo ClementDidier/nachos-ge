@@ -17,7 +17,7 @@
 #include "timer.h"
 #include "synch.h"
 
-#define MAX_STRING_SIZE 100
+#define MAX_STRING_SIZE 128
 
 // Initialization and cleanup routines
 extern void Initialize (int argc, char **argv);	// Initialization,

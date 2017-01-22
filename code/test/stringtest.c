@@ -8,7 +8,7 @@
 
 #define largeur 100
 #define taille 68
-#define hauteur 150
+#define hauteur 70
 #define ligne1 "                                                  _,-'-._           \n"
 #define ligne2 "                                                 <_     _>          \n"
 #define ligne3 "     _____----'----________________________________`---'_______     \n"
@@ -19,10 +19,10 @@
 #define ligne8 "[=|______________________________________________________________|=]\n"
 #define ligne9 "   )/_-(-o-)=_=(=8=)=_=(-o-)-_ [____] _-(-o-)=_=(=8=)=_=(-o-)-_\\(  \n"
 
-void waitloop(int n){
-	int j = 0;
-	while(j<n){
-		j++;
+void CustomUsleep(int duree){
+	int i = 0;
+	while(i < duree*2000){
+	  i++;
 	}
 }
 
@@ -30,12 +30,12 @@ int main()
 {
 	int i = 0;
 	int k = 0;
-	char rails[largeur];
+	char rails[largeur+1];
 
 	int j;
-	char clearscr[hauteur];
+	char clearscr[hauteur+1];
 
-	char deplacement[largeur];
+	char deplacement[largeur+1];
 
 	int choix;
 	int vitesse;
@@ -43,14 +43,15 @@ int main()
 	PutString(clearscr);
 	PutString("Veuillez entrer le nombre de train (1-10) = ");
 	GetInt(&choix);
-	PutString("Veuillez entrer une vitesse 1-2 = ");
+	PutString("Veuillez entrer une vitesse 1-3 = ");
 	GetInt(&vitesse);
 
-	for(k = 1; k<=choix; k++){
+	for(j = 0; j<hauteur; j++){
+		clearscr[j] = '\n';
+	}
+	clearscr[hauteur] = '\0';
 
-		for(j = 0; j<hauteur; j++){
-			clearscr[j] = '\n';
-		}
+	for(k = 1; k<=choix; k++){
 
 		for(j = 0 ; j<largeur ; j++){
 			rails[j] = '=';
@@ -60,7 +61,8 @@ int main()
 		for(i = 0; i<largeur; i++){
 			deplacement[i] = ' ';
 			PutString(clearscr);
-			waitloop(2000);
+			PutString(clearscr);
+			CustomUsleep(1);
 			PutString(deplacement);
 			PutString(ligne1);
 			PutString(deplacement);
@@ -81,7 +83,7 @@ int main()
 			PutString(ligne9);
 			PutString(rails);
 			PutString(rails);
-			waitloop((4-vitesse)*10000);
+			CustomUsleep((4-vitesse)*7);
 		}
 	}
 	PutString(clearscr);

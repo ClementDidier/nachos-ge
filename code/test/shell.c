@@ -63,7 +63,7 @@ main ()
 	help();
 
 	while (1){
-		PutString("\n->");
+		PutString("\nuser@NachOS:~/ $ ");
 
 		resetbuffer(buffer);
 
@@ -83,27 +83,27 @@ main ()
       			case 'c':
 				{
 					clearscr();
-					break; // jamais atteint
+					break; 
       			}
       			case 'h':
 				{
 					help();
-					break; // jamais atteint
+					break; 
       			}
       			case 'f':
 				{
 					//TODO
-					break; // jamais atteint
+					break; 
       			}
       			case 'l':
 				{
 					//TODO
-					break; // jamais atteint
+					break; 
       			}
       			case 'x':
 				{
 					//TODO
-					break; // jamais atteint
+					break; 
       			}
 			}
 		}

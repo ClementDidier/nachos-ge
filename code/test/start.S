@@ -1,7 +1,7 @@
 /* Start.s
  *	Assembly language assist for user programs running on top of Nachos.
  *
- *	Since we don't want to pull in the entire C library, we define
+ *	Since we don t want to pull in the entire C library, we define
  *	what we need for a user program here, namely Start and the system
  *	calls.
  */
@@ -210,6 +210,14 @@ UserThreadJoin:
   	syscall
   	j	$31
   	.end UserSemCreate
+
+   .globl GetCharInt
+	.ent	GetCharInt
+  GetCharInt:
+  	addiu $2,$0,SC_GetCharInt
+  	syscall
+  	j	$31
+  	.end GetCharInt
 
   .globl UserSemP
   .ent	UserSemP

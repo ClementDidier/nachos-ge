@@ -185,6 +185,13 @@ ExceptionHandler (ExceptionType which)
         DEBUG('a', "Appel systeme SC_UserSemCreate réalisé\n");
         break;
       }
+      case SC_GetCharInt:
+      {
+        int ch = (int)synchconsole->SynchGetChar();
+        machine->WriteRegister(2,ch);
+        DEBUG('a', "Appel systeme SC_GetCharInt réalisé\n");
+        break;
+      }
       case SC_UserSemP:
       {
         Semaphore* f = (Semaphore *) machine->ReadRegister(4);
