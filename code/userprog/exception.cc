@@ -233,8 +233,53 @@ ExceptionHandler (ExceptionType which)
         iziAssert(res, res2str, res3, res4str);
         break;
       }
+      case SC_List:
+      {
+        fileSystem->List();
+        DEBUG('a', "Appel systeme SC_Open réalisé\n");
+        break;
+      }
+      case SC_Create:
+      {
+        int arg = machine->ReadRegister (4);
+
+        // Buffer de la chaine de caractères LINUX (initialement vide et de taille maximale)
+        char buffer[MAX_STRING_SIZE];
+        #ifdef FILESYS
+          printf("test\n");
+          fileSystem->Create (buffer, 3000,FileHeader::f);
+        #endif
+        synchconsole->copyStringFromMachine(arg, buffer, MAX_STRING_SIZE);
+        DEBUG('a', "Appel systeme SC_Open réalisé\n");
+        break;
+      }
+      case SC_Read:
+      {
+        /*int buffer = machine->ReadRegister (4);
+        int size = machine->ReadRegister (5);
+        OpenFile openfileId = (OpenFile)machine->ReadRegister (6);
+        openfileId.read(buffer,size);*/
+        DEBUG('a', "Appel systeme SC_Read réalisé\n");
+        break;
+      }
+      case SC_Write:
+      {
+        DEBUG('a', "Appel systeme SC_Write réalisé\n");
+        break;
+      }
+      case SC_Close:
+      {
+        DEBUG('a', "Appel systeme SC_Close réalisé\n");
+        break;
+      }
+      case SC_Open:
+      {
+        DEBUG('a', "Appel systeme SC_Close réalisé\n");
+        break;
+      }
       default:
       {
+
         printf("Unexpected user mode exception %d %d\n", which, type);
         ASSERT(FALSE);
         break;

@@ -1,7 +1,7 @@
 /* Start.s
  *	Assembly language assist for user programs running on top of Nachos.
  *
- *	Since we don't want to pull in the entire C library, we define
+ *	Since we don t want to pull in the entire C library, we define
  *	what we need for a user program here, namely Start and the system
  *	calls.
  */
@@ -105,6 +105,14 @@ Write:
 	j	$31
 	.end Write
 
+	.globl List
+	.ent	List
+List:
+	addiu $2,$0,SC_List
+	syscall
+	j	$31
+	.end List
+
 	.globl Close
 	.ent	Close
 Close:
@@ -182,7 +190,7 @@ PutInt:
 	.ent	UserThreadCreate
 UserThreadCreate:
 	addiu $2,$0,SC_UserThreadCreate /* appel système sur création de thread utilisateur*/
-	addiu $6,$0,UserThreadExit /*Passage en paramètre de l'addresse du syscall de ret*/
+	addiu $6,$0,UserThreadExit /*Passage en paramètre de l addresse du syscall de ret*/
 	syscall
 	j	$31
 	.end UserThreadCreate
