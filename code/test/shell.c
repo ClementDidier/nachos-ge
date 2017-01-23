@@ -1,37 +1,81 @@
 #include "syscall.h"
 
+#define buffersize 60
+
+void resetbuffer(char * buffer){
+	int i;
+	for (i = 0; i < buffersize; i++){
+		buffer[i] = '\0';
+	}
+}
+
+void clearscr(){
+	int i;
+	for(i = 0; i<15; i++){
+		PutString("\n\n\n\n\n\n\n\n\n\n");
+	}
+}
+
 int
 main ()
 {
-    SpaceId newProc;
-    OpenFileId input = ConsoleInput;
-    OpenFileId output = ConsoleOutput;
-    char prompt[2], buffer[60];
-    int i;
+	ForkExec("ashell");
+    char buffer[buffersize];
+	while (1){
+		PutString("\nuser@NachOS:~/ $ ");
 
-    prompt[0] = '-';
-    prompt[1] = '-';
+		resetbuffer(buffer);
 
-    while (1)
-      {
-	  Write (prompt, 2, output);
+		GetString(buffer, 60);
 
-	  i = 0;
-
-	  do
-	    {
-
-		Read (&buffer[i], 1, input);
-
-	    }
-	  while (buffer[i++] != '\n');
-
-	  buffer[--i] = '\0';
-
-	  if (i > 0)
-	    {
-		newProc = Exec (buffer);
-		Join (newProc);
-	    }
-      }
+		if (buffer[0] != '\0' && buffer[0] != '\n' && buffer[1] != '\0' && buffer[1] != ' '){ // c'est un programme
+			ForkExec(buffer);
+			//SimpleShellProcJoin();
+		}
+		else{
+			switch (buffer[0]){
+				case 'q':
+				{
+					Halt();
+					break; // jamais atteint
+      			}
+      			case 'c':
+				{
+					clearscr();
+					break; 
+      			}
+      			case 'h':
+				{
+					//ForkExec("ashell");
+					//SimpleShellProcJoin();
+					break; 
+      			}
+      			case 'l':
+				{
+					List();
+					break; 
+      			}
+      			case 'm':
+				{
+					List();
+					break; 
+      			}
+      			case 'd':
+				{
+					List();
+					break; 
+      			}
+      			case 'f':
+				{
+					List();
+					break; 
+      			}
+      			case 'x':
+				{
+					//TODO
+					break; 
+      			}
+			}
+		}
+    }
 }

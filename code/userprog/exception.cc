@@ -235,21 +235,21 @@ ExceptionHandler (ExceptionType which)
       }
       case SC_List:
       {
+        #ifdef FILESYS
         fileSystem->List();
+        #endif
         DEBUG('a', "Appel systeme SC_Open réalisé\n");
         break;
       }
       case SC_Create:
       {
-        int arg = machine->ReadRegister (4);
-
-        // Buffer de la chaine de caractères LINUX (initialement vide et de taille maximale)
-        char buffer[MAX_STRING_SIZE];
         #ifdef FILESYS
-          printf("test\n");
-          fileSystem->Create (buffer, 3000,FileHeader::f);
-        #endif
+        int arg = machine->ReadRegister (4);
+        char buffer[MAX_STRING_SIZE];
         synchconsole->copyStringFromMachine(arg, buffer, MAX_STRING_SIZE);
+        fileSystem->Create (buffer, 3000,FileHeader::f);
+        #endif
+        
         DEBUG('a', "Appel systeme SC_Open réalisé\n");
         break;
       }
