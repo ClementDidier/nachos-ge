@@ -3,6 +3,12 @@
 
 #include "post.h"
 
+typedef struct 
+{
+	char type;
+	int index;
+} PacketHeaderReliable;
+
 class ReliableNet
 {
 	public:
@@ -21,11 +27,13 @@ class ReliableNet
 				// PostalDelivery)
     	void WaitMessages();
 
-    	void SetTarget (NetworkAddress addr);
-
 	private:
+
+		PacketHeaderReliable ParseReliableHeader(char * buffer);
+
 		Network* net;
 		PacketHeader pktHdr;
+		PacketHeaderReliable pktHdrReliable;
 		SynchList* messages;
 		Semaphore *messageAvailable;// V'ed when message has arrived from network
     	Semaphore *messageSent;	// V'ed when next message can be sent to network
@@ -34,6 +42,8 @@ class ReliableNet
     	char memory[MaxPacketSize];
     	int memoryIndex;
     	int memorySize;
+
+    	int isClosed;
 
     	int numEmission;
     	int numReception;
