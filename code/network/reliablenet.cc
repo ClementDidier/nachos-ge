@@ -1,11 +1,6 @@
 #include "reliablenet.h"
 #include <strings.h>
-
-#define MSG 0x00
-#define ACK 0x01
-#define DATA_SIZE 100
-#define MAXREEMISSIONS 10
-#define TEMPO 1
+#include "system.h"
 
 class Paquet
 {
@@ -66,13 +61,14 @@ ReliableNet::ReliableNet(NetworkAddress addr, double reliability, NetworkAddress
 	messageAvailable = new Semaphore("message available", 0);
     messageSent = new Semaphore("message sent", 0);
     sendLock = new Lock("message send lock");
-    semAck = new Semaphore("message ack", 0);
+    semAck = new Semaphore("message ack", 1);
 
 	network = new Network(addr, reliability, ReadAvail, WriteDone, (int) this);
 
 	Thread *t = new Thread("postal worker");
 
     t->Fork(Helper, (int) this);
+    currentThread->Yield();
 }
 
 ReliableNet::~ReliableNet()
@@ -95,12 +91,17 @@ void ThreadSendHandler(int arg)
 	int i;
 	for(i = 0; i < MAXREEMISSIONS; i++)
 	{
-		if(context->nE == context->nA) // Message acquité
+		if(context->rlbnet->numEmission == context->rlbnet->numAquitement) // Message acquité
 		{
 			break;
 		}
 
-    	context->network->Send(context->hdr, context->data);
+		context->rlbnet->sendLock->Acquire();
+
+    	context->rlbnet->network->Send(context->hdr, context->data);
+    	context->rlbnet->messageSent->P();
+
+    	context->rlbnet->sendLock->Acquire();
     	
 		Delay(TEMPO);	
 	}
@@ -116,16 +117,18 @@ void ReliableNet::Send(char type, const char *data)
 			network->Send(pktHdr, (char*)data);
 			break;
 		case MSG:
-			ASSERT(numEmission != numAquitement);
+			semAck->P();
+			//ASSERT(numEmission != numAquitement);
 
 			PacketContext context;
 			context.hdr = pktHdr;
 			context.hdrReliable.type = type;
 			context.hdrReliable.index = numEmission;
 			context.data = (char*)data;
-			context.nE = numEmission;
+			/*context.nE = numEmission;
 			context.nA = numAquitement;
-			context.network = network;
+			context.network = network;*/
+			context.rlbnet = this;
 
 			Thread * t = new Thread("send worker");
 			t->Fork(ThreadSendHandler, (int) &context);
@@ -161,6 +164,7 @@ void ReliableNet::IncomingPacket()
 
 void ReliableNet::WaitMessages()
 {
+	printf("Waiting...\n");
 	char *buffer = new char[MaxPacketSize];
 
     while(1)
@@ -179,7 +183,7 @@ void ReliableNet::WaitMessages()
         		if(pktHdrReliable.index == numEmission)
         		{
         			numAquitement = numEmission;
-        			//semAck->V();
+        			semAck->V();
         		}
         		else
         		{

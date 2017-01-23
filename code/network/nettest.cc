@@ -22,6 +22,7 @@
 #include "network.h"
 #include "post.h"
 #include "interrupt.h"
+#include "reliablenet.h"
 
 
 // Test out message delivery, by doing the following:
@@ -108,4 +109,24 @@ void AnneauTest(int cible){
     }
     //Delay (cible);
     interrupt->Halt();
+}
+
+void Ping(int target)
+{
+    ReliableNet * rlbnet = new ReliableNet(netname, 1.0, target);
+    Delay(3);
+
+    printf("Création de reliablenet\n");
+    
+
+    printf("Envoi message\n");
+    rlbnet->Send(MSG, "PING");
+
+    Delay(1);
+
+    char data[4];
+    printf("Recoi message\n");
+    rlbnet->Receive(data, 4);
+
+    printf("%s\n", data);
 }

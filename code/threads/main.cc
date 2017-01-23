@@ -66,6 +66,7 @@ extern void SynchStringTest(char *in, char *out);
 
 extern void MailTest (int networkID);
 extern void AnneauTest (int cible);
+extern void Ping (int target);
 
 //----------------------------------------------------------------------
 // main
@@ -198,6 +199,15 @@ main (int argc, char **argv)
 		// to give the user time to 
 		// start up another nachos
 		AnneauTest (atoi (*(argv + 1)));
+		argCount = 2;
+	}
+	else if (!strcmp (*argv, "-g"))
+	    {
+	    	ASSERT (argc > 1);
+		Delay (2);	// delay for 2 seconds
+		// to give the user time to 
+		// start up another nachos
+		Ping (atoi (*(argv + 1)));
 		argCount = 2;
 	}
 #endif // NETWORK

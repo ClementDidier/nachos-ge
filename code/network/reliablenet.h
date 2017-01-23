@@ -4,21 +4,19 @@
 #include "network.h"
 #include "synchlist.h"
 
+#define MSG 0x00
+#define ACK 0x01
+#define DATA_SIZE 100
+#define MAXREEMISSIONS 10
+#define TEMPO 1
+
 typedef struct 
 {
 	char type;
 	int index;
 } PacketHeaderReliable;
 
-typedef struct
-{
-	PacketHeader hdr;
-	PacketHeaderReliable hdrReliable;
-	char* data;
-	int nE; // num emission
-	int nA; // num ack
-	Network * network;
-} PacketContext;
+
 
 class ReliableNet
 {
@@ -38,27 +36,42 @@ class ReliableNet
 				// PostalDelivery)
     	void WaitMessages();
 
-	private:
-		PacketHeaderReliable ParseReliableHeader(char * buffer);
-		Network* network;
-		PacketHeader pktHdr;
-		PacketHeaderReliable pktHdrReliable;
-		SynchList * messages;
-		Semaphore * messageAvailable;// V'ed when message has arrived from network
+    	int numEmission;
+    	int numReception;
+    	int numAquitement;
+    	Semaphore * messageAvailable;// V'ed when message has arrived from network
     	Semaphore * messageSent;	// V'ed when next message can be sent to network
     	Semaphore * semAck;
     	Lock *sendLock;		// Only one outgoing message at a time
+    	Network* network;
+
+	private:
+		PacketHeaderReliable ParseReliableHeader(char * buffer);
+		
+		PacketHeader pktHdr;
+		PacketHeaderReliable pktHdrReliable;
+		SynchList * messages;
+		
     	NetworkAddress target;
     	char memory[MaxPacketSize];
     	int memoryIndex;
     	int memorySize;
 
-    	int numEmission;
-    	int numReception;
-    	int numAquitement;
+    	
 
     	
 };
+
+typedef struct
+{
+	PacketHeader hdr;
+	PacketHeaderReliable hdrReliable;
+	char* data;
+	/*int nE; // num emission
+	int nA; // num ack
+	Network * network;*/
+	ReliableNet * rlbnet;
+} PacketContext;
 
 #endif
 
