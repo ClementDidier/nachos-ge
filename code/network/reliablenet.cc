@@ -4,6 +4,21 @@
 #define MSG 0x00
 #define ACK 0x01
 #define DATA_SIZE 100
+#define MAXREEMISSIONS 10
+#define TEMPO 1
+
+class Paquet
+{
+	public:
+		PacketHeader hdr;
+		char* data;
+
+		Paquet(PacketHeader header, char* buffer)
+		{
+			hdr = header;
+			data = buffer;
+		}
+};
 
 void Helper (int arg)
 {
@@ -23,14 +38,23 @@ void WriteDone(int arg)
 	rn->PacketSent();
 }
 
-ReliableNet::ReliableNet(NetworkAddress addr, double reliability, NetworkAddress target)
+PacketHeaderReliable ReliableNet::ParseReliableHeader(char * buffer)
+{
+	PacketHeaderReliable pktHdrRel = *(PacketHeaderReliable*)buffer;
+
+	char buff[DATA_SIZE];
+	bcopy(buffer + sizeof(pktHdrRel), buff, DATA_SIZE);
+	bcopy(buff, buffer, DATA_SIZE);
+
+	return pktHdrRel;
+}
+
+ReliableNet::ReliableNet(NetworkAddress addr, double reliability, NetworkAddress to)
 {
 	messages = new SynchList();
 	pktHdr.to = addr;
 
-	isClosed = 0;
-
-	this.target = target;
+	target = to;
 
 	memoryIndex = 0;
 	memorySize = 0;
@@ -42,7 +66,7 @@ ReliableNet::ReliableNet(NetworkAddress addr, double reliability, NetworkAddress
 	messageAvailable = new Semaphore("message available", 0);
     messageSent = new Semaphore("message sent", 0);
     sendLock = new Lock("message send lock");
-    semAck = new Semaphore("message ack");
+    semAck = new Semaphore("message ack", 0);
 
 	network = new Network(addr, reliability, ReadAvail, WriteDone, (int) this);
 
@@ -60,30 +84,69 @@ ReliableNet::~ReliableNet()
     delete sendLock;
 }
 
+void ThreadSendHandler(int arg)
+{
+	PacketContext * context = (PacketContext *) arg;
+
+	char * buffer = new char[DATA_SIZE + sizeof(PacketHeaderReliable)];
+	*(PacketHeaderReliable *) buffer = context->hdrReliable;
+	bcopy(context->data, buffer, sizeof(PacketHeaderReliable));
+
+	int i;
+	for(i = 0; i < MAXREEMISSIONS; i++)
+	{
+		if(context->nE == context->nA) // Message acquité
+		{
+			break;
+		}
+
+    	context->network->Send(context->hdr, context->data);
+    	
+		Delay(TEMPO);	
+	}
+
+	delete [] buffer;
+}
+
 void ReliableNet::Send(char type, const char *data)
 {
 	switch(type)
 	{
 		case ACK:
-
+			network->Send(pktHdr, (char*)data);
 			break;
 		case MSG:
-			break;
-		default:
-			break;
-	}
-	if(type == ACK)
-	{
+			ASSERT(numEmission != numAquitement);
 
+			PacketContext context;
+			context.hdr = pktHdr;
+			context.hdrReliable.type = type;
+			context.hdrReliable.index = numEmission;
+			context.data = (char*)data;
+			context.nE = numEmission;
+			context.nA = numAquitement;
+			context.network = network;
+
+			Thread * t = new Thread("send worker");
+			t->Fork(ThreadSendHandler, (int) &context);
+			//semAck->P();
+			break;
 	}
-	else if(type == MSG)
-	semAck->P();
-	//
 }
 
 int ReliableNet::Receive(char *data, int size)
 {
+	int s = size / DATA_SIZE;
+	int i;
+	for(i = 0; i < s && !messages->IsEmpty(); i++)
+	{
+		Paquet * paquet = (Paquet*) messages->Remove();
+		bcopy(paquet->data, data + i * DATA_SIZE, DATA_SIZE);
+	}
 
+	if(messages->IsEmpty())
+		return 0;
+	return 1;
 }
 
 void ReliableNet::PacketSent()
@@ -107,6 +170,8 @@ void ReliableNet::WaitMessages()
         pktHdr = network->Receive(buffer);
         pktHdrReliable = ParseReliableHeader(buffer);
 
+        printf("ReliableNet : Message reçu [%s] <%s>\n", pktHdrReliable.type == ACK ? "ACK" : (pktHdrReliable.type == MSG ? "MSG" : "ERROR"), buffer);
+
 
         switch(pktHdrReliable.type)
         {
@@ -114,7 +179,7 @@ void ReliableNet::WaitMessages()
         		if(pktHdrReliable.index == numEmission)
         		{
         			numAquitement = numEmission;
-        			semAck->V();
+        			//semAck->V();
         		}
         		else
         		{
@@ -124,7 +189,14 @@ void ReliableNet::WaitMessages()
         	case MSG:
         		if(numReception == pktHdrReliable.index - 1 || numReception == pktHdrReliable.index)
         		{
-        			numReception = pktHdrReliable.index;
+        			if(numReception != pktHdrReliable.index)
+        			{
+	        			numReception = pktHdrReliable.index;
+
+	        			Paquet * p = new Paquet(pktHdr, buffer);
+						messages->Append((void*) p);
+					}
+
         			Send(ACK, "ACK_DATA\0");
         		}
         		else
@@ -132,42 +204,10 @@ void ReliableNet::WaitMessages()
         			printf("ReliableNet Erreur : Numéro du message reçu incorrect\n");
         		}
         		break;
-        	case END:
-        		//isClosed = 1;
-        		break;
         	default:
         		printf("ReliableNet Erreur : Type de paquet inconnu !\n");
         		Exit(0);
         		break;
         }
-
-        Paquet p = new Paquet(pktHdr, buffer);
-		messages->Append((void*) p);
     }
-}
-
-
-PacketHeaderReliable ParseReliableHeader(char * buffer)
-{
-	PacketHeaderReliable pktHdr = *(PacketHeaderReliable*)buffer;
-
-	char buff[DATA_SIZE];
-	bcopy(buffer + sizeof(pktHdr), buff, DATA_SIZE);
-	bcopy(buff, buffer, DATA_SIZE);
-
-	return pktHdr;
-}
-
-class Paquet
-{
-	PacketHeader hdr;
-
-	char* data;
-
-	Paquet::Paquet(PacketHeader header, char* data)
-	{
-		hdr = header;
-		this.data = data;
-	}
-		
 }
