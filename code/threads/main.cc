@@ -194,6 +194,7 @@ main (int argc, char **argv)
         ASSERT (argc > 1);
 	    	fileSystem->ChangeDir (*(argv + 1));
 	    }
+	    interrupt->Halt ();
 #endif // FILESYS
 #ifdef NETWORK
 	    if (!strcmp (*argv, "-o"))
