@@ -55,6 +55,8 @@
 #define SC_SimpleShellProcJoin 26
 #define SC_GetCharInt 27
 
+#define SC_List 29
+
 #ifdef IN_USER_MODE
 
 // LB: This part is read only on compiling the test/*.c files.
@@ -193,6 +195,8 @@ void Write (char *buffer, int size, OpenFileId id);
  * you should always wait until you can return at least one character).
  */
 int Read (char *buffer, int size, OpenFileId id);
+
+void List ();
 
 /**
  * \fn void void Close (OpenFileId id)

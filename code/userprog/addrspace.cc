@@ -20,7 +20,7 @@
 #include "addrspace.h"
 #include "noff.h"
 
-#include <strings.h>		/* for bzero */
+//#include <strings.h>		/* for bzero */
 
 #include "bitmap.h"
 
@@ -110,7 +110,7 @@ AddrSpace::AddrSpace (OpenFile * executable)
 
 // how big is address space?
     size = noffH.code.size + noffH.initData.size + noffH.uninitData.size + UserStackSize * MaxThread;	// we need to increase the size
-    
+
 
     // to leave room for the stack
     numPages = divRoundUp (size, PageSize);
@@ -309,7 +309,7 @@ AddrSpace::UnbindUserThread()
 /**
  * \fn void AddrSpace::PushMeInThreadList()
  * \brief ajoute le pointeur vers l'objet thread du thread courrant dans le tableau des threads actifs. Les opération sur les listes sont effectué de manière protégées.
- * \exception invalide un assert si aucun emplacement libre n'existe dans le tableau. 
+ * \exception invalide un assert si aucun emplacement libre n'existe dans le tableau.
  *  Ceci signifie que l'on a dépassé le nombre de thread autorisé à s'éxécuter sur un thread noyau.
 */
 void
@@ -336,7 +336,7 @@ AddrSpace::PushMeInThreadList(){
   newCompteur->tid = currentThread->getTID();
   newCompteur->compteur = 1;
   newCompteur->mutexJoin = currentThread->ThreadJoinMutex;
-  
+
   AddInGCThreadVerrou(newCompteur);
 
   // fin
@@ -448,11 +448,11 @@ AddrSpace::DeleteThreadList(Thread * ThreadP)
  * \fn struct compteurVerrou * AddrSpace::findCompteurVerrou(int tid)
  * \brief cherche dans le tableau GCThreadVerrou si une entrée possède le tid passé en paramètre
  *  assume GCThreadVerrouLock->Acquire() avant l'appel...
- * \param tid : un numéro (int) the thread utilisateur 
+ * \param tid : un numéro (int) the thread utilisateur
  * \return un pointeur vers la structure compteurVerrou associé au thread utilisateur ayant ou ayant eu (= si le thread est déjà terminé) le tid passé en paramètre.
  *  Si aucune structure n'est trouvé retourne NULL.
 */
-struct compteurVerrou * 
+struct compteurVerrou *
 AddrSpace::FindCompteurVerrou(int tid)
 {
   int i;
@@ -466,18 +466,18 @@ AddrSpace::FindCompteurVerrou(int tid)
 
 /**
  * \fn int AddrSpace::attendre(int tid)
- * \brief attend la fin du thread ayant le tid passé en paramètre. 
- *  Si un thread utilisateur possède ce tid alors on attend la fin de celui ci en demandant son verrou threadjoin. 
+ * \brief attend la fin du thread ayant le tid passé en paramètre.
+ *  Si un thread utilisateur possède ce tid alors on attend la fin de celui ci en demandant son verrou threadjoin.
  *  si aucun thread actif (ie actuellement en cours d'exécution) n'est trouvé alors on termine et return immédiatement.
  * \param tid : un numéro (int) the thread utilisateur
- * \return noThreadJoinFound si aucun thread n'a été trouvé, 
- *  noMutexJoinFound si le verrou de join à déjà été libéré (on peut continuer, 
+ * \return noThreadJoinFound si aucun thread n'a été trouvé,
+ *  noMutexJoinFound si le verrou de join à déjà été libéré (on peut continuer,
  *  le thread ne devrait plus exister) ou successWait après une attente réussie.
- * \exception invalide un assert si la structure structCompteur a été supprimé, 
+ * \exception invalide un assert si la structure structCompteur a été supprimé,
  *  ayant incrémenter le compteur, le garbage collector ne devrait pas la supprimé car le compteur > 0.
 */
 
-int 
+int
 AddrSpace::Attendre(int tid)
 {
   Thread * ThreadToJoin = FindThreadList(tid);
@@ -508,11 +508,11 @@ AddrSpace::Attendre(int tid)
   structCompteur->compteur = structCompteur->compteur + 1; // on s'ajoute en temps que thread attendant
 
   GCThreadVerrouLock->Release();
-  
+
   Thread::OpOnUserThreadSem->V();
 
   structCompteur->mutexJoin->Acquire();
-  
+
   GCThreadVerrouLock->Acquire();
 
   ASSERT(structCompteur != NULL);
@@ -532,14 +532,14 @@ AddrSpace::Attendre(int tid)
 // assume mutexJoin->Acquire()
 /**
  * \fn int AddrSpace::checkIfWaitingThread(int tid)
- * \brief Assume que le verrou ThreadJoinMutex de l'addrspace ( ici défini par mutexJoin ) est acqui. 
+ * \brief Assume que le verrou ThreadJoinMutex de l'addrspace ( ici défini par mutexJoin ) est acqui.
  *  recherche une structure compteurVerrou dans la liste GCThreadVerrou. Si celle si existe alors elle est détruit si aucun thread n'attend la terminaison du thread courrant.
  *  Libère le verrou ThreadJoinMutex.
  * \param tid : un numéro (int) the thread utilisateur
  * \return un entier associé à l'opération effectuée (structCompteurNotFound, structCompteurInUse)
  * \exception Si ThreadJoinMutex n'a pas été verouillé alors une erreur sera provoqué lors du Release.
 */
-int 
+int
 AddrSpace::CheckIfWaitingThread(int tid)
 {
   GCThreadVerrouLock->Acquire();
@@ -552,20 +552,20 @@ AddrSpace::CheckIfWaitingThread(int tid)
   structCompteur->compteur = structCompteur->compteur - 1;
   structCompteur->mutexJoin->Release();
   GCThreadVerrouLock->Release();
-  
-  
+
+
   GarbageCollector();
   return structCompteurInUse;
 }
 
 /**
  * \fn int AddrSpace::GarbageCollector()
- * \brief parcourt le tableau GCThreadVerrou à la recherche de structure de compteur avec un compteur de thread à 0. 
+ * \brief parcourt le tableau GCThreadVerrou à la recherche de structure de compteur avec un compteur de thread à 0.
  *  Supprime les struture trouvées ainsi que les mutex utilisés pour pour se mettre en attente sur le thread.
  *  Met à NULL les cases du tableau concernées une fois fini pour réutilisation.
  *  Cette opération sur le tableau GCThreadVerrou est protégé par le verrou GCThreadVerrouLock.
 */
-void 
+void
 AddrSpace::GarbageCollector()
 {
   int i;

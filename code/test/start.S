@@ -105,6 +105,14 @@ Write:
 	j	$31
 	.end Write
 
+	.globl List
+	.ent	List
+List:
+	addiu $2,$0,SC_List
+	syscall
+	j	$31
+	.end List
+
 	.globl Close
 	.ent	Close
 Close:

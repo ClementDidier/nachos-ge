@@ -40,7 +40,7 @@ NACHOS_MIPS_FLAGS += -mips1 -mfp32
 # use plain function calls
 NACHOS_MIPS_FLAGS += -mno-abicalls
 # do not generate symbol to relocate at runtime (one option for the compiler, the other for the linker...)
-NACHOS_MIPS_FLAGS += --no-pie -no-pie
+NACHOS_MIPS_FLAGS += --no-pie
 # do not expect to be linked with the gcc library
 NACHOS_MIPS_FLAGS += -fno-builtin
 # disable stack protection where enabled by default (else some symbols will be missing)

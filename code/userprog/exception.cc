@@ -247,8 +247,53 @@ ExceptionHandler (ExceptionType which)
         DEBUG('a', "Appel systeme SC_SimpleShellProcJoin réalisé\n");
         break;
       }
+      case SC_List:
+      {
+        #ifdef FILESYS
+        fileSystem->List();
+        #endif
+        DEBUG('a', "Appel systeme SC_Open réalisé\n");
+        break;
+      }
+      case SC_Create:
+      {
+        #ifdef FILESYS
+        int arg = machine->ReadRegister (4);
+        char buffer[MAX_STRING_SIZE];
+        synchconsole->copyStringFromMachine(arg, buffer, MAX_STRING_SIZE);
+        fileSystem->Create (buffer, 3000,FileHeader::f);
+        #endif
+        
+        DEBUG('a', "Appel systeme SC_Open réalisé\n");
+        break;
+      }
+      case SC_Read:
+      {
+        /*int buffer = machine->ReadRegister (4);
+        int size = machine->ReadRegister (5);
+        OpenFile openfileId = (OpenFile)machine->ReadRegister (6);
+        openfileId.read(buffer,size);*/
+        DEBUG('a', "Appel systeme SC_Read réalisé\n");
+        break;
+      }
+      case SC_Write:
+      {
+        DEBUG('a', "Appel systeme SC_Write réalisé\n");
+        break;
+      }
+      case SC_Close:
+      {
+        DEBUG('a', "Appel systeme SC_Close réalisé\n");
+        break;
+      }
+      case SC_Open:
+      {
+        DEBUG('a', "Appel systeme SC_Close réalisé\n");
+        break;
+      }
       default:
       {
+
         printf("Unexpected user mode exception %d %d\n", which, type);
         ASSERT(FALSE);
         break;

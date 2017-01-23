@@ -59,6 +59,12 @@ Thread::Thread (const char *threadName)
   for (int r=NumGPRegs; r<NumTotalRegs; r++)
       userRegisters[r] = 0;
 #endif
+
+#ifdef FILESYS
+  for (int i = 0; i < FileMap::map_size; ++i){
+    FicOuverts[i] = NULL;
+  }
+#endif
     mapID = -2; // Valeur d'erreur
 }
 
