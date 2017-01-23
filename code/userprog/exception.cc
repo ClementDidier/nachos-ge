@@ -310,7 +310,7 @@ ExceptionHandler (ExceptionType which)
           int arg = machine->ReadRegister (4);
           char buffer[MAX_STRING_SIZE];
           synchconsole->copyStringFromMachine(arg, buffer, MAX_STRING_SIZE);
-          int res = fileSystem->ChangeDir (buffer);
+          int res = fileSystem->ChangeDirPath (buffer);
           machine->WriteRegister(2,res);
         #endif
         

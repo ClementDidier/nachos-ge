@@ -63,6 +63,7 @@
 #define FreeMapFileSize 	(NumSectors / BitsInByte)
 #define NumDirEntries 		10
 #define DirectoryFileSize 	(sizeof(DirectoryEntry) * NumDirEntries)
+#define MAX_STRING_SIZE 128 // on le redéclare pour ne pas importer tout system.h...
 
 //----------------------------------------------------------------------
 // FileSystem::FileSystem
@@ -507,4 +508,45 @@ int FileSystem::ChangeDir(const char * name)
   delete directoryFile;
   directoryFile = new OpenFile(sector);
   return 1;
+}
+
+void FileSystem::clearBuffer(char * buffer){
+  int i;
+  for(i = 0; i< MAX_STRING_SIZE; i++){
+    buffer[i] = '\0';
+  }
+}
+
+int FileSystem::ChangeDirPath(const char * name){
+  int i = 0;
+  int j = 0;
+  char tempPath[MAX_STRING_SIZE];
+  int continuer = 1;
+  
+  clearBuffer(tempPath);
+
+  if(name[0] == '/'){ // chemin absolu on revient à l'origine
+    delete directoryFile;
+    directoryFile = new OpenFile(DirectorySector);
+    i = 1;
+  }
+
+  while(i < MAX_STRING_SIZE && name[i] != '\0' && continuer){
+    if(name[i] == '/'){
+      continuer = ChangeDir(tempPath);
+      clearBuffer(tempPath);
+      j = 0;
+    }
+    else{
+      tempPath[j] = name[i];
+      j++;
+    }
+    i++;
+  }
+
+  if(tempPath[0] != '\0'){
+    continuer = ChangeDir(tempPath);
+  }
+
+  return continuer;
 }
