@@ -6,7 +6,7 @@
 
 #define MSG 0x00
 #define ACK 0x01
-#define DATA_SIZE 100
+#define DATA_SIZE 30
 #define MAXREEMISSIONS 10
 #define TEMPO 1
 
@@ -24,7 +24,7 @@ class ReliableNet
 		ReliableNet(NetworkAddress addr, double reliability, NetworkAddress target);
 		~ReliableNet();
 
-		void Send(char type, const char *data);
+		void Send(char type, const char *data, int size);
 		int Receive(char *data, int size);
 
 		void PacketSent();		// Interrupt handler, called when outgoing 

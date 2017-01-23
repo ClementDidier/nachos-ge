@@ -33,12 +33,19 @@ void WriteDone(int arg)
 	rn->PacketSent();
 }
 
+void printRelHdr(PacketHeaderReliable hdr)
+{
+	printf("------------- ENTETE RELIABLE NET -----------\nType : %d\nIndex : %d\n---------------------------------------------\n", hdr.type, hdr.index);
+}
+
 PacketHeaderReliable ReliableNet::ParseReliableHeader(char * buffer)
 {
 	PacketHeaderReliable pktHdrRel = *(PacketHeaderReliable*)buffer;
 
+	printRelHdr(pktHdrRel);
+
 	char buff[DATA_SIZE];
-	bcopy(buffer + sizeof(pktHdrRel), buff, DATA_SIZE);
+	bcopy(buffer + sizeof(PacketHeaderReliable), buff, DATA_SIZE);
 	bcopy(buff, buffer, DATA_SIZE);
 
 	return pktHdrRel;
@@ -47,9 +54,9 @@ PacketHeaderReliable ReliableNet::ParseReliableHeader(char * buffer)
 ReliableNet::ReliableNet(NetworkAddress addr, double reliability, NetworkAddress to)
 {
 	messages = new SynchList();
-	pktHdr.to = addr;
-
-	target = to;
+	pktHdr.to = to;
+	pktHdr.from = addr;
+	pktHdr.length = DATA_SIZE; // Data de taille statique
 
 	memoryIndex = 0;
 	memorySize = 0;
@@ -82,22 +89,35 @@ ReliableNet::~ReliableNet()
 
 void ThreadSendHandler(int arg)
 {
+	printf("Début ThreadHandler Send\n");
+
 	PacketContext * context = (PacketContext *) arg;
 
 	char * buffer = new char[DATA_SIZE + sizeof(PacketHeaderReliable)];
-	*(PacketHeaderReliable *) buffer = context->hdrReliable;
-	bcopy(context->data, buffer, sizeof(PacketHeaderReliable));
+
+	printRelHdr(context->hdrReliable);
+	//bcopy((void*)&context->hdrReliable.type, buffer, sizeof(char));
+	//bcopy((void*)&context->hdrReliable.index, buffer + sizeof(char), sizeof(int));
+	//*(PacketHeaderReliable *) buffer = context->hdrReliable;
+	*(PacketHeaderReliable *)buffer = context->hdrReliable;
+
+	printf("Buffer : <%s> & Buffer Data : %s\n", buffer, context->data);
+
+	bcopy(context->data, buffer + sizeof(PacketHeaderReliable), context->hdr.length);
+
 
 	int i;
 	for(i = 0; i < MAXREEMISSIONS; i++)
 	{
-		if(context->rlbnet->numEmission == context->rlbnet->numAquitement) // Message acquité
+		if(context->rlbnet->numEmission == context->rlbnet->numAquitement && context->rlbnet->numEmission > 0) // Message acquité
 		{
 			break;
 		}
 
+		printf("Acquire in send *****\n");
 		context->rlbnet->sendLock->Acquire();
 
+		printf("network send in send *****\n");
     	context->rlbnet->network->Send(context->hdr, context->data);
     	context->rlbnet->messageSent->P();
 
@@ -109,7 +129,7 @@ void ThreadSendHandler(int arg)
 	delete [] buffer;
 }
 
-void ReliableNet::Send(char type, const char *data)
+void ReliableNet::Send(char type, const char *data, int size)
 {
 	switch(type)
 	{
@@ -117,11 +137,13 @@ void ReliableNet::Send(char type, const char *data)
 			network->Send(pktHdr, (char*)data);
 			break;
 		case MSG:
+			printf("MSG before Semaphore\n");
 			semAck->P();
-			//ASSERT(numEmission != numAquitement);
+			printf("MSG after Semaphore\n");
 
 			PacketContext context;
 			context.hdr = pktHdr;
+			context.hdr.length = size;
 			context.hdrReliable.type = type;
 			context.hdrReliable.index = numEmission;
 			context.data = (char*)data;
@@ -132,6 +154,7 @@ void ReliableNet::Send(char type, const char *data)
 
 			Thread * t = new Thread("send worker");
 			t->Fork(ThreadSendHandler, (int) &context);
+			currentThread->Yield();
 			//semAck->P();
 			break;
 	}
@@ -147,6 +170,7 @@ int ReliableNet::Receive(char *data, int size)
 		bcopy(paquet->data, data + i * DATA_SIZE, DATA_SIZE);
 	}
 
+	printf("receive realised : messages->IsEmpty = %d\n", messages->IsEmpty());
 	if(messages->IsEmpty())
 		return 0;
 	return 1;
@@ -201,7 +225,7 @@ void ReliableNet::WaitMessages()
 						messages->Append((void*) p);
 					}
 
-        			Send(ACK, "ACK_DATA\0");
+        			Send(ACK, "A", 1);
         		}
         		else
         		{

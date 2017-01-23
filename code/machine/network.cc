@@ -106,8 +106,11 @@ Network::Send(PacketHeader hdr, char* data)
 
     sprintf(toName, "SOCKET_%d", (int)hdr.to);
     
-    ASSERT((sendBusy == FALSE) && (hdr.length > 0) 
-		&& (hdr.length <= MaxPacketSize) && (hdr.from == ident));
+    printf("hdr from : %d\nhdr to : %d\nident : %d\nhdr lenght : %d\n", hdr.from, hdr.to, ident, hdr.length);
+    ASSERT((sendBusy == FALSE) 
+        && (hdr.length > 0) 
+		&& (hdr.length <= MaxPacketSize) 
+        && (hdr.from == ident));
     DEBUG('n', "Sending to addr %d, %d bytes... ", hdr.to, hdr.length);
 
     interrupt->Schedule(NetworkSendDone, (int)this, NetworkTime, NetworkSendInt);

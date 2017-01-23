@@ -120,7 +120,7 @@ void Ping(int target)
     
 
     printf("Envoi message\n");
-    rlbnet->Send(MSG, "PING");
+    rlbnet->Send(MSG, "PING", 4);
 
     Delay(1);
 
