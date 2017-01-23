@@ -54,8 +54,11 @@
 #define SC_Assert 25
 #define SC_SimpleShellProcJoin 26
 #define SC_GetCharInt 27
-
+#define SC_Mkdir 28
 #define SC_List 29
+#define SC_ChangeDirectory 30
+#define SC_RmDir 31
+#define SC_Remove 32
 
 #ifdef IN_USER_MODE
 
@@ -152,6 +155,34 @@ typedef int OpenFileId;
 
 /* Create a Nachos file, with "name" */
 void Create (char *name);
+
+/**
+ * \fn void Mkdir (char *name)
+ * \brief Créer un dossier du nom passé en paramètre
+ * \param name nom du dossier à créer
+*/
+void Mkdir (char *name);
+
+/**
+ * \fn void Mkdir (char *name)
+ * \brief Supprime un dossier de nom passé en paramètre
+ * \param name nom du dossier à supprimer
+*/
+void RmDir (char *name);
+
+/**
+ * \fn void Remove (char *name)
+ * \brief Supprime un fichier de nom passé en paramètre
+ * \param name nom du fichier à supprimer
+*/
+void Remove (char *name);
+/**
+ * \fn int ChangeDirectory (char *name)
+ * \brief permet de changer de repertoire courrant.
+ * \param name nom du dossier dans lequel basculer, le dossier doit être dans le repertoire courrant.
+ * \return retourne 1 si on a pu changer de repertoire, 0 sinon.
+*/
+int ChangeDirectory (char *name);
 
 /**
  * \fn OpenFileId Open (char *name)
@@ -388,6 +419,12 @@ int ForkExec(char *s);
  */
 void SimpleShellProcJoin();
 
+/**
+ * \fn char GetCharInt()
+ * \brief Obtient un caractère depuis l'entrée de la console standard et retourne l'entier (table ascii) associé. 
+ *  La fonction est bloquante, le thread attend une entrée utilisateur avant de poursuivre
+ * \return Retourne un int représentant le caractère entré dans la console de la table ascii
+ */
 int GetCharInt();
 
 /**

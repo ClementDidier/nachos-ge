@@ -93,7 +93,7 @@ class FileSystem {
     bool CreateDir(const char* name);
     bool DeleteDir(const char * name);
 
-    void ChangeDir(const char* name);
+    int ChangeDir(const char* name);
   private:
    OpenFile* freeMapFile;		// Bit map of free disk blocks,
 					// represented as a file

@@ -85,7 +85,6 @@ ExceptionHandler (ExceptionType which)
       case SC_Exit:
       {
         ProcessExit();
-        //printf("fhsqddsjhfds\n");
         break;
       }
       case SC_Halt:
@@ -116,11 +115,6 @@ ExceptionHandler (ExceptionType which)
         synchconsole->SynchPutString(buffer);
         DEBUG('a', "Appel systeme PutString réalisé\n");
         break;
-      }
-      case SC_GetChar:
-      {
-        machine->WriteRegister(2, (int)synchconsole->SynchGetChar());
-        DEBUG('a', "Appel systeme GetChar réalisé\n");
       }
       case SC_GetString:
       {
@@ -192,6 +186,13 @@ ExceptionHandler (ExceptionType which)
         DEBUG('a', "Appel systeme SC_GetCharInt réalisé\n");
         break;
       }
+      case SC_GetChar:
+      {
+        int ch = (int)synchconsole->SynchGetChar();
+        machine->WriteRegister(2,ch);
+        DEBUG('a', "Appel systeme SC_GetChar réalisé\n");
+        break;
+      }
       case SC_UserSemP:
       {
         Semaphore* f = (Semaphore *) machine->ReadRegister(4);
@@ -252,43 +253,68 @@ ExceptionHandler (ExceptionType which)
         #ifdef FILESYS
         fileSystem->List();
         #endif
-        DEBUG('a', "Appel systeme SC_Open réalisé\n");
+        DEBUG('a', "Appel systeme SC_List réalisé\n");
         break;
       }
       case SC_Create:
       {
         #ifdef FILESYS
-        int arg = machine->ReadRegister (4);
-        char buffer[MAX_STRING_SIZE];
-        synchconsole->copyStringFromMachine(arg, buffer, MAX_STRING_SIZE);
-        fileSystem->Create (buffer, 3000,FileHeader::f);
+          int arg = machine->ReadRegister (4);
+          char buffer[MAX_STRING_SIZE];
+          synchconsole->copyStringFromMachine(arg, buffer, MAX_STRING_SIZE);
+          fileSystem->Create (buffer, 3000,FileHeader::f);
         #endif
         
-        DEBUG('a', "Appel systeme SC_Open réalisé\n");
+        DEBUG('a', "Appel systeme SC_Create réalisé\n");
         break;
       }
-      case SC_Read:
+      case SC_Mkdir:
       {
-        /*int buffer = machine->ReadRegister (4);
-        int size = machine->ReadRegister (5);
-        OpenFile openfileId = (OpenFile)machine->ReadRegister (6);
-        openfileId.read(buffer,size);*/
-        DEBUG('a', "Appel systeme SC_Read réalisé\n");
+        #ifdef FILESYS
+          int arg = machine->ReadRegister (4);
+          char buffer[MAX_STRING_SIZE];
+          synchconsole->copyStringFromMachine(arg, buffer, MAX_STRING_SIZE);
+          fileSystem->CreateDir (buffer);
+        #endif
+        
+        DEBUG('a', "Appel systeme SC_Mkdir réalisé\n");
         break;
       }
-      case SC_Write:
+      case SC_Remove:
       {
-        DEBUG('a', "Appel systeme SC_Write réalisé\n");
+        #ifdef FILESYS
+          int arg = machine->ReadRegister (4);
+          char buffer[MAX_STRING_SIZE];
+          synchconsole->copyStringFromMachine(arg, buffer, MAX_STRING_SIZE);
+          fileSystem->Remove (buffer);
+        #endif
+        
+        DEBUG('a', "Appel systeme SC_Mkdir réalisé\n");
         break;
       }
-      case SC_Close:
+      case SC_RmDir:
       {
-        DEBUG('a', "Appel systeme SC_Close réalisé\n");
+        #ifdef FILESYS
+          int arg = machine->ReadRegister (4);
+          char buffer[MAX_STRING_SIZE];
+          synchconsole->copyStringFromMachine(arg, buffer, MAX_STRING_SIZE);
+          fileSystem->DeleteDir (buffer);
+        #endif
+        
+        DEBUG('a', "Appel systeme SC_Mkdir réalisé\n");
         break;
       }
-      case SC_Open:
+      case SC_ChangeDirectory:
       {
-        DEBUG('a', "Appel systeme SC_Close réalisé\n");
+        #ifdef FILESYS
+          int arg = machine->ReadRegister (4);
+          char buffer[MAX_STRING_SIZE];
+          synchconsole->copyStringFromMachine(arg, buffer, MAX_STRING_SIZE);
+          int res = fileSystem->ChangeDir (buffer);
+          machine->WriteRegister(2,res);
+        #endif
+        
+        DEBUG('a', "Appel systeme SC_ChangeDirectory réalisé\n");
         break;
       }
       default:

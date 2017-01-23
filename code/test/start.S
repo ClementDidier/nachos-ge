@@ -105,6 +105,22 @@ Write:
 	j	$31
 	.end Write
 
+	.globl RmDir
+	.ent	RmDir
+RmDir:
+	addiu $2,$0,SC_RmDir
+	syscall
+	j	$31
+	.end RmDir
+
+	.globl Remove
+	.ent	Remove
+Remove:
+	addiu $2,$0,SC_Remove
+	syscall
+	j	$31
+	.end Remove
+
 	.globl List
 	.ent	List
 List:
@@ -112,6 +128,22 @@ List:
 	syscall
 	j	$31
 	.end List
+
+	.globl Mkdir
+	.ent	Mkdir
+Mkdir:
+	addiu $2,$0,SC_Mkdir
+	syscall
+	j	$31
+	.end Mkdir
+
+	.globl ChangeDirectory
+	.ent	ChangeDirectory
+ChangeDirectory:
+	addiu $2,$0,SC_ChangeDirectory
+	syscall
+	j	$31
+	.end ChangeDirectory
 
 	.globl Close
 	.ent	Close

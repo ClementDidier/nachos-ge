@@ -54,6 +54,7 @@ int ForkExec(char* s)
 
 void ProcessExit()
 {
+	Thread::ShellProcOnlyOne->V(); // de toute façon quand on est la le shell peut reprendre la main
 	currentThread->space->verrou->P();
 	int i;
 	processListLock->Acquire();
@@ -66,12 +67,10 @@ void ProcessExit()
 
 	for(i = 0; i < NumPhysPages; i++){
 		if(processList[i] >= 0){
-			Thread::ShellProcOnlyOne->V();
 			processListLock->Release();
 			currentThread->Finish();
 		}
 	}
-	Thread::ShellProcOnlyOne->V();
 	processListLock->Release();
 	interrupt->Halt();
 }

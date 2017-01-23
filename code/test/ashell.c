@@ -16,51 +16,109 @@ void clearscr(){
 	}
 }
 
-void help(){
-	PutString("          ╔════════════════════");
-    PutString("═════════════════════════════");
-    PutString("══════════");
-    PutString("═══════════════════╗\n");
-    PutString("          ║                                                                              ║\n");
-	PutString("          ║     --- Console utilisateur simple ---, commandes disponibles:               ║\n");
-	PutString("          ║     q : quitter                                                              ║\n");
-	PutString("          ║     h : affiche l'aide                                                       ║\n");
-	PutString("          ║     c : vider l'affichage                                                    ║\n");
-	PutString("          ║     m <directory> : créer un répertoire                                      ║\n");
-	PutString("          ║     f <filename> : créer un fichier                                          ║\n");
-	PutString("          ║     d <directory> : changer de repertoire courrant                           ║\n");
-	PutString("          ║     l : affiche le repertoire courrant                                       ║\n");
-	PutString("          ║     x : copier le fichier (UNIX) dans le repertoire (NachOS) courrant        ║\n");
-	PutString("          ║     <executable> ( nom >= 2 caractères sans arguments )                      ║\n");
-	PutString("          ║                                                                              ║\n");
-	PutString("          ╚════════════════════");
-	PutString("═════════════════════════════");
-	PutString("══════════");
-	PutString("═══════════════════╝\n");
+void updatecp(char * currentPath, char * buffer){
+	int i;
+	int m;
+	if(buffer [2] == '.' && buffer[3] == '.'){
+		m = 0;
+		for(i = 0; i<buffersize-1; i++){
+			if (currentPath[i] == '/' && currentPath[i+1] != '\0'){
+				m = i;
+			}
+		}
+		for(i = m+1; i<buffersize; i++){
+			currentPath[i] = '\0';
+		}
+	}
+	else if(buffer [2] != '.'){
+		for(i = 0; i<buffersize; i++){
+			if (currentPath[i] != '\0'){
+				m = i;
+			}
+		}
+		m++;
+		i = 0;
+		while(m < buffersize-1 && buffer[2+i] != '\0'){
+			currentPath[m] = buffer[2+i];
+			m++;
+			i++;
+		}
+		currentPath[m] = '/';
+	}
 }
+
 
 int
 main ()
 {
+	char currentPath[buffersize];
 	clearscr();
-	PutString("   _   _            _     _____ _____     ");
-	PutString(" _____ _                 _      _____ _          _ _ \n");
-	PutString("  | \\ | |          | |   |  _  /  ___|    ");
-	PutString("/  ___(_)               | |    /  ___| |        | | |\n");
-	PutString("  |  \\| | __ _  ___| |__ | | | \\ `--.     ");
-	PutString("\\ `--. _ _ __ ___  _ __ | | ___\\ `--.| |__   ___| | |\n");
-	PutString("  | . ` |/ _` |/ __| '_ \\| | | |`--. \\    ");
-	PutString(" `--. \\ | '_ ` _ \\| '_ \\| |/ _ \\`--. \\ '_ \\ / _ \\ | |\n");
-	PutString("  | |\\  | (_| | (__| | | \\ \\_/ /\\__/ /    ");
-	PutString("/\\__/ / | | | | | | |_) | |  __/\\__/ / | | |  __/ | |\n");
-	PutString("  \\_| \\_/\\__,_|\\___|_| |_|\\___/\\____/     ");
-	PutString("\\____/|_|_| |_| |_| .__/|_|\\___\\____/|_| |_|\\___|_|_|\n");
-	PutString("                                          ");
-	PutString("                  | |\n");
-	PutString("                                          ");
-	PutString("                  |_|\n");
+	PutString("┌─────────────────────");
+	PutString("─────────────────────┐\n");
+	PutString("│╔═╗┬┌┬┐┌─┐┬  ┌─┐  ┌─┐┌─┐   ╔═╗┬ ┬┌─┐┬  ┬  │\n");
+	PutString("│╚═╗││││├─┘│  ├┤   ├┤ └─┐───╚═╗├─┤├┤ │  │  │\n");
+	PutString("│╚═╝┴┴ ┴┴  ┴─┘└─┘  └  └─┘   ╚═╝┴ ┴└─┘┴─┘┴─┘│\n");
+	PutString("├────────────────────");
+	PutString("──────────────────────┤\n");
+	PutString("│ l : affiche le repertoire courrant       │\n");
+	PutString("│ c <dir. name> : change de repertoire     │\n");
+	PutString("│ m <directory name> : créer un repertoire │\n");
+	PutString("│ n <file name> : créer un fichier         │\n");
+	PutString("│ r <dir. name> : supprime un repertoire   │\n");
+	PutString("│ d <file name> : supprime un fichier      │\n");
+	PutString("│ q : quitter                              │\n");
+	PutString("└───────────────────────");
+	PutString("───────────────────┘\n");
+	char buffer[buffersize];
+	resetbuffer(currentPath);
+	resetbuffer(buffer);
+	currentPath[0] = '/';
+	while (!(buffer[0] == 'q' && buffer[1] == '\0')){
+		PutString("\nuser@NachOS:~");
+		PutString(currentPath);
+		PutChar('$');
+		resetbuffer(buffer);
+		GetString(buffer, 60);
 
-	help();
-
+		switch(buffer[0]){
+			case 'm':
+				if(buffer[1] == ' '){
+					Mkdir(&buffer[2]);
+				}
+			break;
+			case 'l':
+				if(buffer[1] == '\0'){
+					List();
+				}
+			break;
+			case 'n':
+				if(buffer[1] == ' '){
+					Create(&buffer[2]);
+				}
+			break;
+			case 'c':
+				if(buffer[1] == ' '){
+					if(currentPath[1] == '\0' && buffer[3] == '.'){
+						PutString("Opération Impossible\n");
+					}
+					else{
+						if(ChangeDirectory(&buffer[2])){
+							updatecp(currentPath,buffer);
+						}
+					}
+				}
+			break;
+			case 'r':
+				if(buffer[1] == ' '){
+					RmDir(&buffer[2]);
+				}
+			break;
+			case 'd':
+				if(buffer[1] == ' '){
+					Remove(&buffer[2]);
+				}
+			break;
+		}
+	}
 	return 0;
 }

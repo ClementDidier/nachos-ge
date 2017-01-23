@@ -482,7 +482,7 @@ bool FileSystem::DeleteDir(const char * name)
 }
 
 
-void FileSystem::ChangeDir(const char * name)
+int FileSystem::ChangeDir(const char * name)
 {
   int sector;
   if(name[0] == '.' && name[1] == '.' && name[2] == '\0'){
@@ -492,13 +492,19 @@ void FileSystem::ChangeDir(const char * name)
     sector = dir->Find("..");
     fh->FetchFrom(sector);
     sector = fh->getSector(0);
+    delete fh;
+    delete dir;
   }
   else{
-  Directory* dir = new Directory(NumDirEntries);
-  dir->FetchFrom(directoryFile);
-  sector = dir->Find(name);
-  printf("%d\n", sector );
-  //delete directoryFile;
+    Directory * dir = new Directory(NumDirEntries);
+    dir->FetchFrom(directoryFile);
+    sector = dir->Find(name);
+    if (sector == -1){
+      return 0;
+    }
+    delete dir;
  }
+  delete directoryFile;
   directoryFile = new OpenFile(sector);
+  return 1;
 }
