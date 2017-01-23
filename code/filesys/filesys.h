@@ -39,7 +39,10 @@
 #include "openfile.h"
 #include "filehdr.h"
 #include "filemap.h"
-
+#ifdef USER_PROGRAM
+//#include "system.h"
+#endif
+class FileMap;
 #ifdef FILESYS_STUB 		// Temporarily implement file system calls as
 				// calls to UNIX, until the real file system
 				// implementation is available

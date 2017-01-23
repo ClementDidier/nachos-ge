@@ -163,6 +163,7 @@ FileSystem::FileSystem(bool format)
     // the bitmap and directory; these are left open while Nachos is running
         freeMapFile = new OpenFile(FreeMapSector);
         directoryFile = new OpenFile(DirectorySector);
+        OpenedFiles = new FileMap;
     }
 }
 
@@ -264,8 +265,10 @@ FileSystem::Open(const char *name)
     if (sector >= 0){
   	  //openFile = new OpenFile(sector);	// name was found in directory
       delete directory;
+      DEBUG('f', "File %s correctly opened\n", name);
       return OpenedFiles->Add(sector, new OpenFile(sector));				// return NULL if not found
     }
+  DEBUG('f', "File %s failed to open\n", name);
   return NULL;
 }
 
@@ -274,14 +277,18 @@ void FileSystem::Close(const char *name)
   Directory *directory = new Directory(NumDirEntries);
   //OpenFile *openFile = NULL;
   int sector;
-
   DEBUG('f', "Opening file %s\n", name);
   directory->FetchFrom(directoryFile);
   sector = directory->Find(name);
+
   if (sector >= 0){
-  //openFile = new OpenFile(sector);	// name was found in directory
-  delete directory;
-  OpenedFiles->Delete(sector);
+    //openFile = new OpenFile(sector);	// name was found in directory
+    if (OpenedFiles->Delete(sector)){
+      delete directory;
+    }
+    else{
+      DEBUG('f', "File %s wasn't deleted\n", name);
+    }
   }
 }
 
