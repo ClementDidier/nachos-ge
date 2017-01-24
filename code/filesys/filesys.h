@@ -1,3 +1,7 @@
+/**
+ * \file filesys.h
+ * \brief implemente des fonctions pour la gestion des fichiers
+*/
 // filesys.h
 //	Data structures to represent the Nachos file system.
 //
@@ -72,30 +76,92 @@ class FileSystem {
 #else // FILESYS
 class FileSystem {
   public:
-    FileSystem(bool format);		// Initialize the file system.
-					// Must be called *after* "synchDisk"
-					// has been initialized.
-    					// If "format", there is nothing on
-					// the disk, so initialize the directory
-    					// and the bitmap of free blocks.
 
+  /**
+   * \fn void FileSystem(bool format);
+   * \brief Initialize the file system.
+   *  Must be called *after* "synchDisk" has been initialized.
+   * If "format", there is nothing on the disk, so initialize the directory and the bitmap of free blocks.
+  */
+    FileSystem(bool format);
+
+  /**
+   * \fn void Close(const char *name, int initialSize, FileHeader::Type type = FileHeader::f);
+   * \brief créer un fichier ou un dossier dans le repertoire courrant
+   * \param name nom du ficheir ou repertoire à créer
+   * \param initialSize taille initial du fichier ou repertoire à créer (int)
+   * \param type f en cas de fichier, d en cas de repertoire
+   * \return true(1) si on a pu créer le repertoire ou le fichier, 0 sinon
+  */
     bool Create(const char *name, int initialSize, FileHeader::Type type = FileHeader::f);
 					// Create a file (UNIX creat)
 
-    OpenFile* Open(const char *name); 	// Open a file (UNIX open)
+  /**
+   * \fn void Close(const char * buffer);
+   * \brief Open a file (UNIX open)
+  */
+    OpenFile* Open(const char *name);
+
+  /**
+   * \fn void Close(const char * buffer);
+   * \brief ferme une fichier
+  */
     void Close(const char *name);
-    bool Remove(const char *name); 	// Delete a file (UNIX unlink)
 
-    void List();			// List all the files in the file system
+  /**
+   * \fn void Remove(const char * buffer);
+   * \brief Delete a file (UNIX unlink)
+  */
+    bool Remove(const char *name);
 
-    void Print();			// List all the files and their contents
+  /**
+   * \fn void Print(const char * buffer);
+   * \brief List all the files in the file system
+  */
+    void List(); 
 
+  /**
+   * \fn void Print(const char * buffer);
+   * \brief List all the files and their contents
+  */
+    void Print();
+
+  /**
+   * \fn void CreateDir(const char * buffer);
+   * \brief suppime le repertoire name du dossier courrant. 
+   * \param name une chaine de taille max 9 (taille maximum de nom de fichier) qui contient un nom de dossier du repertoire courrant (. et .. exclus).
+   * \return retourne true(1) si on a pu créer le repertoire, false(0) sinon.
+  */
     bool CreateDir(const char* name);
+
+  /**
+   * \fn void DeleteDir(const char * buffer);
+   * \brief suppime le repertoire name du dossier courrant. 
+   * \param name une chaine de taille max 9 (taille maximum de nom de fichier) qui contient un nom de dossier du repertoire courrant (. et .. exclus).
+   * \return retourne true(1) si on a pu supprimer le repertoire, false(0) sinon.
+  */
     bool DeleteDir(const char * name);
 
+  /**
+   * \fn void ChangeDir(const char * buffer);
+   * \brief recherche le nom du dossier passé en paramètre, recherche le secteur associé et change l'emplacement
+   * \param name une chaine de taille max 9 (taille maximum de nom de fichier) qui contient un nom de dossier du repertoire courrant (. et .. inclu).
+   * \return retourne 1 si on a pu changer de repertoire, 0 sinon.
+  */
     int ChangeDir(const char* name);
-    int ChangeDirPath(const char* name);
 
+  /**
+   * \fn void ChangeDirPath(const char * buffer);
+   * \brief analyse la chaine passé en paramètre 
+   * \param name une chaine de taille max 9 (taille maximum de nom de fichier) qui contient un chemin de repertoire absolu ou relatif.
+   * \return retourne 1 si on a pu changer de repertoire, 0 sinon.
+  */
+    int ChangeDirPath(const char* name);
+  /**
+   * \fn void clearBuffer(char * buffer);
+   * \brief réinitialise le buffer passé en paramètre  
+   * \param buffer doit être de taille MAX_STRING_SIZE
+  */
     void clearBuffer(char * buffer);
   private:
    OpenFile* freeMapFile;		// Bit map of free disk blocks,

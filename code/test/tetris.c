@@ -1,3 +1,12 @@
+/**
+ * \file tetris.c
+ * \brief permet de tester l'utilisation de la console (get char, get string, put string etc.), 
+ *	la gestion et la synchronisation des threads utilisateurs, 
+ *	les semaphores utilisateurs.
+ *	Permet aussi de jouer au tetris 
+ *	(note il est possible d'entrer jusqu'a 2 fonctions de déplacement, par exemple 1+2+enter vas faire aller la pièce à gauche puis va la faire pivoter)
+*/
+
 #include "syscall.h"
 
 #define hauteur 40
@@ -1854,7 +1863,7 @@ void printMenu(){
 	PutString("═════════════════════");
 	PutString("═════════════════════╗\n");
 	PutString(" ║                                                               ║");
-	PutString("\n ║ n : Lancer une partie (normale)                                ║");
+	PutString("\n ║ n : Lancer une partie (normale)                               ║");
 	PutString("\n ║ d : Lancer une partie (difficile)                             ║");
 	PutString("\n ║ q : quitter                                                   ║");
 	PutString("\n ║                                                               ║");

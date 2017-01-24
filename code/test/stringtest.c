@@ -2,6 +2,7 @@
  * \file stringtest.c
  * \brief Récupère des données de l'utilisateur via GetInt et affiche un (ou plusieurs)
  * train(s) grace a l'appel de PutString
+ * La vitesse des train est très dépendante de la vitesse CPU (n'ayant pas d'horloge interne)...
  */
 
 #include "syscall.h"
