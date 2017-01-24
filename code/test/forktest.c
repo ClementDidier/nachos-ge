@@ -1,3 +1,7 @@
+/**
+ * \file forktest.c
+ * \brief lance 10 programmes utilisateur dans de nouveaux processus.
+*/
 #include "syscall.h"
 
 int main()

@@ -85,7 +85,6 @@ ExceptionHandler (ExceptionType which)
       case SC_Exit:
       {
         ProcessExit();
-        //printf("fhsqddsjhfds\n");
         break;
       }
       case SC_Halt:
@@ -116,11 +115,6 @@ ExceptionHandler (ExceptionType which)
         synchconsole->SynchPutString(buffer);
         DEBUG('a', "Appel systeme PutString réalisé\n");
         break;
-      }
-      case SC_GetChar:
-      {
-        machine->WriteRegister(2, (int)synchconsole->SynchGetChar());
-        DEBUG('a', "Appel systeme GetChar réalisé\n");
       }
       case SC_GetString:
       {
@@ -159,6 +153,7 @@ ExceptionHandler (ExceptionType which)
         params->arg = machine->ReadRegister(5);
         params->retaddr = machine->ReadRegister(6);
         machine->WriteRegister(2, do_UserThreadCreate(f, (int) params));
+        delete params;
         DEBUG('a', "Appel systeme SC_UserThreadCreate réalisé\n");
         break;
       }
@@ -183,6 +178,20 @@ ExceptionHandler (ExceptionType which)
         synchconsole->copyStringFromMachine(arg, f, MAX_SEM_NAME_SIZE);
         machine->WriteRegister(2,(int) do_UserSemCreate(f,arg2));
         DEBUG('a', "Appel systeme SC_UserSemCreate réalisé\n");
+        break;
+      }
+      case SC_GetCharInt:
+      {
+        int ch = (int)synchconsole->SynchGetChar();
+        machine->WriteRegister(2,ch);
+        DEBUG('a', "Appel systeme SC_GetCharInt réalisé\n");
+        break;
+      }
+      case SC_GetChar:
+      {
+        int ch = (int)synchconsole->SynchGetChar();
+        machine->WriteRegister(2,ch);
+        DEBUG('a', "Appel systeme SC_GetChar réalisé\n");
         break;
       }
       case SC_UserSemP:
@@ -233,8 +242,85 @@ ExceptionHandler (ExceptionType which)
         iziAssert(res, res2str, res3, res4str);
         break;
       }
+      case SC_SimpleShellProcJoin:
+      {
+        Thread::ShellProcOnlyOne->P();
+        Thread::ShellProcOnlyOne->P();
+        DEBUG('a', "Appel systeme SC_SimpleShellProcJoin réalisé\n");
+        break;
+      }
+      case SC_List:
+      {
+        #ifdef FILESYS
+        fileSystem->List();
+        #endif
+        DEBUG('a', "Appel systeme SC_List réalisé\n");
+        break;
+      }
+      case SC_Create:
+      {
+        #ifdef FILESYS
+          int arg = machine->ReadRegister (4);
+          char buffer[MAX_STRING_SIZE];
+          synchconsole->copyStringFromMachine(arg, buffer, MAX_STRING_SIZE);
+          fileSystem->Create (buffer, 3000,FileHeader::f);
+        #endif
+        
+        DEBUG('a', "Appel systeme SC_Create réalisé\n");
+        break;
+      }
+      case SC_Mkdir:
+      {
+        #ifdef FILESYS
+          int arg = machine->ReadRegister (4);
+          char buffer[MAX_STRING_SIZE];
+          synchconsole->copyStringFromMachine(arg, buffer, MAX_STRING_SIZE);
+          fileSystem->CreateDir (buffer);
+        #endif
+        
+        DEBUG('a', "Appel systeme SC_Mkdir réalisé\n");
+        break;
+      }
+      case SC_Remove:
+      {
+        #ifdef FILESYS
+          int arg = machine->ReadRegister (4);
+          char buffer[MAX_STRING_SIZE];
+          synchconsole->copyStringFromMachine(arg, buffer, MAX_STRING_SIZE);
+          fileSystem->Remove (buffer);
+        #endif
+        
+        DEBUG('a', "Appel systeme SC_Mkdir réalisé\n");
+        break;
+      }
+      case SC_RmDir:
+      {
+        #ifdef FILESYS
+          int arg = machine->ReadRegister (4);
+          char buffer[MAX_STRING_SIZE];
+          synchconsole->copyStringFromMachine(arg, buffer, MAX_STRING_SIZE);
+          fileSystem->DeleteDir (buffer);
+        #endif
+        
+        DEBUG('a', "Appel systeme SC_Mkdir réalisé\n");
+        break;
+      }
+      case SC_ChangeDirectory:
+      {
+        #ifdef FILESYS
+          int arg = machine->ReadRegister (4);
+          char buffer[MAX_STRING_SIZE];
+          synchconsole->copyStringFromMachine(arg, buffer, MAX_STRING_SIZE);
+          int res = fileSystem->ChangeDirPath (buffer);
+          machine->WriteRegister(2,res);
+        #endif
+        
+        DEBUG('a', "Appel systeme SC_ChangeDirectory réalisé\n");
+        break;
+      }
       default:
       {
+
         printf("Unexpected user mode exception %d %d\n", which, type);
         ASSERT(FALSE);
         break;

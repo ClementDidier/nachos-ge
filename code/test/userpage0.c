@@ -1,5 +1,5 @@
 /**
- * \file semaphore.c
+ * \file userpage0.c
  * \brief Créer 3 threads, chacun fera appel a la fonction threadHandler et lui
  * passera en paramètre un caractère qu'il affichera 10 fois. On doit donc se retrouver
  * dans la console avec 10 * a, 10 * b et 10 * c répartis de manière plutôt aléatoirement

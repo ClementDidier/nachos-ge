@@ -9,7 +9,10 @@
  * 	automatics within a procedure, but if you do this, you have to
  *	be careful to allocate a big enough stack to hold the automatics!
  */
-
+/**
+ * \file halt.c
+ * \brief effectue quelque opérations basiques et effectu un appel système halt()
+*/
 #include "syscall.h"
 
 int

@@ -30,6 +30,7 @@ int Thread::TIDcnt = 0;
 int Thread::PIDcnt = 0;
 Semaphore * Thread::TIDcntLock = new Semaphore("TIDcntLock",1);
 Semaphore * Thread::OpOnUserThreadSem = new Semaphore("OpOnUserThreadSem",1);
+Semaphore * Thread::ShellProcOnlyOne = new Semaphore("on ne peut lancer qu'un seul proc dans le shell",0);
 #endif
 
 
@@ -53,10 +54,16 @@ Thread::Thread (const char *threadName)
     // FBT: Need to initialize special registers of simulator to 0
     // in particular LoadReg or it could crash when switching
     // user threads.
-  if (TIDcntLock == NULL)
-      TIDcntLock = new Semaphore("TIDcntLock", 1);
+  /*if (TIDcntLock == NULL)
+      TIDcntLock = new Semaphore("TIDcntLock", 1);*/
   for (int r=NumGPRegs; r<NumTotalRegs; r++)
       userRegisters[r] = 0;
+#endif
+
+#ifdef FILESYS
+  for (int i = 0; i < FileMap::map_size; ++i){
+    FicOuverts[i] = NULL;
+  }
 #endif
     mapID = -2; // Valeur d'erreur
 }

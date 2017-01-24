@@ -1,11 +1,11 @@
-// synchlist.h 
+// synchlist.h
 //      Data structures for synchronized access to a list.
 //
 //      Implemented by surrounding the List abstraction
 //      with synchronization routines.
 //
 // Copyright (c) 1992-1993 The Regents of the University of California.
-// All rights reserved.  See copyright.h for copyright notice and limitation 
+// All rights reserved.  See copyright.h for copyright notice and limitation
 // of liability and disclaimer of warranty provisions.
 
 #ifndef SYNCHLIST_H
@@ -20,7 +20,7 @@
 //      1. Threads trying to remove an item from a list will
 //      wait until the list has an element on it.
 //      2. One thread at a time can access list data structures
-
+class Condition;
 class SynchList
 {
   public:

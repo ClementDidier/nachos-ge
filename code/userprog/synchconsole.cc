@@ -39,6 +39,7 @@ SynchConsole::~SynchConsole()
 	delete semRead;
 	delete semWrite;
 	delete semPutChar;
+	delete semMemory;
 }
 
 void SynchConsole::SynchPutChar(const char ch)
@@ -56,7 +57,9 @@ char SynchConsole::SynchGetChar()
 {
 	readAvail->P();
 	// Lecture possible
-	return console->GetChar();
+	char ch = console->GetChar();
+	//printf("->%c<-",ch);
+	return ch;
 }
 
 void SynchConsole::SynchPutString(const char s[])

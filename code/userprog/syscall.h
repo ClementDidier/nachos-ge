@@ -52,6 +52,13 @@
 #define SC_UserSemDelete 23
 #define SC_ForkExec	24
 #define SC_Assert 25
+#define SC_SimpleShellProcJoin 26
+#define SC_GetCharInt 27
+#define SC_Mkdir 28
+#define SC_List 29
+#define SC_ChangeDirectory 30
+#define SC_RmDir 31
+#define SC_Remove 32
 
 #ifdef IN_USER_MODE
 
@@ -150,6 +157,37 @@ typedef int OpenFileId;
 void Create (char *name);
 
 /**
+ * \fn void Mkdir (char *name)
+ * \brief Créer un dossier du nom passé en paramètre
+ * \param name nom du dossier à créer
+*/
+void Mkdir (char *name);
+
+/**
+ * \fn void Mkdir (char *name)
+ * \brief Supprime un dossier de nom passé en paramètre
+ *  Le système de fichier NachOS FILESYS doit être lancer (sans effet sinon)
+ * \param name nom du dossier à supprimer
+*/
+void RmDir (char *name);
+
+/**
+ * \fn void Remove (char *name)
+ * \brief Supprime un fichier de nom passé en paramètre
+ *  Le système de fichier NachOS FILESYS doit être lancer (sans effet sinon)
+ * \param name nom du fichier à supprimer
+*/
+void Remove (char *name);
+/**
+ * \fn int ChangeDirectory (char *name)
+ * \brief permet de changer de repertoire courrant.
+ *  Le système de fichier NachOS FILESYS doit être lancer (sans effet sinon)
+ * \param name nom du dossier dans lequel basculer, le dossier doit être dans le repertoire courrant.
+ * \return retourne 1 si on a pu changer de repertoire, 0 sinon.
+*/
+int ChangeDirectory (char *name);
+
+/**
  * \fn OpenFileId Open (char *name)
  * \brief Open the Nachos file "name", and return an "OpenFileId" that can
   * be used to read and write to the file.
@@ -184,13 +222,14 @@ void Write (char *buffer, int size, OpenFileId id);
  * \return retourne le nombre de byte lus.
 */
 
-/* Read "size" bytes from the open file into "buffer".
- * Return the number of bytes actually read -- if the open file isn't
- * long enough, or if it is an I/O device, and there aren't enough
- * characters to read, return whatever is available (for I/O devices,
- * you should always wait until you can return at least one character).
- */
 int Read (char *buffer, int size, OpenFileId id);
+
+/**
+ * \fn void List ()
+ * \brief Affiche la liste des fichier et repertoire contenu dans le repertoire courrant. 
+ *  Le système de fichier NachOS FILESYS doit être lancer (sans effet sinon)
+*/
+void List ();
 
 /**
  * \fn void void Close (OpenFileId id)
@@ -294,7 +333,8 @@ void GetInt(int * n);
  * comme un void *, et casté dans son type d'origine par exemple.
  * \param f Pointeur (non NULL) vers une fonction utilisateur qui sera exécutée au début du thread. La fonction ne doit prendre qu'un seul argument de type void*
  * \param arg Argument (non NULL) à passer a la fonction f, a caster en void*
- * \return Retourne le TID du thread créé ou -1 si la création a échouée (Manque de place dans la mémoire etc).
+ * \return Retourne le TID du thread créé ou -1 si la création a échouée (Manque de place dans la mémoire etc). 
+ * TID unique dans la machine (deux processus ne peuvent pas avoir de threads avec des TID identiques).
  * \exception Invalide un assert si une erreur c'est produite lors de l'attribution de l'espace mémoire pour le thread utilisateur.
  */
 int UserThreadCreate(void f(void *arg), void *arg);
@@ -367,10 +407,28 @@ void UserSemDelete(sem_t * sem);
 
 /**
  * \fn int ForkExec(char *s)
- * \brief Créer un thread système et lance le programme donné avec le thread crée
+ * \brief Créer un thread système dans un nouveau processus et lance le programme donné avec le thread crée
  * \param s Le nom du fichier executable à lancer
+ * \return retourne le PID du processus créé, -1 si echec
  */
 int ForkExec(char *s);
+
+/**
+ * \fn int SimpleShellProcJoin()
+ * \brief Utilisé pour le shell. permet d'attendre la fin d'un processus lancé avec forkexec.
+ *  permet de continuer si un processus a été créé puis a lancer par forkexec 
+ *  OU si ce processus à lancé un autre processus par forkExec (on ne gère pas les attentes multiples).
+ *  Ne permet pas d'effectuer des synchronisations complexes entre les processus.
+ */
+void SimpleShellProcJoin();
+
+/**
+ * \fn char GetCharInt()
+ * \brief Obtient un caractère depuis l'entrée de la console standard et retourne l'entier (table ascii) associé. 
+ *  La fonction est bloquante, le thread attend une entrée utilisateur avant de poursuivre
+ * \return Retourne un int représentant le caractère entré dans la console de la table ascii
+ */
+int GetCharInt();
 
 /**
  * \fn AssertFull(int res, const char* condition, const int lineNumber, const char* functionName);

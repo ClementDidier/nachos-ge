@@ -1,14 +1,20 @@
-// filehdr.h 
-//	Data structures for managing a disk file header.  
+// filehdr.h
+//	Data structures for managing a disk file header.
 //
 //	A file header describes where on disk to find the data in a file,
 //	along with other information about the file (for instance, its
 //	length, owner, etc.)
 //
 // Copyright (c) 1992-1993 The Regents of the University of California.
-// All rights reserved.  See copyright.h for copyright notice and limitation 
+// All rights reserved.  See copyright.h for copyright notice and limitation
 // of liability and disclaimer of warranty provisions.
 
+/**
+ * \file filehdr.h
+ * \brief A file header describes where on disk to find the data in a file,
+ *	along with other information about the file (for instance, its
+ *	length, owner, etc.)
+*/
 #include "copyright.h"
 
 #ifndef FILEHDR_H
@@ -20,10 +26,10 @@
 #define NumDirect 	((SectorSize - 2 * sizeof(int)) / sizeof(int))
 #define MaxFileSize 	(NumDirect * SectorSize)
 
-// The following class defines the Nachos "file header" (in UNIX terms,  
+// The following class defines the Nachos "file header" (in UNIX terms,
 // the "i-node"), describing where on disk to find all of the data in the file.
 // The file header is organized as a simple table of pointers to
-// data blocks. 
+// data blocks.
 //
 // The file header data structure can be stored in memory or on disk.
 // When it is on disk, it is stored in a single sector -- this means
@@ -36,11 +42,16 @@
 // reading it from disk.
 
 class FileHeader {
+
   public:
-    bool Allocate(BitMap *bitMap, int fileSize);// Initialize a file header, 
-						//  including allocating space 
+    enum Type {
+      f, //file
+      d, //directory
+    };
+    bool Allocate(BitMap *bitMap, int fileSize);// Initialize a file header,
+						//  including allocating space
 						//  on disk for the file data
-    void Deallocate(BitMap *bitMap);  		// De-allocate this file's 
+    void Deallocate(BitMap *bitMap);  		// De-allocate this file's
 						//  data blocks
 
     void FetchFrom(int sectorNumber); 	// Initialize file header from disk
@@ -51,15 +62,32 @@ class FileHeader {
 					// to the disk sector containing
 					// the byte
 
-    int FileLength();			// Return the length of the file 
+    int FileLength();			// Return the length of the file
 					// in bytes
 
     void Print();			// Print the contents of the file.
-
+  /**
+   * \fn int getSector(int id)
+   * \brief Récupère les données a un secteur donné du fichier
+   * \param id Secteur où les données doivent etre récupérées
+   * \return Données récupérées au secteur id
+  */
+    int getSector(int id);
+    /**
+     * \fn void setSector(int sector, int id)
+     * \brief Ecrit des données sur le secteur numero id du fichier
+     * \param sector Données à ecrire
+     * \param id Secteur du fichier où les données doivent etre écrites
+    */
+    void setSector(int sector, int id);
+    /**
+     * \brief Type du fichier (Dossier/Fichier)
+    */
+    Type type;
   private:
     int numBytes;			// Number of bytes in the file
     int numSectors;			// Number of data sectors in the file
-    int dataSectors[NumDirect];		// Disk sector numbers for each data 
+    int dataSectors[NumDirect];		// Disk sector numbers for each data
 					// block in the file
 };
 

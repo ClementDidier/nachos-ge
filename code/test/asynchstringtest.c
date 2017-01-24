@@ -1,8 +1,6 @@
 /**
- * \file semaphore.c
- * \brief Créer 10 threadsqui doivent afficher des chaines de caractères différentes.
- * Il est possible que tous les threads ne soient pas créés selon le nb max de threads
- * pouvant etre créés
+ * \file asynchstringtest.c
+ * \brief lance 10 thread utilisateur qui affiche une première ou une seconde chaine de caractère de façon contigüe (pas d'entrelacement)
  */
 #include "syscall.h"
 
