@@ -276,10 +276,6 @@ AddrSpace::RestoreState ()
     machine->pageTableSize = numPages;
 }
 
-/**
- * \fn void AddrSpace::BindUserThread()
- * \brief ajoute un thread sur le compteur des thread actif et verouille le lock "verrou" utilisé pour l'attente lors du halt.
-*/
 void
 AddrSpace::BindUserThread()
 {
@@ -291,10 +287,6 @@ AddrSpace::BindUserThread()
 
 }
 
-/**
- * \fn void AddrSpace::BindUserThread()
- * \brief retire un thread sur le compteur des thread actif et déverouille le lock "verrou" utilisé pour l'attente lors du halt.
-*/
 void
 AddrSpace::UnbindUserThread()
 {
@@ -307,12 +299,6 @@ AddrSpace::UnbindUserThread()
 }
 
 // ajoute le thread "currentThread" dans le tableau des thread
-/**
- * \fn void AddrSpace::PushMeInThreadList()
- * \brief ajoute le pointeur vers l'objet thread du thread courrant dans le tableau des threads actifs. Les opération sur les listes sont effectué de manière protégées.
- * \exception invalide un assert si aucun emplacement libre n'existe dans le tableau.
- *  Ceci signifie que l'on a dépassé le nombre de thread autorisé à s'éxécuter sur un thread noyau.
-*/
 void
 AddrSpace::PushMeInThreadList(){
   LockThreadList->Acquire();
@@ -339,8 +325,6 @@ AddrSpace::PushMeInThreadList(){
   newCompteur->mutexJoin = currentThread->ThreadJoinMutex;
 
   AddInGCThreadVerrou(newCompteur);
-
-  // fin
 }
 
 int
@@ -361,12 +345,6 @@ AddrSpace::AddInGCThreadVerrou(struct compteurVerrou * compteur)
 }
 
 // vérifie si le thread #id est dans le tableau
-/**
- * \fn void AddrSpace::checkThreadList(int tid)
- * \brief vérifie dans le tableau des thread actif si un thread a le tid passé en paramètre.
- * \param tid : un numéro (int) the thread utilisateur
- * \return retourne vrai si on trouve un thread actif ayant le tid passé en paramètre, faux sinon.
-*/
 bool
 AddrSpace::CheckThreadList(int tid)
 {
@@ -386,13 +364,6 @@ AddrSpace::CheckThreadList(int tid)
 }
 
 // vérifie si le thread #id est dans le tableau
-/**
- * \fn void AddrSpace::FindThreadList(int tid)
- * \brief recherche dans le tableau des thread actif le thread ayant le tid passé en paramètre.
- * \param tid : un numéro (int) the thread utilisateur
- * \return retourne un pointeur vers l'objet thread associé au thread ayant l'id passé en paramètre (tid).
- *  Si aucun thread actif n'a ce tid alors la fonction retourne NULL
-*/
 Thread *
 AddrSpace::FindThreadList(int tid)
 {
@@ -411,12 +382,6 @@ AddrSpace::FindThreadList(int tid)
   return NULL;
 }
 
-/**
- * \fn void AddrSpace::deleteThreadList(Thread * ThreadP)
- * \brief Supprime le pointeur du thread pointé par threadP de le tableau des threads actif (le tableau ThreadList).
- * \param ThreadP un pointeur vers un objet thread. ThreadP ne doit pas être null;
- * \exception invalide in assert si threadP est NULL ou si on n'a pas trouvé threadP dans le tableau ThreadList (thread actif).
-*/
 void
 AddrSpace::DeleteThreadList(Thread * ThreadP)
 {
@@ -445,14 +410,6 @@ AddrSpace::DeleteThreadList(Thread * ThreadP)
   }
 }
 
-/**
- * \fn struct compteurVerrou * AddrSpace::findCompteurVerrou(int tid)
- * \brief cherche dans le tableau GCThreadVerrou si une entrée possède le tid passé en paramètre
- *  assume GCThreadVerrouLock->Acquire() avant l'appel...
- * \param tid : un numéro (int) the thread utilisateur
- * \return un pointeur vers la structure compteurVerrou associé au thread utilisateur ayant ou ayant eu (= si le thread est déjà terminé) le tid passé en paramètre.
- *  Si aucune structure n'est trouvé retourne NULL.
-*/
 struct compteurVerrou *
 AddrSpace::FindCompteurVerrou(int tid)
 {
@@ -464,19 +421,6 @@ AddrSpace::FindCompteurVerrou(int tid)
   }
   return NULL;
 }
-
-/**
- * \fn int AddrSpace::attendre(int tid)
- * \brief attend la fin du thread ayant le tid passé en paramètre.
- *  Si un thread utilisateur possède ce tid alors on attend la fin de celui ci en demandant son verrou threadjoin.
- *  si aucun thread actif (ie actuellement en cours d'exécution) n'est trouvé alors on termine et return immédiatement.
- * \param tid : un numéro (int) the thread utilisateur
- * \return noThreadJoinFound si aucun thread n'a été trouvé,
- *  noMutexJoinFound si le verrou de join à déjà été libéré (on peut continuer,
- *  le thread ne devrait plus exister) ou successWait après une attente réussie.
- * \exception invalide un assert si la structure structCompteur a été supprimé,
- *  ayant incrémenter le compteur, le garbage collector ne devrait pas la supprimé car le compteur > 0.
-*/
 
 int
 AddrSpace::Attendre(int tid)
@@ -529,17 +473,7 @@ AddrSpace::Attendre(int tid)
   return successWait;
 }
 
-
 // assume mutexJoin->Acquire()
-/**
- * \fn int AddrSpace::checkIfWaitingThread(int tid)
- * \brief Assume que le verrou ThreadJoinMutex de l'addrspace ( ici défini par mutexJoin ) est acqui.
- *  recherche une structure compteurVerrou dans la liste GCThreadVerrou. Si celle si existe alors elle est détruit si aucun thread n'attend la terminaison du thread courrant.
- *  Libère le verrou ThreadJoinMutex.
- * \param tid : un numéro (int) the thread utilisateur
- * \return un entier associé à l'opération effectuée (structCompteurNotFound, structCompteurInUse)
- * \exception Si ThreadJoinMutex n'a pas été verouillé alors une erreur sera provoqué lors du Release.
-*/
 int
 AddrSpace::CheckIfWaitingThread(int tid)
 {
@@ -559,13 +493,6 @@ AddrSpace::CheckIfWaitingThread(int tid)
   return structCompteurInUse;
 }
 
-/**
- * \fn int AddrSpace::GarbageCollector()
- * \brief parcourt le tableau GCThreadVerrou à la recherche de structure de compteur avec un compteur de thread à 0.
- *  Supprime les struture trouvées ainsi que les mutex utilisés pour pour se mettre en attente sur le thread.
- *  Met à NULL les cases du tableau concernées une fois fini pour réutilisation.
- *  Cette opération sur le tableau GCThreadVerrou est protégé par le verrou GCThreadVerrouLock.
-*/
 void
 AddrSpace::GarbageCollector()
 {

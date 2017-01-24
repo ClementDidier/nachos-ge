@@ -166,6 +166,7 @@ void Mkdir (char *name);
 /**
  * \fn void Mkdir (char *name)
  * \brief Supprime un dossier de nom passé en paramètre
+ *  Le système de fichier NachOS FILESYS doit être lancer (sans effet sinon)
  * \param name nom du dossier à supprimer
 */
 void RmDir (char *name);
@@ -173,12 +174,14 @@ void RmDir (char *name);
 /**
  * \fn void Remove (char *name)
  * \brief Supprime un fichier de nom passé en paramètre
+ *  Le système de fichier NachOS FILESYS doit être lancer (sans effet sinon)
  * \param name nom du fichier à supprimer
 */
 void Remove (char *name);
 /**
  * \fn int ChangeDirectory (char *name)
  * \brief permet de changer de repertoire courrant.
+ *  Le système de fichier NachOS FILESYS doit être lancer (sans effet sinon)
  * \param name nom du dossier dans lequel basculer, le dossier doit être dans le repertoire courrant.
  * \return retourne 1 si on a pu changer de repertoire, 0 sinon.
 */
@@ -219,14 +222,13 @@ void Write (char *buffer, int size, OpenFileId id);
  * \return retourne le nombre de byte lus.
 */
 
-/* Read "size" bytes from the open file into "buffer".
- * Return the number of bytes actually read -- if the open file isn't
- * long enough, or if it is an I/O device, and there aren't enough
- * characters to read, return whatever is available (for I/O devices,
- * you should always wait until you can return at least one character).
- */
 int Read (char *buffer, int size, OpenFileId id);
 
+/**
+ * \fn void List ()
+ * \brief Affiche la liste des fichier et repertoire contenu dans le repertoire courrant. 
+ *  Le système de fichier NachOS FILESYS doit être lancer (sans effet sinon)
+*/
 void List ();
 
 /**
