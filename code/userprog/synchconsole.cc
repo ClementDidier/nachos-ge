@@ -39,6 +39,7 @@ SynchConsole::~SynchConsole()
 	delete semRead;
 	delete semWrite;
 	delete semPutChar;
+	delete semMemory;
 }
 
 void SynchConsole::SynchPutChar(const char ch)

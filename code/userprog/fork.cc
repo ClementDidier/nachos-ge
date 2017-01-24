@@ -19,6 +19,8 @@ int ForkExec(char* s)
 	t->PID = Thread::PIDcnt;
 	t->PIDcnt++;
 	int i;
+
+	//ajoute le PID du processus à la liste des processus
 	processListLock->Acquire();
 	for(i = 0; i < NumPhysPages; i++)
 	{
@@ -30,6 +32,7 @@ int ForkExec(char* s)
 
 	}
 	processListLock->Release();
+
     if (executable == NULL)
     {
 		printf ("Unable to open file %s\n", s);
@@ -37,13 +40,14 @@ int ForkExec(char* s)
 		Thread::ShellProcOnlyOne->V();
 		return -1;
     }
-    printf("%d\n", t->PID);
-    printf("%d\n", t->getTID());
+    /*printf("%d\n", t->PID);
+    printf("%d\n", t->getTID());*/
 
     AddrSpace *space = new AddrSpace (executable);
 
     delete executable;
 
+    //création du thread prncipal du processus
     t->Fork(ProcessHandler, (int) space);
 
     currentThread->Yield();
@@ -57,6 +61,8 @@ void ProcessExit()
 	Thread::ShellProcOnlyOne->V(); // de toute façon quand on est la le shell peut reprendre la main
 	currentThread->space->verrou->P();
 	int i;
+
+	//suppression du processus de la liste
 	processListLock->Acquire();
 	for(i = 0; i < NumPhysPages; i++){
 		if(processList[i] == currentThread->PID){
@@ -65,6 +71,7 @@ void ProcessExit()
 		}
 	}
 
+	//si la processus n'est pas le dernier il finish
 	for(i = 0; i < NumPhysPages; i++){
 		if(processList[i] >= 0){
 			processListLock->Release();
@@ -72,5 +79,6 @@ void ProcessExit()
 		}
 	}
 	processListLock->Release();
+	//si le processus est le dernier il halt
 	interrupt->Halt();
 }
