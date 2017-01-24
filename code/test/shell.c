@@ -1,3 +1,7 @@
+/**
+ * \file shell.c
+ * \brief affiche un shell qui permet de lancer d'autre programme utilisateur. Ne fonctionne pas sur le système de fichier
+*/
 #include "syscall.h"
 
 #define buffersize 60

@@ -1,3 +1,9 @@
+/**
+ * \file fsshell.c
+ * \brief affiche un shell pour le système de fichier permettant des opérations basique sur les fichiers/repertoire
+ * Ce fichier doit être copier sur le système de fichier nachos et il sera nécessaire de lancer nachos avec le flavor userprog-fs
+*/
+
 #include "syscall.h"
 
 #define buffersize 128

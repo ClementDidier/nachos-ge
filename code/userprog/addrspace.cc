@@ -210,6 +210,7 @@ AddrSpace::~AddrSpace ()
   delete GCThreadVerrouLock;
   delete verrou;
   delete mutex;
+  delete LockThreadList;
 
   // End of modification
 }
