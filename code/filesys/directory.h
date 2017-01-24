@@ -12,6 +12,13 @@
 // All rights reserved.  See copyright.h for copyright notice and limitation
 // of liability and disclaimer of warranty provisions.
 
+/**
+ * \file directory.h
+ * \brief  A directory is a table of pairs: <file name, sector #>,
+ *	giving the name of each file in the directory, and
+ *	where to find its file header (the data structure describing
+ *	where to find the file's data blocks) on disk.
+*/
 #include "copyright.h"
 
 #ifndef DIRECTORY_H
@@ -70,6 +77,12 @@ class Directory {
     void Print();			// Verbose print of the contents
 					//  of the directory -- all the file
 					//  names and their contents.
+
+/**
+ * \fn bool IsEmpty()
+ * \brief Retourne l'état actuel du dossier, s'il est plein ou vide.
+ * \return Retourne TRUE si le dossier est vide, FALSE s'il est plein
+*/
     bool IsEmpty();
   private:
     int tableSize;			// Number of directory entries

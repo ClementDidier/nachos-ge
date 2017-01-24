@@ -22,6 +22,23 @@
 // All rights reserved.  See copyright.h for copyright notice and limitation
 // of liability and disclaimer of warranty provisions.
 
+/**
+ * \file filehdr.cc
+ * \brief The file header is used to locate where on disk the
+ *	file's data is stored.  We implement this as a fixed size
+ *	table of pointers -- each entry in the table points to the
+ *	disk sector containing that portion of the file data
+ *	(in other words, there are no indirect or doubly indirect
+ *	blocks). The table size is chosen so that the file header
+ *	will be just big enough to fit in one disk sector,
+ *      Unlike in a real system, we do not keep track of file permissions,
+ *	ownership, last modification date, etc., in the file header.
+ *
+ *	A file header can be initialized in two ways:
+ *	   for a new file, by modifying the in-memory data structure
+ *	     to point to the newly allocated data blocks
+ *	   for a file already on disk, by reading the file header from disk
+*/
 #include "copyright.h"
 
 #include "system.h"

@@ -20,6 +20,23 @@
 // All rights reserved.  See copyright.h for copyright notice and limitation
 // of liability and disclaimer of warranty provisions.
 
+/**
+ * \file directory.cc
+ * \brief The directory is a table of fixed length entries; each
+ *	entry represents a single file, and contains the file name,
+ *	and the location of the file header on disk.  The fixed size
+ *	of each directory entry means that we have the restriction
+ *	of a fixed maximum size for file names.
+ *
+ *	The constructor initializes an empty directory of a certain size;
+ *	we use ReadFrom/WriteBack to fetch the contents of the directory
+ *	from disk, and to write back any modifications back to disk.
+ *
+ *	Also, this implementation has the restriction that the size
+ *	of the directory cannot expand.  In other words, once all the
+ *	entries in the directory are used, no more files can be created.
+ *	Fixing this is one of the parts to the assignment.
+*/
 #include "copyright.h"
 #include "utility.h"
 #include "filehdr.h"

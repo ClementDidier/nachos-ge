@@ -9,6 +9,12 @@
 // All rights reserved.  See copyright.h for copyright notice and limitation
 // of liability and disclaimer of warranty provisions.
 
+/**
+ * \file filehdr.h
+ * \brief A file header describes where on disk to find the data in a file,
+ *	along with other information about the file (for instance, its
+ *	length, owner, etc.)
+*/
 #include "copyright.h"
 
 #ifndef FILEHDR_H
@@ -60,9 +66,23 @@ class FileHeader {
 					// in bytes
 
     void Print();			// Print the contents of the file.
-
+  /**
+   * \fn int getSector(int id)
+   * \brief Récupère les données a un secteur donné du fichier
+   * \param id Secteur où les données doivent etre récupérées
+   * \return Données récupérées au secteur id
+  */
     int getSector(int id);
+    /**
+     * \fn void setSector(int sector, int id)
+     * \brief Ecrit des données sur le secteur numero id du fichier
+     * \param sector Données à ecrire
+     * \param id Secteur du fichier où les données doivent etre écrites
+    */
     void setSector(int sector, int id);
+    /**
+     * \brief Type du fichier (Dossier/Fichier)
+    */
     Type type;
   private:
     int numBytes;			// Number of bytes in the file

@@ -1,3 +1,8 @@
+/**
+ * \file filemap.cc
+ * \brief Gère les fichiers ouverts dans le systeme
+*/
+
 #include "filemap.h"
 #include "openfile.h"
 #include "system.h"
