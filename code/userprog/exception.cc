@@ -153,6 +153,7 @@ ExceptionHandler (ExceptionType which)
         params->arg = machine->ReadRegister(5);
         params->retaddr = machine->ReadRegister(6);
         machine->WriteRegister(2, do_UserThreadCreate(f, (int) params));
+        delete params;
         DEBUG('a', "Appel systeme SC_UserThreadCreate réalisé\n");
         break;
       }

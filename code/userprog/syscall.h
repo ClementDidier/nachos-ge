@@ -405,8 +405,9 @@ void UserSemDelete(sem_t * sem);
 
 /**
  * \fn int ForkExec(char *s)
- * \brief Créer un thread système et lance le programme donné avec le thread crée
+ * \brief Créer un thread système dans un nouveau processus et lance le programme donné avec le thread crée
  * \param s Le nom du fichier executable à lancer
+ * \return retourne le PID du processus créé, -1 si echec
  */
 int ForkExec(char *s);
 
