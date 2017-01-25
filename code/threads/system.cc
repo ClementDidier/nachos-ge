@@ -38,6 +38,7 @@ FrameProvider *frameProvider;
 
 #ifdef NETWORK
 PostOffice *postOffice;
+int netname;
 #endif
 
 
@@ -94,7 +95,7 @@ Initialize (int argc, char **argv)
 #endif
 #ifdef NETWORK
     double rely = 1;		// network reliability
-    int netname = 0;		// UNIX socket name
+    netname = 0;		// UNIX socket name
 #endif
 
     for (argc--, argv++; argc > 0; argc -= argCount, argv += argCount)

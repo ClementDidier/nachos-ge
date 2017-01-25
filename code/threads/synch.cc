@@ -175,10 +175,8 @@ Lock::~Lock ()
 void
 Lock::Acquire ()
 {
-    IntStatus oldLevel = interrupt->SetLevel (IntOff);
     mutex->P();
     ThreadP = currentThread; // Lock is acquired by ThreadP
-    (void) interrupt->SetLevel (oldLevel);
 }
 
 /**
@@ -190,12 +188,10 @@ Lock::Acquire ()
 void
 Lock::Release ()
 {
-    IntStatus oldLevel = interrupt->SetLevel (IntOff);
     ASSERT(mutex->checkUnTocken());
     ASSERT(this->isHeldByCurrentThread());
     ThreadP = NULL;
     mutex->V();
-    (void) interrupt->SetLevel (oldLevel);
 }
 
 /**
@@ -247,19 +243,11 @@ Condition::Wait (Lock * conditionLock)
 {
     IntStatus oldLevel = interrupt->SetLevel (IntOff);
     ASSERT(conditionLock->isHeldByCurrentThread());
-    if(LThreads->IsEmpty () == false)
-    {
-        LThreads->Append(((void *) currentThread));
-        conditionLock->Release();
-        currentThread->Sleep();
-        (void) interrupt->SetLevel (oldLevel);
-        conditionLock->Acquire();
-    }
-    else{
-        (void) interrupt->SetLevel (oldLevel);
-    }
-
-
+    LThreads->Append(((void *) currentThread));
+    conditionLock->Release();
+    currentThread->Sleep();
+    (void) interrupt->SetLevel (oldLevel);
+    conditionLock->Acquire();
 }
 
 /**
@@ -272,8 +260,6 @@ void
 Condition::Signal (Lock * conditionLock)
 {
     IntStatus oldLevel = interrupt->SetLevel (IntOff);
-    ASSERT(conditionLock->isHeldByCurrentThread());
-    conditionLock->Release();
     if(LThreads->IsEmpty () == false)
     {
         scheduler->ReadyToRun ((Thread *)LThreads->Remove());
@@ -291,8 +277,6 @@ void
 Condition::Broadcast (Lock * conditionLock)
 {
     IntStatus oldLevel = interrupt->SetLevel (IntOff);
-    ASSERT(conditionLock->isHeldByCurrentThread());
-    conditionLock->Release();
     while(LThreads->IsEmpty () == false)
     {
         scheduler->ReadyToRun ((Thread *) LThreads->Remove());

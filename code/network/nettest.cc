@@ -22,6 +22,8 @@
 #include "network.h"
 #include "post.h"
 #include "interrupt.h"
+#include "reliablenet.h"
+
 
 // Test out message delivery, by doing the following:
 //	1. send a message to the machine with ID "farAddr", at mail box #0
@@ -69,4 +71,58 @@ MailTest(int farAddr)
 
     // Then we're done!
     interrupt->Halt();
+}
+
+void AnneauTest(int cible){
+    int token = 0;
+    char buffer[1];
+    PacketHeader outPktHdr, inPktHdr;
+    MailHeader outMailHdr, inMailHdr;
+    outPktHdr.to = cible;//cible
+    outMailHdr.to = 0;//box cible
+    outMailHdr.from = 0;//box reception
+    outMailHdr.length = 1;
+    if(netname == 0){
+        RandomInit(1);
+        printf("\033[34mMachine %d ----- création du token\033[0m\n", netname);
+        token = Random() % 10;
+        printf("\033[34mMachine %d ----- attente\033[0m\n", netname);
+        Delay(1);
+
+        
+        printf("\033[34mMachine %d ----- Envoi du token %d à %d\033[0m\n", netname, token, cible);
+        sprintf(buffer, "%d", token);
+        postOffice->Send(outPktHdr, outMailHdr, buffer);
+        printf("\033[34mMachine %d ----- attente de réponse\033[0m\n", netname);
+        postOffice->Receive(0, &inPktHdr, &inMailHdr, buffer);
+        printf("\033[34mMachine %d ----- message reçu : %d de la machine %d\033[0m\n", netname, atoi(buffer), inPktHdr.from);
+    }
+    else{
+        printf("\033[34mMachine %d ----- attente de message\033[0m\n", netname);
+        postOffice->Receive(0, &inPktHdr, &inMailHdr, buffer);
+        printf("\033[34mMachine %d ----- message reçu : %d de la machine %d\033[0m\n", netname, atoi(buffer), inPktHdr.from);
+        printf("\033[34mMachine %d ----- attente\033[0m\n", netname);
+        Delay(1);
+        printf("\033[34mMachine %d ----- Envoi du token %d à %d\033[0m\n", netname, atoi(buffer), cible);
+        //sprintf(buffer, "%d", token);
+        postOffice->Send(outPktHdr, outMailHdr, buffer);
+    }
+    //Delay (cible);
+    interrupt->Halt();
+}
+
+void Ping(int target)
+{
+    ReliableNet * rlbnet = new ReliableNet(netname, 0.3, target);
+    Delay(3);
+
+    printf("Création de reliablenet\n");
+    
+
+    rlbnet->Send(MSG, "PING", 4);
+
+    Delay(1);
+
+    char data[4];
+    rlbnet->Receive(data, 4);
 }

@@ -65,6 +65,8 @@ extern SynchDisk *synchDisk;
 #include "post.h"
 class PostOffice;
 extern PostOffice *postOffice;
+
+extern int netname;
 #endif
 
 #endif // SYSTEM_H
