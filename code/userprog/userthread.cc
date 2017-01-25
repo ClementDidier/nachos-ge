@@ -83,6 +83,7 @@ int do_UserThreadCreate(int f, int arg)
 		Thread::OpOnUserThreadSem->V();
 		currentThread->space->mapLock->Release();
 		currentThread->space->UnbindUserThread();
+		delete newThread;
 		return -1;
 	}
 	ASSERT(newThread->mapID >= 0);
