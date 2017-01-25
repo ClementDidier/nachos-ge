@@ -50,6 +50,13 @@ UpdatePC ()
   machine->WriteRegister (NextPCReg, pc);
 }
 
+
+void resetbuffer(char * buffer, int buffersize){
+  int i;
+  for (i = 0; i < buffersize; i++){
+    buffer[i] = '\0';
+  }
+}
 //----------------------------------------------------------------------
 // ExceptionHandler
 //      Entry point into the Nachos kernel.  Called when a user program
@@ -316,6 +323,75 @@ ExceptionHandler (ExceptionType which)
         #endif
         
         DEBUG('a', "Appel systeme SC_ChangeDirectory réalisé\n");
+        break;
+      }
+      case SC_Open:
+      {
+        #ifdef FILESYS
+          int arg = machine->ReadRegister (4);
+          char buffer[MAX_STRING_SIZE];
+          synchconsole->copyStringFromMachine(arg, buffer, MAX_STRING_SIZE);
+          int res = (int)fileSystem->Open (buffer);
+          machine->WriteRegister(2,res);
+        #endif
+        
+        DEBUG('a', "Appel systeme SC_open réalisé\n");
+        break;
+      }
+      case SC_Close:
+      {
+        #ifdef FILESYS
+          int arg = machine->ReadRegister (4);
+          char buffer[MAX_STRING_SIZE];
+          synchconsole->copyStringFromMachine(arg, buffer, MAX_STRING_SIZE);
+          fileSystem->Close (buffer);
+        #endif
+        
+        DEBUG('a', "Appel systeme SC_Close réalisé\n");
+        break;
+      }
+      case SC_Read:
+      {
+        #ifdef FILESYS
+          int returnBuffer = machine->ReadRegister (4);
+          int size = machine->ReadRegister (5);
+          OpenFile * OFile = (OpenFile *)machine->ReadRegister (6);
+          
+          char buffer[MAX_STRING_SIZE];
+          resetbuffer(buffer,MAX_STRING_SIZE);
+
+          int res = OFile->Read (buffer,size);
+          synchconsole->copyMachineFromString(buffer, returnBuffer, size);
+          machine->WriteRegister(2,res);
+        #endif
+        
+        DEBUG('a', "Appel systeme SC_read réalisé\n");
+        break;
+      }
+      case SC_Write:
+      {
+        #ifdef FILESYS
+          int arg = machine->ReadRegister (4);
+          int size = machine->ReadRegister (5);
+          OpenFile * OFile = (OpenFile *)machine->ReadRegister (6);
+          char buffer[MAX_STRING_SIZE];
+          synchconsole->copyStringFromMachine(arg, buffer, size);
+          int res = (int)(OFile->Write (buffer,size));
+          machine->WriteRegister(2,res);
+        #endif
+        
+        DEBUG('a', "Appel systeme SC_Write réalisé\n");
+        break;
+      }
+      case SC_SetCursor:
+      {
+        #ifdef FILESYS
+          OpenFile * OFile = (OpenFile *)machine->ReadRegister (4);
+          int pos = machine->ReadRegister (5);
+          OFile->Seek (pos);
+        #endif
+        
+        DEBUG('a', "Appel systeme SC_Write réalisé\n");
         break;
       }
       default:

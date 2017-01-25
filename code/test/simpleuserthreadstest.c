@@ -1,5 +1,5 @@
 /**
- * \file simpleusertheadstes.c
+ * \file simpleusertheadstest.c
  * \brief Créer 3 threads, vérifie a l'aide de Assert que ces threads sont créés
  * correctement et vérifie que la variable passée en paramètre s'incrémente a chaque thread.
  */

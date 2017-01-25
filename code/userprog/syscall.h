@@ -59,6 +59,7 @@
 #define SC_ChangeDirectory 30
 #define SC_RmDir 31
 #define SC_Remove 32
+#define SC_SetCursor 33
 
 #ifdef IN_USER_MODE
 
@@ -164,7 +165,7 @@ void Create (char *name);
 void Mkdir (char *name);
 
 /**
- * \fn void Mkdir (char *name)
+ * \fn void RmDir (char *name)
  * \brief Supprime un dossier de nom passé en paramètre
  *  Le système de fichier NachOS FILESYS doit être lancer (sans effet sinon)
  * \param name nom du dossier à supprimer
@@ -190,8 +191,10 @@ int ChangeDirectory (char *name);
 /**
  * \fn OpenFileId Open (char *name)
  * \brief Open the Nachos file "name", and return an "OpenFileId" that can
-  * be used to read and write to the file.
+  * be used to read and write to the file. Limite l'ouverture à 10 fichiers.
  * \param name nom du fichier nachos à créé
+ * \return un OpenFileId associé au fichier demandé en ouverture, 
+ * NULL si on a pas pu ouvrir le fichier (limite atteinte, non trouvé ou déjà ouvert par un autre thread).
 */
 
 /* Open the Nachos file "name", and return an "OpenFileId" that can
@@ -207,7 +210,13 @@ OpenFileId Open (char *name);
  * \param id du fichier dans lequel écrire
 */
 /* Write "size" bytes from "buffer" to the open file. */
-void Write (char *buffer, int size, OpenFileId id);
+int Write (char *buffer, int size, OpenFileId id);
+
+/*fn void SetCursor(OpenFileId id);
+ * \brief replace le curseur de fichier au début.
+ * \param id l'identifiant du fichier ouvert OpenFileId
+*/
+void SetCursor(OpenFileId id, int pos);
 
 /**
  * \fn int Read (char *buffer, int size, OpenFileId id)
@@ -234,10 +243,10 @@ void List ();
 /**
  * \fn void void Close (OpenFileId id)
  * \brief Close the file, we're done reading and writing to it.
- * \param id du fichier à fermer
+ * \param buffer buffer avec le nom du fichier à fermer
 */
 /* Close the file, we're done reading and writing to it. */
-void Close (OpenFileId id);
+void Close (const char * buffer);
 
 
 
@@ -401,7 +410,7 @@ void UserSemV(sem_t * sem);
    * \fn void UserSemDelete(sem_t * sem);
    * \brief Permet de détruire une sémaphore dont le pointeur est passé en paramètre,
    * il doit pointer vers une sémaphore créer par UserSemCreate.
-   * \param sem Semaphore qui doit être détruite, doit  crée par UserSemCreate
+   * \param sem Semaphore qui doit être détruite, doit être crée par UserSemCreate
   */
 void UserSemDelete(sem_t * sem);
 
@@ -431,7 +440,7 @@ void SimpleShellProcJoin();
 int GetCharInt();
 
 /**
- * \fn AssertFull(int res, const char* condition, const int lineNumber, const char* functionName);
+ * \fn Assert(int res, const char* condition, const int lineNumber, const char* functionName);
  * \brief version simplifié du assert utilisateur () ne termine pas le programme et affiche des informations sur l'évaluation du assert,
  *  permet de spécifier un test boolean, la description, le numéro de ligne et le nom de la fonction sont renseigné automatiquement.
  * \param res (int) : entier boolean a vérifier

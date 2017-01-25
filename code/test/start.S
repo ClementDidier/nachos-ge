@@ -97,6 +97,14 @@ Read:
 	j	$31
 	.end Read
 
+	.globl SetCursor
+	.ent	SetCursor
+SetCursor:
+	addiu $2,$0,SC_SetCursor
+	syscall
+	j	$31
+	.end SetCursor
+
 	.globl Write
 	.ent	Write
 Write:

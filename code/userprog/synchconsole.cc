@@ -58,7 +58,6 @@ char SynchConsole::SynchGetChar()
 	readAvail->P();
 	// Lecture possible
 	char ch = console->GetChar();
-	//printf("->%c<-",ch);
 	return ch;
 }
 
