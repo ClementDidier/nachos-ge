@@ -105,9 +105,9 @@ void ThreadSendHandler(int arg)
 	int i;
 	for(i = 0; i < MAXREEMISSIONS; i++)
 	{
-		if(context->hdrReliable.type == ACK && context->rlbnet->numAquitement == context->rlbnet->numReception && context->rlbnet->numAquitement > 0)
+		if(context->hdrReliable.type == ACK && context->rlbnet->numAquitement == context->rlbnet->numReception - 1 && context->rlbnet->numAquitement > 0)
 			break;
-		if(context->rlbnet->numEmission == context->rlbnet->numAquitement && context->rlbnet->numEmission > 0) // Message acquité
+		if(context->hdrReliable.type == MSG && context->rlbnet->numEmission == context->rlbnet->numAquitement && context->rlbnet->numEmission > 0) // Message acquité
 		{
 			printf("Message acquité...\n");
 			break;
