@@ -485,29 +485,34 @@ bool FileSystem::DeleteDir(const char * name)
 
 int FileSystem::ChangeDir(const char * name)
 {
-  int sector;
-  if(name[0] == '.' && name[1] == '.' && name[2] == '\0'){
-    Directory* dir = new Directory(NumDirEntries);
-    dir->FetchFrom(directoryFile);
-    FileHeader* fh = new FileHeader;
-    sector = dir->Find("..");
-    fh->FetchFrom(sector);
-    sector = fh->getSector(0);
-    delete fh;
-    delete dir;
+  if(name[0] == '.' && name[1] == '\0'){
+    return 1;
   }
   else{
-    Directory * dir = new Directory(NumDirEntries);
-    dir->FetchFrom(directoryFile);
-    sector = dir->Find(name);
-    if (sector == -1){
-      return 0;
+    int sector;
+    if(name[0] == '.' && name[1] == '.' && name[2] == '\0'){
+      Directory* dir = new Directory(NumDirEntries);
+      dir->FetchFrom(directoryFile);
+      FileHeader* fh = new FileHeader;
+      sector = dir->Find("..");
+      fh->FetchFrom(sector);
+      sector = fh->getSector(0);
+      delete fh;
+      delete dir;
     }
-    delete dir;
- }
-  delete directoryFile;
-  directoryFile = new OpenFile(sector);
-  return 1;
+    else{
+      Directory * dir = new Directory(NumDirEntries);
+      dir->FetchFrom(directoryFile);
+      sector = dir->Find(name);
+      if (sector == -1){
+        return 0;
+      }
+      delete dir;
+   }
+    delete directoryFile;
+    directoryFile = new OpenFile(sector);
+    return 1;
+    }
 }
 
 void FileSystem::clearBuffer(char * buffer){

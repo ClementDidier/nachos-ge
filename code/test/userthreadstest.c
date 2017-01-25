@@ -6,7 +6,7 @@
  */
 #include "syscall.h"
 
-#define nbthread 20
+#define nbthread 50
 
 sem_t * sem;
 
@@ -40,5 +40,9 @@ main()
 			PutString("\n\nFin regoupement (désordonné) des Threads utilisateur \n\n");
 		}
 	}
+	UserThreadJoin(i-2);
+	UserThreadJoin(i);
+	UserThreadJoin(i-1);
+	UserSemDelete(sem);
 	return 0;
 }

@@ -74,6 +74,7 @@ void updatecp(char * currentPath, char * buffer){
 			if(buffer[current] == '/'){
 				onecp(currentPath,tempPath);
 				cPos = 0;
+				resetbuffer(tempPath);
 			}
 			else{
 				tempPath[cPos] = buffer[current];
