@@ -46,13 +46,22 @@ OpenFile* FileMap::Add (int key, OpenFile* value){
     else
     {
       for(int i = 0; i < FileMap::map_size; ++i)
-        if(currentThread->FicOuverts[i] == NULL)
+      {
+        if(currentThread->FicOuverts[i] == NULL){
           currentThread->FicOuverts[i] = (OpenFile *) table[addr][1];
+          break;
+        }
+      }
       table[place][0] = key;
       table[place][1] = (int) value;
       for(int i = 0; i < FileMap::map_size; ++i)
+      {
         if(currentThread->FicOuverts[i] == NULL)
+        {
           currentThread->FicOuverts[i] = (OpenFile *) table[place][1];
+          break;
+        }
+      }
       tableLock->Release();
       return (OpenFile *) table[place][1];
     }
@@ -100,7 +109,10 @@ int FileMap::FindPlace()
 bool FileMap::isInThread(OpenFile * of, Thread * cr)
 {
   for(int i = 0; i < FileMap::map_size; ++i)
+  {
+    printf("%d == %d\n", (int) cr->FicOuverts[i], (int) of );
     if( cr->FicOuverts[i] == of)
       return true;
+  }
   return false;
 }

@@ -185,18 +185,20 @@ main (int argc, char **argv)
 	    {			// make directory
         ASSERT (argc > 1);
 	    	fileSystem->CreateDir (*(argv + 1));
+        argCount = 2;
 	    }
       else if (!strcmp (*argv, "--rmdir"))
 	    {			// make directory
         ASSERT (argc > 1);
 	    	fileSystem->DeleteDir (*(argv + 1));
+        argCount = 2;
 	    }
       else if (!strcmp (*argv, "--cd"))
 	    {			// make directory
         ASSERT (argc > 1);
 	    	fileSystem->ChangeDir (*(argv + 1));
+        argCount = 2;
 	    }
-	    interrupt->Halt ();
 #endif // FILESYS
 #ifdef NETWORK
 	    if (!strcmp (*argv, "-o"))
@@ -212,7 +214,7 @@ main (int argc, char **argv)
 	    {
 	    	ASSERT (argc > 1);
 		Delay (2);	// delay for 2 seconds
-		// to give the user time to 
+		// to give the user time to
 		// start up another nachos
 		AnneauTest (atoi (*(argv + 1)));
 		argCount = 2;
@@ -221,7 +223,7 @@ main (int argc, char **argv)
 	    {
 	    	ASSERT (argc > 1);
 		Delay (2);	// delay for 2 seconds
-		// to give the user time to 
+		// to give the user time to
 		// start up another nachos
 		Ping (atoi (*(argv + 1)));
 		argCount = 2;
