@@ -3,7 +3,7 @@ import sys
 import multiprocessing
 
 def f(i):
-	subprocess.call(["./nachos-network", "-m", str(i), "-h", str((i+1)%int(n))])
+	subprocess.call(["./nachos-complete", "-m", str(i), "-h", str((i+1)%int(n))])
 
 l = []
 n = sys.argv[1]
