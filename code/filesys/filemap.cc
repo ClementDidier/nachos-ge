@@ -110,7 +110,7 @@ bool FileMap::isInThread(OpenFile * of, Thread * cr)
 {
   for(int i = 0; i < FileMap::map_size; ++i)
   {
-    printf("%d == %d\n", (int) cr->FicOuverts[i], (int) of );
+    //printf("%d == %d\n", (int) cr->FicOuverts[i], (int) of );
     if( cr->FicOuverts[i] == of)
       return true;
   }
