@@ -6,7 +6,7 @@
  */
 #include "syscall.h"
 
-#define nbthread 50
+#define nbthread 999
 
 sem_t * sem;
 

@@ -500,6 +500,7 @@ AddrSpace::GarbageCollector()
   GCThreadVerrouLock->Acquire();
   for(i = 0; i<MaxThread * 2; i++){
     if(GCThreadVerrou[i] != NULL && GCThreadVerrou[i]->compteur == 0){
+      GCThreadVerrou[i]->mutexJoin->Acquire();
       delete GCThreadVerrou[i]->mutexJoin;
       delete GCThreadVerrou[i];
       GCThreadVerrou[i] = NULL;
