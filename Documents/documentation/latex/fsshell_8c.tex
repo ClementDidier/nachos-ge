@@ -1,0 +1,34 @@
+\hypertarget{fsshell_8c}{}\subsection{Référence du fichier test/fsshell.c}
+\label{fsshell_8c}\index{test/fsshell.\+c@{test/fsshell.\+c}}
+
+
+affiche un shell pour le système de fichier permettant des opérations basique sur les fichiers/repertoire Ce fichier doit être copier sur le système de fichier nachos et il sera nécessaire de lancer nachos avec le flavor userprog-\/fs  
+
+
+{\ttfamily \#include \char`\"{}syscall.\+h\char`\"{}}\newline
+\subsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{fsshell_8c_a0382e2f849deac7d51e6acef1f830ae0}{}\label{fsshell_8c_a0382e2f849deac7d51e6acef1f830ae0} 
+\#define {\bfseries buffersize}~128
+\end{DoxyCompactItemize}
+\subsubsection*{Fonctions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{fsshell_8c_a15fdc5a3a3ef380ca28c3cbc1df417f7}{}\label{fsshell_8c_a15fdc5a3a3ef380ca28c3cbc1df417f7} 
+void {\bfseries resetbuffer} (char $\ast$buffer)
+\item 
+\hypertarget{fsshell_8c_aeeda1bb93461b3ae11c59790e18ac9ec}{}\label{fsshell_8c_aeeda1bb93461b3ae11c59790e18ac9ec} 
+void {\bfseries onecp} (char $\ast$current\+Path, char $\ast$temp\+Path)
+\item 
+\hypertarget{fsshell_8c_a84b1ebdee8a535abba99508c33458fcd}{}\label{fsshell_8c_a84b1ebdee8a535abba99508c33458fcd} 
+void {\bfseries updatecp} (char $\ast$current\+Path, char $\ast$buffer)
+\item 
+\hypertarget{fsshell_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}{}\label{fsshell_8c_ae66f6b31b5ad750f1fe042a706a4e3d4} 
+int {\bfseries main} ()
+\end{DoxyCompactItemize}
+
+
+\subsubsection{Description détaillée}
+affiche un shell pour le système de fichier permettant des opérations basique sur les fichiers/repertoire Ce fichier doit être copier sur le système de fichier nachos et il sera nécessaire de lancer nachos avec le flavor userprog-\/fs 
+

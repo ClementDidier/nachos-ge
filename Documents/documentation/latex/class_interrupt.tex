@@ -1,0 +1,71 @@
+\hypertarget{class_interrupt}{}\subsection{Référence de la classe Interrupt}
+\label{class_interrupt}\index{Interrupt@{Interrupt}}
+\subsubsection*{Fonctions membres publiques}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_interrupt_af55a6cea64a8a3de49bad9ea3843addb}{}\label{class_interrupt_af55a6cea64a8a3de49bad9ea3843addb} 
+Int\+Status {\bfseries Set\+Level} (Int\+Status level)
+\item 
+\hypertarget{class_interrupt_a16eca26a7162f7099e5b043d0c0de344}{}\label{class_interrupt_a16eca26a7162f7099e5b043d0c0de344} 
+void {\bfseries Enable} ()
+\item 
+\hypertarget{class_interrupt_aa519deead8b512a52ba4ad9fb0e2643b}{}\label{class_interrupt_aa519deead8b512a52ba4ad9fb0e2643b} 
+Int\+Status {\bfseries get\+Level} ()
+\item 
+\hypertarget{class_interrupt_ace54aece18806bae3614ebf9cc8c2991}{}\label{class_interrupt_ace54aece18806bae3614ebf9cc8c2991} 
+void {\bfseries Idle} ()
+\item 
+\hypertarget{class_interrupt_a4d9820efbc3e9fd82e82f2eb6ef3613b}{}\label{class_interrupt_a4d9820efbc3e9fd82e82f2eb6ef3613b} 
+void {\bfseries Halt} ()
+\item 
+\hypertarget{class_interrupt_a2dd7548881fde3cf3c8fba4d75437849}{}\label{class_interrupt_a2dd7548881fde3cf3c8fba4d75437849} 
+void {\bfseries Yield\+On\+Return} ()
+\item 
+\hypertarget{class_interrupt_a6b240d463c36d4dcb18c444d4f71b778}{}\label{class_interrupt_a6b240d463c36d4dcb18c444d4f71b778} 
+Machine\+Status {\bfseries get\+Status} ()
+\item 
+\hypertarget{class_interrupt_a35a3cf7b10315addeee6ed0730225d57}{}\label{class_interrupt_a35a3cf7b10315addeee6ed0730225d57} 
+void {\bfseries set\+Status} (Machine\+Status st)
+\item 
+\hypertarget{class_interrupt_a8f9a7ddd0f250de0dcd45fa5bfd80c11}{}\label{class_interrupt_a8f9a7ddd0f250de0dcd45fa5bfd80c11} 
+void {\bfseries Dump\+State} ()
+\item 
+\hypertarget{class_interrupt_a78dd8c83735e5e73c056e87f3a47d3cb}{}\label{class_interrupt_a78dd8c83735e5e73c056e87f3a47d3cb} 
+void {\bfseries Schedule} (Void\+Function\+Ptr handler, int arg, long long when, Int\+Type type)
+\item 
+\hypertarget{class_interrupt_af7e385b28c374d35c4ca3763efac2b33}{}\label{class_interrupt_af7e385b28c374d35c4ca3763efac2b33} 
+void {\bfseries One\+Tick} ()
+\end{DoxyCompactItemize}
+\subsubsection*{Fonctions membres privées}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_interrupt_ab5adc6b35b5820fe525d8fcdf6229273}{}\label{class_interrupt_ab5adc6b35b5820fe525d8fcdf6229273} 
+bool {\bfseries Check\+If\+Due} (bool advance\+Clock)
+\item 
+\hypertarget{class_interrupt_ad83e8709b967745b6614ea7f75c446d7}{}\label{class_interrupt_ad83e8709b967745b6614ea7f75c446d7} 
+void {\bfseries Change\+Level} (Int\+Status old, Int\+Status now)
+\end{DoxyCompactItemize}
+\subsubsection*{Attributs privés}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_interrupt_a558467f06f3d1945f63726738b93191e}{}\label{class_interrupt_a558467f06f3d1945f63726738b93191e} 
+Int\+Status {\bfseries level}
+\item 
+\hypertarget{class_interrupt_a9f390f53a1c4bafd39ef6d0c27834c7e}{}\label{class_interrupt_a9f390f53a1c4bafd39ef6d0c27834c7e} 
+\hyperlink{class_list}{List} $\ast$ {\bfseries pending}
+\item 
+\hypertarget{class_interrupt_a5ea5d05ea85a95979a51b6450433ca10}{}\label{class_interrupt_a5ea5d05ea85a95979a51b6450433ca10} 
+bool {\bfseries in\+Handler}
+\item 
+\hypertarget{class_interrupt_a97d372b8fa7a2061fce62068bcb053c5}{}\label{class_interrupt_a97d372b8fa7a2061fce62068bcb053c5} 
+bool {\bfseries yield\+On\+Return}
+\item 
+\hypertarget{class_interrupt_a270e2391b397151f55939dd57349edf9}{}\label{class_interrupt_a270e2391b397151f55939dd57349edf9} 
+Machine\+Status {\bfseries status}
+\end{DoxyCompactItemize}
+
+
+La documentation de cette classe a été générée à partir des fichiers suivants \+:\begin{DoxyCompactItemize}
+\item 
+machine/interrupt.\+h\item 
+machine/interrupt.\+cc\end{DoxyCompactItemize}

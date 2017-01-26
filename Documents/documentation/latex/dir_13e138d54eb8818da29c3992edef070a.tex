@@ -1,0 +1,29 @@
+\hypertarget{dir_13e138d54eb8818da29c3992edef070a}{}\subsection{Répertoire de référence de test}
+\label{dir_13e138d54eb8818da29c3992edef070a}\index{Répertoire de référence de test@{Répertoire de référence de test}}
+\subsubsection*{Fichiers}
+\begin{DoxyCompactItemize}
+\item 
+fichier \hyperlink{asynchstringtest_8c}{asynchstringtest.\+c}
+\begin{DoxyCompactList}\small\item\em lance 10 thread utilisateur qui affiche une première ou une seconde chaine de caractère de façon contigüe (pas d\textquotesingle{}entrelacement) \end{DoxyCompactList}\item 
+fichier \hyperlink{forktest_8c}{forktest.\+c}
+\begin{DoxyCompactList}\small\item\em lance 10 programmes utilisateur dans de nouveaux processus. \end{DoxyCompactList}\item 
+fichier \hyperlink{fsshell_8c}{fsshell.\+c}
+\begin{DoxyCompactList}\small\item\em affiche un shell pour le système de fichier permettant des opérations basique sur les fichiers/repertoire Ce fichier doit être copier sur le système de fichier nachos et il sera nécessaire de lancer nachos avec le flavor userprog-\/fs \end{DoxyCompactList}\item 
+fichier \hyperlink{halt_8c}{halt.\+c}
+\begin{DoxyCompactList}\small\item\em effectue quelque opérations basiques et effectu un appel système halt() \end{DoxyCompactList}\item 
+fichier \hyperlink{inttest_8c}{inttest.\+c}
+\begin{DoxyCompactList}\small\item\em demande à l\textquotesingle{}utilisateur d\textquotesingle{}entrer un int et l\textquotesingle{}affiche, permet de tester les appels systèmes sur la console get\+C\+Har\+Int, Get\+Int et Put\+Int \end{DoxyCompactList}\item 
+fichier \hyperlink{putchar_8c}{putchar.\+c}
+\begin{DoxyCompactList}\small\item\em affiche une série de 5 caractère puis demande un caractère et l\textquotesingle{}affiche. Permet de tester les syscall getchar et putchar. \end{DoxyCompactList}\item 
+fichier \hyperlink{putchartest_8c}{putchartest.\+c}
+\begin{DoxyCompactList}\small\item\em Affiche les caractères de 47 à 127 sur la table A\+S\+C\+II grace à Put\+Char. \end{DoxyCompactList}\item 
+fichier \hyperlink{semaphore_8c}{semaphore.\+c}
+\begin{DoxyCompactList}\small\item\em Situation de producteur/consomateur. On créer 2 consomateur qui affichent le contenu d\textquotesingle{}un même buffer et un producteur qui rempli ce buffer avec des caractères de la table A\+S\+C\+II. Le buffer est protégé avec des sémaphores, de la même façon que la situation de producteur/consomateur vu en cours. \end{DoxyCompactList}\item 
+fichier \hyperlink{shell_8c}{shell.\+c}
+\begin{DoxyCompactList}\small\item\em affiche un shell qui permet de lancer d\textquotesingle{}autre programme utilisateur. Ne fonctionne pas sur le système de fichier \end{DoxyCompactList}\item 
+fichier \hyperlink{stringtest_8c}{stringtest.\+c}
+\begin{DoxyCompactList}\small\item\em Récupère des données de l\textquotesingle{}utilisateur via Get\+Int et affiche un (ou plusieurs) train(s) grace a l\textquotesingle{}appel de Put\+String La vitesse des train est très dépendante de la vitesse C\+PU (n\textquotesingle{}ayant pas d\textquotesingle{}horloge interne)... \end{DoxyCompactList}\item 
+fichier \hyperlink{tetris_8c}{tetris.\+c}
+\begin{DoxyCompactList}\small\item\em permet de tester l\textquotesingle{}utilisation de la console (get char, get string, put string etc.), la gestion et la synchronisation des threads utilisateurs, les semaphores utilisateurs. Permet aussi de jouer au tetris (note il est possible d\textquotesingle{}entrer jusqu\textquotesingle{}a 2 fonctions de déplacement, par exemple 1+2+enter vas faire aller la pièce à gauche puis va la faire pivoter) \end{DoxyCompactList}\item 
+fichier \hyperlink{userpage0_8c}{userpage0.\+c}
+\begin{DoxyCompactList}\small\item\em Créer 3 threads, chacun fera appel a la fonction thread\+Handler et lui passera en paramètre un caractère qu\textquotesingle{}il affichera 10 fois. On doit donc se retrouver dans la console avec 10 $\ast$ a, 10 $\ast$ b et 10 $\ast$ c répartis de manière plutôt aléatoirement (selon le scheduler). \end{DoxyCompactList}\end{DoxyCompactItemize}

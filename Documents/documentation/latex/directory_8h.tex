@@ -1,0 +1,27 @@
+\hypertarget{directory_8h}{}\subsection{Référence du fichier filesys/directory.h}
+\label{directory_8h}\index{filesys/directory.\+h@{filesys/directory.\+h}}
+
+
+A directory is a table of pairs\+: $<$file name, sector \#$>$, giving the name of each file in the directory, and where to find its file header (the data structure describing where to find the file\textquotesingle{}s data blocks) on disk.  
+
+
+{\ttfamily \#include \char`\"{}copyright.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}openfile.\+h\char`\"{}}\newline
+\subsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{class_directory_entry}{Directory\+Entry}
+\item 
+class \hyperlink{class_directory}{Directory}
+\end{DoxyCompactItemize}
+\subsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{directory_8h_a66ff406ace4e6725f5986d9b8d4a5ebd}{}\label{directory_8h_a66ff406ace4e6725f5986d9b8d4a5ebd} 
+\#define {\bfseries File\+Name\+Max\+Len}~9
+\end{DoxyCompactItemize}
+
+
+\subsubsection{Description détaillée}
+A directory is a table of pairs\+: $<$file name, sector \#$>$, giving the name of each file in the directory, and where to find its file header (the data structure describing where to find the file\textquotesingle{}s data blocks) on disk. 
+

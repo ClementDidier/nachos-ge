@@ -1,0 +1,72 @@
+\hypertarget{class_directory}{}\subsection{Référence de la classe Directory}
+\label{class_directory}\index{Directory@{Directory}}
+\subsubsection*{Fonctions membres publiques}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_directory_a77366fc5c4d73a3c20fc060640b1258a}{}\label{class_directory_a77366fc5c4d73a3c20fc060640b1258a} 
+{\bfseries Directory} (int size)
+\item 
+\hypertarget{class_directory_a36ed455b21bbd9a66ffe8ec689ff7c73}{}\label{class_directory_a36ed455b21bbd9a66ffe8ec689ff7c73} 
+void {\bfseries Fetch\+From} (\hyperlink{class_open_file}{Open\+File} $\ast$file)
+\item 
+\hypertarget{class_directory_abf5550df42587bbc604c71441a4d12fc}{}\label{class_directory_abf5550df42587bbc604c71441a4d12fc} 
+void {\bfseries Write\+Back} (\hyperlink{class_open_file}{Open\+File} $\ast$file)
+\item 
+\hypertarget{class_directory_abfe376d1883918703cda2a6a4e23ffa8}{}\label{class_directory_abfe376d1883918703cda2a6a4e23ffa8} 
+int {\bfseries Find} (const char $\ast$name)
+\item 
+\hypertarget{class_directory_aab3700537a499e57a07c79ba666d2fcb}{}\label{class_directory_aab3700537a499e57a07c79ba666d2fcb} 
+bool {\bfseries Add} (const char $\ast$name, int new\+Sector)
+\item 
+\hypertarget{class_directory_a3ad4280cbe376ef803105e6a35856165}{}\label{class_directory_a3ad4280cbe376ef803105e6a35856165} 
+bool {\bfseries Remove} (const char $\ast$name)
+\item 
+\hypertarget{class_directory_a5065793fb216a407cc3871dd3c837117}{}\label{class_directory_a5065793fb216a407cc3871dd3c837117} 
+void {\bfseries List} ()
+\item 
+\hypertarget{class_directory_a40c728221c5557e4fc181c4091c6fcff}{}\label{class_directory_a40c728221c5557e4fc181c4091c6fcff} 
+void {\bfseries Print} ()
+\item 
+bool \hyperlink{class_directory_a2f4299d8d962c0384f707274d7563932}{Is\+Empty} ()
+\begin{DoxyCompactList}\small\item\em Retourne l\textquotesingle{}état actuel du dossier, s\textquotesingle{}il est plein ou vide. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsubsection*{Fonctions membres privées}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_directory_ac7f09c7b36c1d0cf68d36ae0e922e6d9}{}\label{class_directory_ac7f09c7b36c1d0cf68d36ae0e922e6d9} 
+int {\bfseries Find\+Index} (const char $\ast$name)
+\end{DoxyCompactItemize}
+\subsubsection*{Attributs privés}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_directory_a3d30c557f3616574ff9eaeeb4163b82d}{}\label{class_directory_a3d30c557f3616574ff9eaeeb4163b82d} 
+int {\bfseries table\+Size}
+\item 
+\hypertarget{class_directory_a58597cdbf161409c3469527f2169894b}{}\label{class_directory_a58597cdbf161409c3469527f2169894b} 
+\hyperlink{class_directory_entry}{Directory\+Entry} $\ast$ {\bfseries table}
+\end{DoxyCompactItemize}
+
+
+\subsubsection{Documentation des fonctions membres}
+\hypertarget{class_directory_a2f4299d8d962c0384f707274d7563932}{}\label{class_directory_a2f4299d8d962c0384f707274d7563932} 
+\index{Directory@{Directory}!Is\+Empty@{Is\+Empty}}
+\index{Is\+Empty@{Is\+Empty}!Directory@{Directory}}
+\paragraph{\texorpdfstring{Is\+Empty()}{IsEmpty()}}
+{\footnotesize\ttfamily bool Directory\+::\+Is\+Empty (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Retourne l\textquotesingle{}état actuel du dossier, s\textquotesingle{}il est plein ou vide. 
+
+\begin{DoxyReturn}{Renvoie}
+Retourne T\+R\+UE si le dossier est vide, F\+A\+L\+SE s\textquotesingle{}il est plein 
+\end{DoxyReturn}
+
+
+Référencé par File\+System\+::\+Delete\+Dir().
+
+
+
+La documentation de cette classe a été générée à partir des fichiers suivants \+:\begin{DoxyCompactItemize}
+\item 
+filesys/\hyperlink{directory_8h}{directory.\+h}\item 
+filesys/\hyperlink{directory_8cc}{directory.\+cc}\end{DoxyCompactItemize}

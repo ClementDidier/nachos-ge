@@ -1,0 +1,62 @@
+\hypertarget{class_network}{}\subsection{Référence de la classe Network}
+\label{class_network}\index{Network@{Network}}
+\subsubsection*{Fonctions membres publiques}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_network_a0293c87c8c600e73383252a7c54b7c74}{}\label{class_network_a0293c87c8c600e73383252a7c54b7c74} 
+{\bfseries Network} (Network\+Address addr, double reliability, Void\+Function\+Ptr read\+Avail, Void\+Function\+Ptr write\+Done, int call\+Arg)
+\item 
+\hypertarget{class_network_ab68e75d65ef18f8a94a2f002c9e7f4ca}{}\label{class_network_ab68e75d65ef18f8a94a2f002c9e7f4ca} 
+void {\bfseries Send} (\hyperlink{class_packet_header}{Packet\+Header} hdr, char $\ast$\hyperlink{structdata}{data})
+\item 
+\hypertarget{class_network_a65fc6c013612cd582c099e46c1395066}{}\label{class_network_a65fc6c013612cd582c099e46c1395066} 
+\hyperlink{class_packet_header}{Packet\+Header} {\bfseries Receive} (char $\ast$\hyperlink{structdata}{data})
+\item 
+\hypertarget{class_network_ace79fd02d0d8404789162e991df951fe}{}\label{class_network_ace79fd02d0d8404789162e991df951fe} 
+void {\bfseries Send\+Done} ()
+\item 
+\hypertarget{class_network_af33f61b6bb77606dc25805578e71abd0}{}\label{class_network_af33f61b6bb77606dc25805578e71abd0} 
+void {\bfseries Check\+Pkt\+Avail} ()
+\end{DoxyCompactItemize}
+\subsubsection*{Attributs privés}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_network_a3ae032efa004363c75e271f6c2511120}{}\label{class_network_a3ae032efa004363c75e271f6c2511120} 
+Network\+Address {\bfseries ident}
+\item 
+\hypertarget{class_network_ad7c13d9b762a6f5507e606c3b155fda0}{}\label{class_network_ad7c13d9b762a6f5507e606c3b155fda0} 
+double {\bfseries chance\+To\+Work}
+\item 
+\hypertarget{class_network_ad3175dd7f73b9fc80f6951e9bdbb4003}{}\label{class_network_ad3175dd7f73b9fc80f6951e9bdbb4003} 
+int {\bfseries sock}
+\item 
+\hypertarget{class_network_ad944b6abcb052bba08ac4b96ee948087}{}\label{class_network_ad944b6abcb052bba08ac4b96ee948087} 
+char {\bfseries sock\+Name} \mbox{[}32\mbox{]}
+\item 
+\hypertarget{class_network_ab02494839dcc7a83a00b8d8baf444c63}{}\label{class_network_ab02494839dcc7a83a00b8d8baf444c63} 
+Void\+Function\+Ptr {\bfseries write\+Handler}
+\item 
+\hypertarget{class_network_a1756ec12581072e48a475d9ba9b9c533}{}\label{class_network_a1756ec12581072e48a475d9ba9b9c533} 
+Void\+Function\+Ptr {\bfseries read\+Handler}
+\item 
+\hypertarget{class_network_acdb37b096697191ba5959e2baf689bcc}{}\label{class_network_acdb37b096697191ba5959e2baf689bcc} 
+int {\bfseries handler\+Arg}
+\item 
+\hypertarget{class_network_a1cd885e10158a863ee80b950c576c4a4}{}\label{class_network_a1cd885e10158a863ee80b950c576c4a4} 
+bool {\bfseries send\+Busy}
+\item 
+\hypertarget{class_network_aa5b78b0da20c8fd26d812c7bfd191a43}{}\label{class_network_aa5b78b0da20c8fd26d812c7bfd191a43} 
+bool {\bfseries packet\+Avail}
+\item 
+\hypertarget{class_network_aaefabeae4dff580c7a9bfbb4c943eb6b}{}\label{class_network_aaefabeae4dff580c7a9bfbb4c943eb6b} 
+\hyperlink{class_packet_header}{Packet\+Header} {\bfseries in\+Hdr}
+\item 
+\hypertarget{class_network_ae63ae6d608c1c534c546376937291db4}{}\label{class_network_ae63ae6d608c1c534c546376937291db4} 
+char {\bfseries inbox} \mbox{[}Max\+Packet\+Size\mbox{]}
+\end{DoxyCompactItemize}
+
+
+La documentation de cette classe a été générée à partir des fichiers suivants \+:\begin{DoxyCompactItemize}
+\item 
+machine/network.\+h\item 
+machine/network.\+cc\end{DoxyCompactItemize}

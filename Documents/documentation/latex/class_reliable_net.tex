@@ -1,0 +1,146 @@
+\hypertarget{class_reliable_net}{}\subsection{Référence de la classe Reliable\+Net}
+\label{class_reliable_net}\index{Reliable\+Net@{Reliable\+Net}}
+\subsubsection*{Fonctions membres publiques}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_reliable_net_ab4a1b19edd7bb7f0704c8dafc1aa7bd5}{Reliable\+Net} (Network\+Address addr, double reliability, Network\+Address target)
+\begin{DoxyCompactList}\small\item\em Constructeur de la classe \hyperlink{class_reliable_net}{Reliable\+Net}. \end{DoxyCompactList}\item 
+void \hyperlink{class_reliable_net_a75900761b71ea519bc750abd10a2608c}{Send} (char type, const char $\ast$\hyperlink{structdata}{data}, int size)
+\begin{DoxyCompactList}\small\item\em Envoie un message à la machine cible. \end{DoxyCompactList}\item 
+int \hyperlink{class_reliable_net_abb821a7c0ec13b9d7faef0801051ba48}{Receive} (char $\ast$\hyperlink{structdata}{data}, int size)
+\begin{DoxyCompactList}\small\item\em Récupére les messages reçu. \end{DoxyCompactList}\item 
+\hypertarget{class_reliable_net_a0cc97509f1aed0a461e9758c3a8b64ea}{}\label{class_reliable_net_a0cc97509f1aed0a461e9758c3a8b64ea} 
+void \hyperlink{class_reliable_net_a0cc97509f1aed0a461e9758c3a8b64ea}{Packet\+Sent} ()
+\begin{DoxyCompactList}\small\item\em Gére le sémaphore d\textquotesingle{}envoie. \end{DoxyCompactList}\item 
+\hypertarget{class_reliable_net_a6f69ebd945dd0f879eef0b1ab63a17f6}{}\label{class_reliable_net_a6f69ebd945dd0f879eef0b1ab63a17f6} 
+void \hyperlink{class_reliable_net_a6f69ebd945dd0f879eef0b1ab63a17f6}{Incoming\+Packet} ()
+\begin{DoxyCompactList}\small\item\em Gére le sémaphore de récéption. \end{DoxyCompactList}\item 
+\hypertarget{class_reliable_net_a68ad4f4faf8b5f96163434752e2f7b19}{}\label{class_reliable_net_a68ad4f4faf8b5f96163434752e2f7b19} 
+void \hyperlink{class_reliable_net_a68ad4f4faf8b5f96163434752e2f7b19}{Wait\+Messages} ()
+\begin{DoxyCompactList}\small\item\em Attend les messages. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsubsection*{Attributs publics}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_reliable_net_a2b8f53f82f8bbc14fbd61e656a1b2bf7}{}\label{class_reliable_net_a2b8f53f82f8bbc14fbd61e656a1b2bf7} 
+int {\bfseries num\+Emission}
+\item 
+\hypertarget{class_reliable_net_a89dd42abf2f20db3c239ee4cb9096b43}{}\label{class_reliable_net_a89dd42abf2f20db3c239ee4cb9096b43} 
+int {\bfseries num\+Reception}
+\item 
+\hypertarget{class_reliable_net_a31f7189a74f1c2cedb1f355a2fc222de}{}\label{class_reliable_net_a31f7189a74f1c2cedb1f355a2fc222de} 
+int {\bfseries num\+Aquitement}
+\item 
+\hypertarget{class_reliable_net_ab5cd346bc4e9f5f37a379114e1840dd1}{}\label{class_reliable_net_ab5cd346bc4e9f5f37a379114e1840dd1} 
+\hyperlink{class_semaphore}{Semaphore} $\ast$ {\bfseries message\+Available}
+\item 
+\hypertarget{class_reliable_net_a278709034417b8c15e736a66ad8b52a7}{}\label{class_reliable_net_a278709034417b8c15e736a66ad8b52a7} 
+\hyperlink{class_semaphore}{Semaphore} $\ast$ {\bfseries message\+Sent}
+\item 
+\hypertarget{class_reliable_net_a57b3ae835a3fdb4a5f7420eab3be01d3}{}\label{class_reliable_net_a57b3ae835a3fdb4a5f7420eab3be01d3} 
+\hyperlink{class_semaphore}{Semaphore} $\ast$ {\bfseries sem\+Ack}
+\item 
+\hypertarget{class_reliable_net_a864d332a8b3cb5bcb2458871e8c0528e}{}\label{class_reliable_net_a864d332a8b3cb5bcb2458871e8c0528e} 
+\hyperlink{class_lock}{Lock} $\ast$ {\bfseries send\+Lock}
+\item 
+\hypertarget{class_reliable_net_a1d6258162bb327de9949f761031ababd}{}\label{class_reliable_net_a1d6258162bb327de9949f761031ababd} 
+\hyperlink{class_network}{Network} $\ast$ {\bfseries network}
+\end{DoxyCompactItemize}
+\subsubsection*{Fonctions membres privées}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_reliable_net_ab0a8c754689d60dd9cde47953e8bc262}{}\label{class_reliable_net_ab0a8c754689d60dd9cde47953e8bc262} 
+\hyperlink{struct_packet_header_reliable}{Packet\+Header\+Reliable} $\ast$ {\bfseries Parse\+Reliable\+Header} (char $\ast$buffer)
+\end{DoxyCompactItemize}
+\subsubsection*{Attributs privés}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_reliable_net_af7880c4044b0b3c900ee88f1ac315b80}{}\label{class_reliable_net_af7880c4044b0b3c900ee88f1ac315b80} 
+\hyperlink{class_synch_list}{Synch\+List} $\ast$ {\bfseries messages}
+\item 
+\hypertarget{class_reliable_net_a23eed2081e68d3c79037a896850f9da0}{}\label{class_reliable_net_a23eed2081e68d3c79037a896850f9da0} 
+Network\+Address {\bfseries from}
+\item 
+\hypertarget{class_reliable_net_a9bde09c291351d5b388849789363a790}{}\label{class_reliable_net_a9bde09c291351d5b388849789363a790} 
+Network\+Address {\bfseries target}
+\item 
+\hypertarget{class_reliable_net_ae1749bc67d697d651379b2b99bb48d43}{}\label{class_reliable_net_ae1749bc67d697d651379b2b99bb48d43} 
+char {\bfseries memory} \mbox{[}Max\+Packet\+Size\mbox{]}
+\item 
+\hypertarget{class_reliable_net_a41e596eebb89f92b8af39b4fb3348489}{}\label{class_reliable_net_a41e596eebb89f92b8af39b4fb3348489} 
+int {\bfseries memory\+Index}
+\item 
+\hypertarget{class_reliable_net_a37679798df9712548ef211b36959810b}{}\label{class_reliable_net_a37679798df9712548ef211b36959810b} 
+int {\bfseries memory\+Size}
+\end{DoxyCompactItemize}
+
+
+\subsubsection{Documentation des constructeurs et destructeur}
+\hypertarget{class_reliable_net_ab4a1b19edd7bb7f0704c8dafc1aa7bd5}{}\label{class_reliable_net_ab4a1b19edd7bb7f0704c8dafc1aa7bd5} 
+\index{Reliable\+Net@{Reliable\+Net}!Reliable\+Net@{Reliable\+Net}}
+\index{Reliable\+Net@{Reliable\+Net}!Reliable\+Net@{Reliable\+Net}}
+\paragraph{\texorpdfstring{Reliable\+Net()}{ReliableNet()}}
+{\footnotesize\ttfamily Reliable\+Net\+::\+Reliable\+Net (\begin{DoxyParamCaption}\item[{Network\+Address}]{addr,  }\item[{double}]{reliability,  }\item[{Network\+Address}]{target }\end{DoxyParamCaption})}
+
+
+
+Constructeur de la classe \hyperlink{class_reliable_net}{Reliable\+Net}. 
+
+Destructeur de la classe \hyperlink{class_reliable_net}{Reliable\+Net}.
+
+
+\begin{DoxyParams}{Paramètres}
+{\em addr} & Adresse réseau de la machine \\
+\hline
+{\em reliability} & Fiabilité du réseau \\
+\hline
+{\em target} & Adresse réseau de la machine cible \\
+\hline
+\end{DoxyParams}
+
+
+\subsubsection{Documentation des fonctions membres}
+\hypertarget{class_reliable_net_abb821a7c0ec13b9d7faef0801051ba48}{}\label{class_reliable_net_abb821a7c0ec13b9d7faef0801051ba48} 
+\index{Reliable\+Net@{Reliable\+Net}!Receive@{Receive}}
+\index{Receive@{Receive}!Reliable\+Net@{Reliable\+Net}}
+\paragraph{\texorpdfstring{Receive()}{Receive()}}
+{\footnotesize\ttfamily int Reliable\+Net\+::\+Receive (\begin{DoxyParamCaption}\item[{char $\ast$}]{data,  }\item[{int}]{size }\end{DoxyParamCaption})}
+
+
+
+Récupére les messages reçu. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em data} & buffer de récupération \\
+\hline
+{\em size} & Taille du buffer de récupération \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+0 si tout les messages ont été récupéré, 1 si il en reste encore 
+\end{DoxyReturn}
+\hypertarget{class_reliable_net_a75900761b71ea519bc750abd10a2608c}{}\label{class_reliable_net_a75900761b71ea519bc750abd10a2608c} 
+\index{Reliable\+Net@{Reliable\+Net}!Send@{Send}}
+\index{Send@{Send}!Reliable\+Net@{Reliable\+Net}}
+\paragraph{\texorpdfstring{Send()}{Send()}}
+{\footnotesize\ttfamily void Reliable\+Net\+::\+Send (\begin{DoxyParamCaption}\item[{char}]{type,  }\item[{const char $\ast$}]{data,  }\item[{int}]{size }\end{DoxyParamCaption})}
+
+
+
+Envoie un message à la machine cible. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em type} & Type du paquet à envoyer \\
+\hline
+{\em data} & Contenu du message \\
+\hline
+{\em size} & Taille du message \\
+\hline
+\end{DoxyParams}
+
+
+La documentation de cette classe a été générée à partir des fichiers suivants \+:\begin{DoxyCompactItemize}
+\item 
+network/reliablenet.\+h\item 
+network/reliablenet.\+cc\end{DoxyCompactItemize}

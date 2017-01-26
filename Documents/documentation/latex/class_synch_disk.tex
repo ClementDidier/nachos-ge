@@ -1,0 +1,35 @@
+\hypertarget{class_synch_disk}{}\subsection{Référence de la classe Synch\+Disk}
+\label{class_synch_disk}\index{Synch\+Disk@{Synch\+Disk}}
+\subsubsection*{Fonctions membres publiques}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_synch_disk_aa6cc1815e0aca2d6fe11d426942e6538}{}\label{class_synch_disk_aa6cc1815e0aca2d6fe11d426942e6538} 
+{\bfseries Synch\+Disk} (const char $\ast$name)
+\item 
+\hypertarget{class_synch_disk_a7d8195bd5d464e4771946eb03c61e8c8}{}\label{class_synch_disk_a7d8195bd5d464e4771946eb03c61e8c8} 
+void {\bfseries Read\+Sector} (int sector\+Number, char $\ast$\hyperlink{structdata}{data})
+\item 
+\hypertarget{class_synch_disk_aadb7e2ce6cf32727e493c63c5ea1018b}{}\label{class_synch_disk_aadb7e2ce6cf32727e493c63c5ea1018b} 
+void {\bfseries Write\+Sector} (int sector\+Number, char $\ast$\hyperlink{structdata}{data})
+\item 
+\hypertarget{class_synch_disk_a973a65b7b7b92f5fabf18da8b8bae402}{}\label{class_synch_disk_a973a65b7b7b92f5fabf18da8b8bae402} 
+void {\bfseries Request\+Done} ()
+\end{DoxyCompactItemize}
+\subsubsection*{Attributs privés}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_synch_disk_a8999601462179076bfd16a20d56efc0b}{}\label{class_synch_disk_a8999601462179076bfd16a20d56efc0b} 
+\hyperlink{class_disk}{Disk} $\ast$ {\bfseries disk}
+\item 
+\hypertarget{class_synch_disk_a5fc105281b2871f863df2e955b8f3ed2}{}\label{class_synch_disk_a5fc105281b2871f863df2e955b8f3ed2} 
+\hyperlink{class_semaphore}{Semaphore} $\ast$ {\bfseries semaphore}
+\item 
+\hypertarget{class_synch_disk_a7a49e93079ba87bb0da8c724883e50ff}{}\label{class_synch_disk_a7a49e93079ba87bb0da8c724883e50ff} 
+\hyperlink{class_lock}{Lock} $\ast$ {\bfseries lock}
+\end{DoxyCompactItemize}
+
+
+La documentation de cette classe a été générée à partir des fichiers suivants \+:\begin{DoxyCompactItemize}
+\item 
+filesys/synchdisk.\+h\item 
+filesys/synchdisk.\+cc\end{DoxyCompactItemize}

@@ -1,0 +1,61 @@
+\hypertarget{stringtest_8c}{}\subsection{Référence du fichier test/stringtest.c}
+\label{stringtest_8c}\index{test/stringtest.\+c@{test/stringtest.\+c}}
+
+
+Récupère des données de l\textquotesingle{}utilisateur via Get\+Int et affiche un (ou plusieurs) train(s) grace a l\textquotesingle{}appel de Put\+String La vitesse des train est très dépendante de la vitesse C\+PU (n\textquotesingle{}ayant pas d\textquotesingle{}horloge interne)...  
+
+
+{\ttfamily \#include \char`\"{}syscall.\+h\char`\"{}}\newline
+\subsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{stringtest_8c_a088c7c70422ca34b59267c58a7d68767}{}\label{stringtest_8c_a088c7c70422ca34b59267c58a7d68767} 
+\#define {\bfseries largeur}~100
+\item 
+\hypertarget{stringtest_8c_a8b6bae0e57cf0a6c1eb977ba1f983902}{}\label{stringtest_8c_a8b6bae0e57cf0a6c1eb977ba1f983902} 
+\#define {\bfseries taille}~68
+\item 
+\hypertarget{stringtest_8c_af4a13e4f962eaa8b45728838b9abdefa}{}\label{stringtest_8c_af4a13e4f962eaa8b45728838b9abdefa} 
+\#define {\bfseries hauteur}~70
+\item 
+\hypertarget{stringtest_8c_aaf784f936f1641dcb79b67d5f819bf62}{}\label{stringtest_8c_aaf784f936f1641dcb79b67d5f819bf62} 
+\#define {\bfseries ligne1}~\char`\"{}                                                  \+\_\+,-\/\textquotesingle{}-\/.\+\_\+           \textbackslash{}n\char`\"{}
+\item 
+\hypertarget{stringtest_8c_a641dcd13f13f40d60464bb99a26d675a}{}\label{stringtest_8c_a641dcd13f13f40d60464bb99a26d675a} 
+\#define {\bfseries ligne2}~\char`\"{}                                                 $<$\+\_\+     \+\_\+$>$          \textbackslash{}n\char`\"{}
+\item 
+\hypertarget{stringtest_8c_afc5cefcebf782d40320bed3c72914a1c}{}\label{stringtest_8c_afc5cefcebf782d40320bed3c72914a1c} 
+\#define {\bfseries ligne3}~\char`\"{}     \+\_\+\+\_\+\+\_\+\+\_\+\+\_\+-\/-\/-\/-\/\textquotesingle{}-\/-\/-\/-\/\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+`-\/-\/-\/\textquotesingle{}\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+     \textbackslash{}n\char`\"{}
+\item 
+\hypertarget{stringtest_8c_a7874e11cec94c2fec4b005a5d8265c41}{}\label{stringtest_8c_a7874e11cec94c2fec4b005a5d8265c41} 
+\#define {\bfseries ligne4}~\char`\"{}    /-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\textbackslash{}\textbackslash{}   \textbackslash{}n\char`\"{}
+\item 
+\hypertarget{stringtest_8c_a91a374ec74dbca7ee7e3dd3d59b57765}{}\label{stringtest_8c_a91a374ec74dbca7ee7e3dd3d59b57765} 
+\#define {\bfseries ligne5}~\char`\"{}   /\mbox{]} \mbox{[}\+\_\+\mbox{]} \#\#\#\# \mbox{[}\+\_\+\+\_\+\+\_\+\mbox{]} \#\#\#\# \mbox{[}\+\_\+\+\_\+\+\_\+\mbox{]}  \textbackslash{}\textbackslash{}/  \mbox{[}\+\_\+\+\_\+\+\_\+\mbox{]} \#\#\#\# \mbox{[}\+\_\+\+\_\+\+\_\+\mbox{]} \#\#\#\# \mbox{[}\+\_\+\mbox{]} \mbox{[}\textbackslash{}\textbackslash{} \textbackslash{}n\char`\"{}
+\item 
+\hypertarget{stringtest_8c_a1a8117ae50ee15ba7ae1af8068733f32}{}\label{stringtest_8c_a1a8117ae50ee15ba7ae1af8068733f32} 
+\#define {\bfseries ligne6}~\char`\"{}  /-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/11407-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/$\vert$-\/$\vert$-\/-\/-\/\textbackslash{}\textbackslash{} \textbackslash{}n\char`\"{}
+\item 
+\hypertarget{stringtest_8c_a9d9e2b862d3acc8250db2ae14b21f649}{}\label{stringtest_8c_a9d9e2b862d3acc8250db2ae14b21f649} 
+\#define {\bfseries ligne7}~\char`\"{}  $\vert$=          S  B  B                          C  F  F     $\vert$\+\_\+$\vert$  =$\vert$  \textbackslash{}n\char`\"{}
+\item 
+\hypertarget{stringtest_8c_a1f2ea40daf023c6a1c046787b02d15e5}{}\label{stringtest_8c_a1f2ea40daf023c6a1c046787b02d15e5} 
+\#define {\bfseries ligne8}~\char`\"{}\mbox{[}=$\vert$\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+\+\_\+$\vert$=\mbox{]}\textbackslash{}n\char`\"{}
+\item 
+\hypertarget{stringtest_8c_a3f8992a6f151a62b39093c4072ce133e}{}\label{stringtest_8c_a3f8992a6f151a62b39093c4072ce133e} 
+\#define {\bfseries ligne9}~\char`\"{}   )/\+\_\+-\/(-\/o-\/)=\+\_\+=(=8=)=\+\_\+=(-\/o-\/)-\/\+\_\+ \mbox{[}\+\_\+\+\_\+\+\_\+\+\_\+\mbox{]} \+\_\+-\/(-\/o-\/)=\+\_\+=(=8=)=\+\_\+=(-\/o-\/)-\/\+\_\+\textbackslash{}\textbackslash{}(  \textbackslash{}n\char`\"{}
+\end{DoxyCompactItemize}
+\subsubsection*{Fonctions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{stringtest_8c_acfef1586e94c7b109a3469cd8bd7e1cb}{}\label{stringtest_8c_acfef1586e94c7b109a3469cd8bd7e1cb} 
+void {\bfseries Custom\+Usleep} (int duree)
+\item 
+\hypertarget{stringtest_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}{}\label{stringtest_8c_ae66f6b31b5ad750f1fe042a706a4e3d4} 
+int {\bfseries main} ()
+\end{DoxyCompactItemize}
+
+
+\subsubsection{Description détaillée}
+Récupère des données de l\textquotesingle{}utilisateur via Get\+Int et affiche un (ou plusieurs) train(s) grace a l\textquotesingle{}appel de Put\+String La vitesse des train est très dépendante de la vitesse C\+PU (n\textquotesingle{}ayant pas d\textquotesingle{}horloge interne)... 
+

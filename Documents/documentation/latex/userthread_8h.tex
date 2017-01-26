@@ -1,0 +1,97 @@
+\hypertarget{userthread_8h}{}\subsection{Référence du fichier userprog/userthread.h}
+\label{userthread_8h}\index{userprog/userthread.\+h@{userprog/userthread.\+h}}
+
+
+Permet la création et l\textquotesingle{}execution de thread utilisateurs.  
+
+
+\subsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structarg_retparams}{arg\+Retparams}
+\end{DoxyCompactItemize}
+\subsubsection*{Fonctions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{userthread_8h_adb0b28b6a6da6819c0dbcfe85e69fdf7}{do\+\_\+\+User\+Thread\+Create} (int f, int arg)
+\begin{DoxyCompactList}\small\item\em Gère l\textquotesingle{}initialisation et la gestion d\textquotesingle{}un thread utilisateur incrémente le nombre de thread actuellement en cours d\textquotesingle{}exécution garanti la synchronisation des accès à la bitmap de l\textquotesingle{}espace des Threads Recherche un espace assez grand pour initialiser ce thread dans pile du thread courrant créé une structure avec les informations nécessaire pour lancer un thread (adresse de retour, paramètre utilisateur et adresse de la fonction utilisateur) effectu un appel à la fonction fork (class \hyperlink{class_thread}{Thread}), récupère le tid (du thread créé) retourner par fork pour le retourner à l\textquotesingle{}utilisateur. \end{DoxyCompactList}\item 
+void \hyperlink{userthread_8h_a202dac34b1d00aa37bfaca8121b9a59f}{do\+\_\+\+User\+Thread\+Exit} ()
+\begin{DoxyCompactList}\small\item\em Supprime le thread courrant de la liste des thread actif. Ceci permet notament de pouvoir demander d\textquotesingle{}attendre un thread. Supprime le thread courrant du tableau des thread actif afin de libérer l\textquotesingle{}espace associé à ce thread utilisateur. Cette opération est protéger par un verrou décrémente le nombre de \hyperlink{class_thread}{Thread} actuel du système Libère le verrou \char`\"{}\+Thread\+Join\+Mutex\char`\"{}. Ceci permet à d\textquotesingle{}autre thread d\textquotesingle{}aquérire ce verrou associé à ce thread. Un autre thread qui acquiert ce verrou signifie que ce thread est terminé. Termine le thread est détruit les structures associées. \end{DoxyCompactList}\item 
+int \hyperlink{userthread_8h_a10a4a24421d9d1faf002b79102c3b736}{do\+\_\+\+User\+Thread\+Join} (int tid)
+\begin{DoxyCompactList}\small\item\em met le \hyperlink{class_thread}{Thread} courrant (appelant) en attente jusqu\textquotesingle{}a ce que le \hyperlink{class_thread}{Thread} passer en paramètre se termine. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsubsection{Description détaillée}
+Permet la création et l\textquotesingle{}execution de thread utilisateurs. 
+
+
+
+\subsubsection{Documentation des fonctions}
+\hypertarget{userthread_8h_adb0b28b6a6da6819c0dbcfe85e69fdf7}{}\label{userthread_8h_adb0b28b6a6da6819c0dbcfe85e69fdf7} 
+\index{userthread.\+h@{userthread.\+h}!do\+\_\+\+User\+Thread\+Create@{do\+\_\+\+User\+Thread\+Create}}
+\index{do\+\_\+\+User\+Thread\+Create@{do\+\_\+\+User\+Thread\+Create}!userthread.\+h@{userthread.\+h}}
+\paragraph{\texorpdfstring{do\+\_\+\+User\+Thread\+Create()}{do\_UserThreadCreate()}}
+{\footnotesize\ttfamily int do\+\_\+\+User\+Thread\+Create (\begin{DoxyParamCaption}\item[{int}]{f,  }\item[{int}]{arg }\end{DoxyParamCaption})}
+
+
+
+Gère l\textquotesingle{}initialisation et la gestion d\textquotesingle{}un thread utilisateur incrémente le nombre de thread actuellement en cours d\textquotesingle{}exécution garanti la synchronisation des accès à la bitmap de l\textquotesingle{}espace des Threads Recherche un espace assez grand pour initialiser ce thread dans pile du thread courrant créé une structure avec les informations nécessaire pour lancer un thread (adresse de retour, paramètre utilisateur et adresse de la fonction utilisateur) effectu un appel à la fonction fork (class \hyperlink{class_thread}{Thread}), récupère le tid (du thread créé) retourner par fork pour le retourner à l\textquotesingle{}utilisateur. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em f} & Adresse de la fonction à executer \\
+\hline
+{\em arg} & Argument passé à cette fonction \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+Retourne le T\+ID du thread utilisateur créé 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em retourne} & -\/1 en cas d\textquotesingle{}erreur (pas assez d\textquotesingle{}espace disponible pour la création) Invalide un assert si l\textquotesingle{}on a pas pu trouver assez d\textquotesingle{}espace dans la bitmap représentant l\textquotesingle{}espace utilisé par threads une fois le test précédent réalisé. \\
+\hline
+\end{DoxyExceptions}
+
+
+Références Lock\+::\+Acquire(), Addr\+Space\+::\+Bind\+User\+Thread(), Semaphore\+::\+P(), Lock\+::\+Release(), Start\+User\+Thread(), Addr\+Space\+::\+Unbind\+User\+Thread(), et Semaphore\+::\+V().
+
+\hypertarget{userthread_8h_a202dac34b1d00aa37bfaca8121b9a59f}{}\label{userthread_8h_a202dac34b1d00aa37bfaca8121b9a59f} 
+\index{userthread.\+h@{userthread.\+h}!do\+\_\+\+User\+Thread\+Exit@{do\+\_\+\+User\+Thread\+Exit}}
+\index{do\+\_\+\+User\+Thread\+Exit@{do\+\_\+\+User\+Thread\+Exit}!userthread.\+h@{userthread.\+h}}
+\paragraph{\texorpdfstring{do\+\_\+\+User\+Thread\+Exit()}{do\_UserThreadExit()}}
+{\footnotesize\ttfamily void do\+\_\+\+User\+Thread\+Exit (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Supprime le thread courrant de la liste des thread actif. Ceci permet notament de pouvoir demander d\textquotesingle{}attendre un thread. Supprime le thread courrant du tableau des thread actif afin de libérer l\textquotesingle{}espace associé à ce thread utilisateur. Cette opération est protéger par un verrou décrémente le nombre de \hyperlink{class_thread}{Thread} actuel du système Libère le verrou \char`\"{}\+Thread\+Join\+Mutex\char`\"{}. Ceci permet à d\textquotesingle{}autre thread d\textquotesingle{}aquérire ce verrou associé à ce thread. Un autre thread qui acquiert ce verrou signifie que ce thread est terminé. Termine le thread est détruit les structures associées. 
+
+\begin{DoxyReturn}{Renvoie}
+ne retourne rien. 
+\end{DoxyReturn}
+
+
+Références Lock\+::\+Acquire(), Thread\+::get\+T\+I\+D(), Semaphore\+::\+P(), Lock\+::\+Release(), Addr\+Space\+::\+Unbind\+User\+Thread(), et Semaphore\+::\+V().
+
+\hypertarget{userthread_8h_a10a4a24421d9d1faf002b79102c3b736}{}\label{userthread_8h_a10a4a24421d9d1faf002b79102c3b736} 
+\index{userthread.\+h@{userthread.\+h}!do\+\_\+\+User\+Thread\+Join@{do\+\_\+\+User\+Thread\+Join}}
+\index{do\+\_\+\+User\+Thread\+Join@{do\+\_\+\+User\+Thread\+Join}!userthread.\+h@{userthread.\+h}}
+\paragraph{\texorpdfstring{do\+\_\+\+User\+Thread\+Join()}{do\_UserThreadJoin()}}
+{\footnotesize\ttfamily int do\+\_\+\+User\+Thread\+Join (\begin{DoxyParamCaption}\item[{int}]{tid }\end{DoxyParamCaption})}
+
+
+
+met le \hyperlink{class_thread}{Thread} courrant (appelant) en attente jusqu\textquotesingle{}a ce que le \hyperlink{class_thread}{Thread} passer en paramètre se termine. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em tid} & numéro du thread utilisateur à attendre. Ce paramètre doit être $>$ 0. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+Retourne -\/1 en cas d\textquotesingle{}erreur (jamais atteint) Retourne 1 si la fonction a attendu le thread avec succès (et permet au thread applant de continuer) Retourne 2 lorsque le \hyperlink{class_thread}{Thread} passé en paramètre est introuvable ( déjà terminé dans la plupars des cas ). Retourne 3 lorsque le \hyperlink{class_thread}{Thread} passé en paramètre est égal au thread appelant. 
+\end{DoxyReturn}
+
+
+Références Thread\+::get\+T\+I\+D(), Semaphore\+::\+P(), et Semaphore\+::\+V().
+

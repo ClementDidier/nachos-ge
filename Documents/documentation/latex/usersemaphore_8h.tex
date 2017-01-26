@@ -1,0 +1,120 @@
+\hypertarget{usersemaphore_8h}{}\subsection{Référence du fichier userprog/usersemaphore.h}
+\label{usersemaphore_8h}\index{userprog/usersemaphore.\+h@{userprog/usersemaphore.\+h}}
+
+
+fournit des primitives aux programmes utilisateurs pour la gestion des sémahores.  
+
+
+{\ttfamily \#include \char`\"{}synch.\+h\char`\"{}}\newline
+\subsubsection*{Fonctions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_semaphore}{Semaphore} $\ast$ \hyperlink{usersemaphore_8h_a3bf518af3a5022858f9a2c942fc92271}{do\+\_\+\+User\+Sem\+Create} (char $\ast$name, int nb)
+\begin{DoxyCompactList}\small\item\em créé une Sémaphore et retourne le pointeur vers le sémaphore. \end{DoxyCompactList}\item 
+void \hyperlink{usersemaphore_8h_a189bd5c83e35a8148025266587fea519}{do\+\_\+\+User\+SemP} (\hyperlink{class_semaphore}{Semaphore} $\ast$sem)
+\begin{DoxyCompactList}\small\item\em tente de prendre un jeton dans la semaphore passé en paramètre. Si aucun jeton n\textquotesingle{}est disponible alors met le thread courrant (demandeur) en attente. \end{DoxyCompactList}\item 
+void \hyperlink{usersemaphore_8h_abc470d8bc12e9fa2d8851f47f27a4a90}{do\+\_\+\+User\+SemV} (\hyperlink{class_semaphore}{Semaphore} $\ast$sem)
+\begin{DoxyCompactList}\small\item\em \char`\"{}\+Post\char`\"{} un jeton dans la sémaphore passé en paramètre. \end{DoxyCompactList}\item 
+void \hyperlink{usersemaphore_8h_a5bb01390dea8560cba4f3bc87dd1b165}{do\+\_\+\+User\+Sem\+Delete} (\hyperlink{class_semaphore}{Semaphore} $\ast$sem)
+\begin{DoxyCompactList}\small\item\em supprime la sémaphore passé en paramètre. Comportement indéfini en cas de double appel de cette fonction avec une même sémaphore. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsubsection{Description détaillée}
+fournit des primitives aux programmes utilisateurs pour la gestion des sémahores. 
+
+
+
+\subsubsection{Documentation des fonctions}
+\hypertarget{usersemaphore_8h_a3bf518af3a5022858f9a2c942fc92271}{}\label{usersemaphore_8h_a3bf518af3a5022858f9a2c942fc92271} 
+\index{usersemaphore.\+h@{usersemaphore.\+h}!do\+\_\+\+User\+Sem\+Create@{do\+\_\+\+User\+Sem\+Create}}
+\index{do\+\_\+\+User\+Sem\+Create@{do\+\_\+\+User\+Sem\+Create}!usersemaphore.\+h@{usersemaphore.\+h}}
+\paragraph{\texorpdfstring{do\+\_\+\+User\+Sem\+Create()}{do\_UserSemCreate()}}
+{\footnotesize\ttfamily \hyperlink{class_semaphore}{Semaphore}$\ast$ do\+\_\+\+User\+Sem\+Create (\begin{DoxyParamCaption}\item[{char $\ast$}]{name,  }\item[{int}]{nb }\end{DoxyParamCaption})}
+
+
+
+créé une Sémaphore et retourne le pointeur vers le sémaphore. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em name} & \+: le nom du sémaphore \\
+\hline
+{\em name} & \+: nb le nombre de jeton de départ \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+un pointeur vers le semaphore créé 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em invalide} & un assert si la semaphore créée est null. \\
+\hline
+\end{DoxyExceptions}
+\hypertarget{usersemaphore_8h_a5bb01390dea8560cba4f3bc87dd1b165}{}\label{usersemaphore_8h_a5bb01390dea8560cba4f3bc87dd1b165} 
+\index{usersemaphore.\+h@{usersemaphore.\+h}!do\+\_\+\+User\+Sem\+Delete@{do\+\_\+\+User\+Sem\+Delete}}
+\index{do\+\_\+\+User\+Sem\+Delete@{do\+\_\+\+User\+Sem\+Delete}!usersemaphore.\+h@{usersemaphore.\+h}}
+\paragraph{\texorpdfstring{do\+\_\+\+User\+Sem\+Delete()}{do\_UserSemDelete()}}
+{\footnotesize\ttfamily void do\+\_\+\+User\+Sem\+Delete (\begin{DoxyParamCaption}\item[{\hyperlink{class_semaphore}{Semaphore} $\ast$}]{sem }\end{DoxyParamCaption})}
+
+
+
+supprime la sémaphore passé en paramètre. Comportement indéfini en cas de double appel de cette fonction avec une même sémaphore. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em sem} & un pointeur vers une semaphore \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em invalide} & un assert si la semaphore passée en paramètre est null. \\
+\hline
+\end{DoxyExceptions}
+\hypertarget{usersemaphore_8h_a189bd5c83e35a8148025266587fea519}{}\label{usersemaphore_8h_a189bd5c83e35a8148025266587fea519} 
+\index{usersemaphore.\+h@{usersemaphore.\+h}!do\+\_\+\+User\+SemP@{do\+\_\+\+User\+SemP}}
+\index{do\+\_\+\+User\+SemP@{do\+\_\+\+User\+SemP}!usersemaphore.\+h@{usersemaphore.\+h}}
+\paragraph{\texorpdfstring{do\+\_\+\+User\+Sem\+P()}{do\_UserSemP()}}
+{\footnotesize\ttfamily void do\+\_\+\+User\+SemP (\begin{DoxyParamCaption}\item[{\hyperlink{class_semaphore}{Semaphore} $\ast$}]{sem }\end{DoxyParamCaption})}
+
+
+
+tente de prendre un jeton dans la semaphore passé en paramètre. Si aucun jeton n\textquotesingle{}est disponible alors met le thread courrant (demandeur) en attente. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em sem} & un pointeur vers une semaphore \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em invalide} & un assert si la semaphore passée en paramètre est null. \\
+\hline
+\end{DoxyExceptions}
+
+
+Références Semaphore\+::\+P().
+
+\hypertarget{usersemaphore_8h_abc470d8bc12e9fa2d8851f47f27a4a90}{}\label{usersemaphore_8h_abc470d8bc12e9fa2d8851f47f27a4a90} 
+\index{usersemaphore.\+h@{usersemaphore.\+h}!do\+\_\+\+User\+SemV@{do\+\_\+\+User\+SemV}}
+\index{do\+\_\+\+User\+SemV@{do\+\_\+\+User\+SemV}!usersemaphore.\+h@{usersemaphore.\+h}}
+\paragraph{\texorpdfstring{do\+\_\+\+User\+Sem\+V()}{do\_UserSemV()}}
+{\footnotesize\ttfamily void do\+\_\+\+User\+SemV (\begin{DoxyParamCaption}\item[{\hyperlink{class_semaphore}{Semaphore} $\ast$}]{sem }\end{DoxyParamCaption})}
+
+
+
+\char`\"{}\+Post\char`\"{} un jeton dans la sémaphore passé en paramètre. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em sem} & un pointeur vers une semaphore \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em invalide} & un assert si la semaphore passée en paramètre est null. \\
+\hline
+\end{DoxyExceptions}
+
+
+Références Semaphore\+::\+V().
+

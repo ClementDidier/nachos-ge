@@ -1,0 +1,124 @@
+\hypertarget{syscall_8h}{}\subsection{Référence du fichier userprog/syscall.h}
+\label{syscall_8h}\index{userprog/syscall.\+h@{userprog/syscall.\+h}}
+
+
+Nachos system call interface. These are Nachos kernel operations that can be invoked from user programs, by trapping to the kernel via the \char`\"{}syscall\char`\"{} instruction.  
+
+
+\subsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{syscall_8h_ab41e0251d1181d4d91b70a583a372ef2}{}\label{syscall_8h_ab41e0251d1181d4d91b70a583a372ef2} 
+\#define {\bfseries sem\+\_\+t}~void
+\item 
+\hypertarget{syscall_8h_a3b2aae4d6c1f1e8027a9fbcc49703a7c}{}\label{syscall_8h_a3b2aae4d6c1f1e8027a9fbcc49703a7c} 
+\#define {\bfseries M\+A\+X\+\_\+\+S\+E\+M\+\_\+\+N\+A\+M\+E\+\_\+\+S\+I\+ZE}~30
+\item 
+\hypertarget{syscall_8h_ab6a9f4e492f3216f5c61c4675801bedf}{}\label{syscall_8h_ab6a9f4e492f3216f5c61c4675801bedf} 
+\#define {\bfseries S\+C\+\_\+\+Halt}~0
+\item 
+\hypertarget{syscall_8h_a171374af0ffab79442015ddea69786c2}{}\label{syscall_8h_a171374af0ffab79442015ddea69786c2} 
+\#define {\bfseries S\+C\+\_\+\+Exit}~1
+\item 
+\hypertarget{syscall_8h_a021b6ef9e5f08a6d3a053ff25c4c0df2}{}\label{syscall_8h_a021b6ef9e5f08a6d3a053ff25c4c0df2} 
+\#define {\bfseries S\+C\+\_\+\+Exec}~2
+\item 
+\hypertarget{syscall_8h_aaed09f111d81b63c8bde339550abd076}{}\label{syscall_8h_aaed09f111d81b63c8bde339550abd076} 
+\#define {\bfseries S\+C\+\_\+\+Join}~3
+\item 
+\hypertarget{syscall_8h_af37f41c7a3a4f4a03170cee55e3bdad3}{}\label{syscall_8h_af37f41c7a3a4f4a03170cee55e3bdad3} 
+\#define {\bfseries S\+C\+\_\+\+Create}~4
+\item 
+\hypertarget{syscall_8h_a255286805d47cd6f92bebd07591e5b03}{}\label{syscall_8h_a255286805d47cd6f92bebd07591e5b03} 
+\#define {\bfseries S\+C\+\_\+\+Open}~5
+\item 
+\hypertarget{syscall_8h_a2ed7f17c7f089e2b5d3af1f6fc8eb9d9}{}\label{syscall_8h_a2ed7f17c7f089e2b5d3af1f6fc8eb9d9} 
+\#define {\bfseries S\+C\+\_\+\+Read}~6
+\item 
+\hypertarget{syscall_8h_abda43217eee0d3ad38d5a9dc378e173d}{}\label{syscall_8h_abda43217eee0d3ad38d5a9dc378e173d} 
+\#define {\bfseries S\+C\+\_\+\+Write}~7
+\item 
+\hypertarget{syscall_8h_acb19f3910e57cdd63dff1747435e2e5b}{}\label{syscall_8h_acb19f3910e57cdd63dff1747435e2e5b} 
+\#define {\bfseries S\+C\+\_\+\+Close}~8
+\item 
+\hypertarget{syscall_8h_a81ceab9b3f7ebd0b510e9c7af670785b}{}\label{syscall_8h_a81ceab9b3f7ebd0b510e9c7af670785b} 
+\#define {\bfseries S\+C\+\_\+\+Fork}~9
+\item 
+\hypertarget{syscall_8h_ac13724ee06fcba144c277c482cf4dd2a}{}\label{syscall_8h_ac13724ee06fcba144c277c482cf4dd2a} 
+\#define {\bfseries S\+C\+\_\+\+Yield}~10
+\item 
+\hypertarget{syscall_8h_a38d80e4a568d866c54e998e4e7f232bf}{}\label{syscall_8h_a38d80e4a568d866c54e998e4e7f232bf} 
+\#define {\bfseries S\+C\+\_\+\+Put\+Char}~11
+\item 
+\hypertarget{syscall_8h_a72a405cdacf79ed873be725e64d9b195}{}\label{syscall_8h_a72a405cdacf79ed873be725e64d9b195} 
+\#define {\bfseries S\+C\+\_\+\+Put\+String}~12
+\item 
+\hypertarget{syscall_8h_a277f8853bae1f93b67e3d12e19da57e9}{}\label{syscall_8h_a277f8853bae1f93b67e3d12e19da57e9} 
+\#define {\bfseries S\+C\+\_\+\+Get\+Char}~13
+\item 
+\hypertarget{syscall_8h_a9c0fc42720832f4a59fe41b1d7625343}{}\label{syscall_8h_a9c0fc42720832f4a59fe41b1d7625343} 
+\#define {\bfseries S\+C\+\_\+\+Get\+String}~14
+\item 
+\hypertarget{syscall_8h_a7f9b78fa0deed48aa2572ea304f27e08}{}\label{syscall_8h_a7f9b78fa0deed48aa2572ea304f27e08} 
+\#define {\bfseries S\+C\+\_\+\+Get\+Int}~15
+\item 
+\hypertarget{syscall_8h_ae74c882394caef224c4d4e9235418def}{}\label{syscall_8h_ae74c882394caef224c4d4e9235418def} 
+\#define {\bfseries S\+C\+\_\+\+Put\+Int}~16
+\item 
+\hypertarget{syscall_8h_ad69ad515c139f64e5f9d4b1e6cac96ce}{}\label{syscall_8h_ad69ad515c139f64e5f9d4b1e6cac96ce} 
+\#define {\bfseries S\+C\+\_\+\+User\+Thread\+Create}~17
+\item 
+\hypertarget{syscall_8h_a1febb6be562dff6f27651304b99c8d32}{}\label{syscall_8h_a1febb6be562dff6f27651304b99c8d32} 
+\#define {\bfseries S\+C\+\_\+\+User\+Thread\+Exit}~18
+\item 
+\hypertarget{syscall_8h_a20dd10fe088036524240c88375085490}{}\label{syscall_8h_a20dd10fe088036524240c88375085490} 
+\#define {\bfseries S\+C\+\_\+\+User\+Thread\+Join}~19
+\item 
+\hypertarget{syscall_8h_ae778c49a73dc0008255bcca9d39d7534}{}\label{syscall_8h_ae778c49a73dc0008255bcca9d39d7534} 
+\#define {\bfseries S\+C\+\_\+\+User\+Sem\+Create}~20
+\item 
+\hypertarget{syscall_8h_a775e925690109b6e699d27bbbe9d23d9}{}\label{syscall_8h_a775e925690109b6e699d27bbbe9d23d9} 
+\#define {\bfseries S\+C\+\_\+\+User\+SemP}~21
+\item 
+\hypertarget{syscall_8h_acdc76be20d384b8ab512b28cc559d1d3}{}\label{syscall_8h_acdc76be20d384b8ab512b28cc559d1d3} 
+\#define {\bfseries S\+C\+\_\+\+User\+SemV}~22
+\item 
+\hypertarget{syscall_8h_aaab2b7260acdbebbb0179c975f3eb243}{}\label{syscall_8h_aaab2b7260acdbebbb0179c975f3eb243} 
+\#define {\bfseries S\+C\+\_\+\+User\+Sem\+Delete}~23
+\item 
+\hypertarget{syscall_8h_a0b370ee799800ff35a3e6cdfcfd4ee47}{}\label{syscall_8h_a0b370ee799800ff35a3e6cdfcfd4ee47} 
+\#define {\bfseries S\+C\+\_\+\+Fork\+Exec}~24
+\item 
+\hypertarget{syscall_8h_a4621fd9a43faa9fdbc13527c2aff9cce}{}\label{syscall_8h_a4621fd9a43faa9fdbc13527c2aff9cce} 
+\#define {\bfseries S\+C\+\_\+\+Assert}~25
+\item 
+\hypertarget{syscall_8h_a3b87752f0ae8467414f88881473d6f13}{}\label{syscall_8h_a3b87752f0ae8467414f88881473d6f13} 
+\#define {\bfseries S\+C\+\_\+\+Simple\+Shell\+Proc\+Join}~26
+\item 
+\hypertarget{syscall_8h_a4430e43f81948ce9b9a8ca0ed7e68142}{}\label{syscall_8h_a4430e43f81948ce9b9a8ca0ed7e68142} 
+\#define {\bfseries S\+C\+\_\+\+Get\+Char\+Int}~27
+\item 
+\hypertarget{syscall_8h_a19d97f74eced6b80e8614e570e560cf2}{}\label{syscall_8h_a19d97f74eced6b80e8614e570e560cf2} 
+\#define {\bfseries S\+C\+\_\+\+Mkdir}~28
+\item 
+\hypertarget{syscall_8h_a0b1dc6b28d9ad6ea3da7153918123f41}{}\label{syscall_8h_a0b1dc6b28d9ad6ea3da7153918123f41} 
+\#define {\bfseries S\+C\+\_\+\+List}~29
+\item 
+\hypertarget{syscall_8h_a3a1503d6586cbbf27d670621ef1eab86}{}\label{syscall_8h_a3a1503d6586cbbf27d670621ef1eab86} 
+\#define {\bfseries S\+C\+\_\+\+Change\+Directory}~30
+\item 
+\hypertarget{syscall_8h_a3461bf2ec44b9ede965807246b478b12}{}\label{syscall_8h_a3461bf2ec44b9ede965807246b478b12} 
+\#define {\bfseries S\+C\+\_\+\+Rm\+Dir}~31
+\item 
+\hypertarget{syscall_8h_a70b1dc1236bb0aeea8ea6b2a14d86eb8}{}\label{syscall_8h_a70b1dc1236bb0aeea8ea6b2a14d86eb8} 
+\#define {\bfseries S\+C\+\_\+\+Remove}~32
+\item 
+\hypertarget{syscall_8h_a4ab28eda6619312eec7c6fe5f0fad75d}{}\label{syscall_8h_a4ab28eda6619312eec7c6fe5f0fad75d} 
+\#define {\bfseries S\+C\+\_\+\+Set\+Cursor}~33
+\end{DoxyCompactItemize}
+
+
+\subsubsection{Description détaillée}
+Nachos system call interface. These are Nachos kernel operations that can be invoked from user programs, by trapping to the kernel via the \char`\"{}syscall\char`\"{} instruction. 
+
+This file is included by user programs and by the Nachos kernel. 

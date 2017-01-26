@@ -1,0 +1,22 @@
+\hypertarget{userpage0_8c}{}\subsection{Référence du fichier test/userpage0.c}
+\label{userpage0_8c}\index{test/userpage0.\+c@{test/userpage0.\+c}}
+
+
+Créer 3 threads, chacun fera appel a la fonction thread\+Handler et lui passera en paramètre un caractère qu\textquotesingle{}il affichera 10 fois. On doit donc se retrouver dans la console avec 10 $\ast$ a, 10 $\ast$ b et 10 $\ast$ c répartis de manière plutôt aléatoirement (selon le scheduler).  
+
+
+{\ttfamily \#include \char`\"{}syscall.\+h\char`\"{}}\newline
+\subsubsection*{Fonctions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{userpage0_8c_ada5fdb65751df17733f4b974ff557843}{}\label{userpage0_8c_ada5fdb65751df17733f4b974ff557843} 
+void {\bfseries thread\+Handler} (void $\ast$arg)
+\item 
+\hypertarget{userpage0_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}{}\label{userpage0_8c_ae66f6b31b5ad750f1fe042a706a4e3d4} 
+int {\bfseries main} ()
+\end{DoxyCompactItemize}
+
+
+\subsubsection{Description détaillée}
+Créer 3 threads, chacun fera appel a la fonction thread\+Handler et lui passera en paramètre un caractère qu\textquotesingle{}il affichera 10 fois. On doit donc se retrouver dans la console avec 10 $\ast$ a, 10 $\ast$ b et 10 $\ast$ c répartis de manière plutôt aléatoirement (selon le scheduler). 
+

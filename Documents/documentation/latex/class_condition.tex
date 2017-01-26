@@ -1,0 +1,119 @@
+\hypertarget{class_condition}{}\subsection{Référence de la classe Condition}
+\label{class_condition}\index{Condition@{Condition}}
+\subsubsection*{Fonctions membres publiques}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_condition_a518a2676e2b33b0481f185d0f942c9c1}{Condition} (const char $\ast$debug\+Name)
+\begin{DoxyCompactList}\small\item\em créé une list pour la file d\textquotesingle{}attente et initialise la condition. \end{DoxyCompactList}\item 
+\hypertarget{class_condition_ab42f6d2dfb2d0de4bed4ed5032d4a8fc}{}\label{class_condition_ab42f6d2dfb2d0de4bed4ed5032d4a8fc} 
+\hyperlink{class_condition_ab42f6d2dfb2d0de4bed4ed5032d4a8fc}{$\sim$\+Condition} ()
+\begin{DoxyCompactList}\small\item\em détruit la liste d\textquotesingle{}attente et l\textquotesingle{}objet condition On assume que la condition n\textquotesingle{}est plus utilisé \end{DoxyCompactList}\item 
+\hypertarget{class_condition_ad99dd8a0da8377b1c1082d7ff820eaf7}{}\label{class_condition_ad99dd8a0da8377b1c1082d7ff820eaf7} 
+const char $\ast$ {\bfseries get\+Name} ()
+\item 
+void \hyperlink{class_condition_aa0442520888bd371ce07d07c0a4313a7}{Wait} (\hyperlink{class_lock}{Lock} $\ast$condition\+Lock)
+\begin{DoxyCompactList}\small\item\em vérifie si des threads sont en attente dans la file, si aucun n\textquotesingle{}est dans la file, alors on peut continuer, sinon on place le thread dans la file d\textquotesingle{}attente. le lock doit être acqui par le thread courrant \end{DoxyCompactList}\item 
+void \hyperlink{class_condition_ada25a70d161b7dc9b81eaad0ef66d91c}{Signal} (\hyperlink{class_lock}{Lock} $\ast$condition\+Lock)
+\begin{DoxyCompactList}\small\item\em Libère le lock condition\+Lock et réveil le premier \hyperlink{class_thread}{Thread} (instance de \hyperlink{class_thread}{Thread}) de la file d\textquotesingle{}attente (list L\+Threads) \end{DoxyCompactList}\item 
+void \hyperlink{class_condition_aefae94b3f9be40a09df667e63a4bdab7}{Broadcast} (\hyperlink{class_lock}{Lock} $\ast$condition\+Lock)
+\begin{DoxyCompactList}\small\item\em Libère le lock condition\+Lock et réveil tout les \hyperlink{class_thread}{Thread} (instance de \hyperlink{class_thread}{Thread}) mis en attente dans la condition. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsubsection*{Attributs privés}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_condition_a8938b4b1f026d03713a654857b39e495}{}\label{class_condition_a8938b4b1f026d03713a654857b39e495} 
+const char $\ast$ {\bfseries name}
+\item 
+\hypertarget{class_condition_ae402abf0d4bf9a250c2ca9c73f1aabb3}{}\label{class_condition_ae402abf0d4bf9a250c2ca9c73f1aabb3} 
+\hyperlink{class_list}{List} $\ast$ {\bfseries L\+Threads}
+\end{DoxyCompactItemize}
+
+
+\subsubsection{Documentation des constructeurs et destructeur}
+\hypertarget{class_condition_a518a2676e2b33b0481f185d0f942c9c1}{}\label{class_condition_a518a2676e2b33b0481f185d0f942c9c1} 
+\index{Condition@{Condition}!Condition@{Condition}}
+\index{Condition@{Condition}!Condition@{Condition}}
+\paragraph{\texorpdfstring{Condition()}{Condition()}}
+{\footnotesize\ttfamily Condition\+::\+Condition (\begin{DoxyParamCaption}\item[{const char $\ast$}]{debug\+Name }\end{DoxyParamCaption})}
+
+
+
+créé une list pour la file d\textquotesingle{}attente et initialise la condition. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em debug\+Name} & nom de la condition pour debug. \\
+\hline
+\end{DoxyParams}
+
+
+\subsubsection{Documentation des fonctions membres}
+\hypertarget{class_condition_aefae94b3f9be40a09df667e63a4bdab7}{}\label{class_condition_aefae94b3f9be40a09df667e63a4bdab7} 
+\index{Condition@{Condition}!Broadcast@{Broadcast}}
+\index{Broadcast@{Broadcast}!Condition@{Condition}}
+\paragraph{\texorpdfstring{Broadcast()}{Broadcast()}}
+{\footnotesize\ttfamily void Condition\+::\+Broadcast (\begin{DoxyParamCaption}\item[{\hyperlink{class_lock}{Lock} $\ast$}]{condition\+Lock }\end{DoxyParamCaption})}
+
+
+
+Libère le lock condition\+Lock et réveil tout les \hyperlink{class_thread}{Thread} (instance de \hyperlink{class_thread}{Thread}) mis en attente dans la condition. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em condition\+Lock} & lock(mutex) asscié à la condition. Doit être obtenu par le thread appelant. \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em invalide} & un assert si condition\+Lock n\textquotesingle{}est pas obtenu par le thread courrant. \\
+\hline
+\end{DoxyExceptions}
+\hypertarget{class_condition_ada25a70d161b7dc9b81eaad0ef66d91c}{}\label{class_condition_ada25a70d161b7dc9b81eaad0ef66d91c} 
+\index{Condition@{Condition}!Signal@{Signal}}
+\index{Signal@{Signal}!Condition@{Condition}}
+\paragraph{\texorpdfstring{Signal()}{Signal()}}
+{\footnotesize\ttfamily void Condition\+::\+Signal (\begin{DoxyParamCaption}\item[{\hyperlink{class_lock}{Lock} $\ast$}]{condition\+Lock }\end{DoxyParamCaption})}
+
+
+
+Libère le lock condition\+Lock et réveil le premier \hyperlink{class_thread}{Thread} (instance de \hyperlink{class_thread}{Thread}) de la file d\textquotesingle{}attente (list L\+Threads) 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em condition\+Lock} & lock(mutex) asscié à la condition. Doit être obtenu par le thread appelant. \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em invalide} & un assert si condition\+Lock n\textquotesingle{}est pas obtenu par le thread courrant. \\
+\hline
+\end{DoxyExceptions}
+\hypertarget{class_condition_aa0442520888bd371ce07d07c0a4313a7}{}\label{class_condition_aa0442520888bd371ce07d07c0a4313a7} 
+\index{Condition@{Condition}!Wait@{Wait}}
+\index{Wait@{Wait}!Condition@{Condition}}
+\paragraph{\texorpdfstring{Wait()}{Wait()}}
+{\footnotesize\ttfamily void Condition\+::\+Wait (\begin{DoxyParamCaption}\item[{\hyperlink{class_lock}{Lock} $\ast$}]{condition\+Lock }\end{DoxyParamCaption})}
+
+
+
+vérifie si des threads sont en attente dans la file, si aucun n\textquotesingle{}est dans la file, alors on peut continuer, sinon on place le thread dans la file d\textquotesingle{}attente. le lock doit être acqui par le thread courrant 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em condition\+Lock} & lock(mutex) asscié à la condition. Doit être obtenu par le thread appelant. \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em invalide} & un assert si condition\+Lock n\textquotesingle{}est pas obtenu par le thread courrant. \\
+\hline
+\end{DoxyExceptions}
+
+
+Références Lock\+::\+Acquire(), Lock\+::is\+Held\+By\+Current\+Thread(), et Lock\+::\+Release().
+
+
+
+La documentation de cette classe a été générée à partir des fichiers suivants \+:\begin{DoxyCompactItemize}
+\item 
+threads/synch.\+h\item 
+threads/\hyperlink{synch_8cc}{synch.\+cc}\end{DoxyCompactItemize}

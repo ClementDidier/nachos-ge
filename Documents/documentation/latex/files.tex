@@ -1,0 +1,64 @@
+\subsection{Liste des fichiers}
+Liste de tous les fichiers documentés avec une brève description \+:\begin{DoxyCompactList}
+\item\contentsline{section}{bin/{\bfseries coff.\+h} }{\pageref{coff_8h}}{}
+\item\contentsline{section}{bin/{\bfseries encode.\+h} }{\pageref{encode_8h}}{}
+\item\contentsline{section}{bin/{\bfseries instr.\+h} }{\pageref{instr_8h}}{}
+\item\contentsline{section}{bin/{\bfseries int.\+h} }{\pageref{int_8h}}{}
+\item\contentsline{section}{bin/{\bfseries noff.\+h} }{\pageref{noff_8h}}{}
+\item\contentsline{section}{filesys/\hyperlink{directory_8cc}{directory.\+cc} \\*The directory is a table of fixed length entries; each entry represents a single file, and contains the file name, and the location of the file header on disk. The fixed size of each directory entry means that we have the restriction of a fixed maximum size for file names }{\pageref{directory_8cc}}{}
+\item\contentsline{section}{filesys/\hyperlink{directory_8h}{directory.\+h} \\*A directory is a table of pairs\+: $<$file name, sector \#$>$, giving the name of each file in the directory, and where to find its file header (the data structure describing where to find the file\textquotesingle{}s data blocks) on disk }{\pageref{directory_8h}}{}
+\item\contentsline{section}{filesys/\hyperlink{filehdr_8cc}{filehdr.\+cc} \\*The file header is used to locate where on disk the file\textquotesingle{}s data is stored. We implement this as a fixed size table of pointers -- each entry in the table points to the disk sector containing that portion of the file data (in other words, there are no indirect or doubly indirect blocks). The table size is chosen so that the file header will be just big enough to fit in one disk sector, Unlike in a real system, we do not keep track of file permissions, ownership, last modification date, etc., in the file header }{\pageref{filehdr_8cc}}{}
+\item\contentsline{section}{filesys/\hyperlink{filehdr_8h}{filehdr.\+h} \\*A file header describes where on disk to find the data in a file, along with other information about the file (for instance, its length, owner, etc.) }{\pageref{filehdr_8h}}{}
+\item\contentsline{section}{filesys/\hyperlink{filemap_8cc}{filemap.\+cc} \\*Gère les fichiers ouverts dans le systeme }{\pageref{filemap_8cc}}{}
+\item\contentsline{section}{filesys/\hyperlink{filemap_8h}{filemap.\+h} \\*Gère les fichiers ouverts dans le system }{\pageref{filemap_8h}}{}
+\item\contentsline{section}{filesys/\hyperlink{filesys_8h}{filesys.\+h} \\*Implemente des fonctions pour la gestion des fichiers }{\pageref{filesys_8h}}{}
+\item\contentsline{section}{filesys/{\bfseries openfile.\+h} }{\pageref{openfile_8h}}{}
+\item\contentsline{section}{filesys/{\bfseries synchdisk.\+h} }{\pageref{synchdisk_8h}}{}
+\item\contentsline{section}{machine/{\bfseries console.\+h} }{\pageref{console_8h}}{}
+\item\contentsline{section}{machine/{\bfseries disk.\+h} }{\pageref{disk_8h}}{}
+\item\contentsline{section}{machine/{\bfseries interrupt.\+h} }{\pageref{interrupt_8h}}{}
+\item\contentsline{section}{machine/{\bfseries machine.\+h} }{\pageref{machine_8h}}{}
+\item\contentsline{section}{machine/{\bfseries mipssim.\+h} }{\pageref{mipssim_8h}}{}
+\item\contentsline{section}{machine/{\bfseries network.\+h} }{\pageref{network_8h}}{}
+\item\contentsline{section}{machine/{\bfseries stats.\+h} }{\pageref{stats_8h}}{}
+\item\contentsline{section}{machine/{\bfseries sysdep.\+h} }{\pageref{sysdep_8h}}{}
+\item\contentsline{section}{machine/{\bfseries timer.\+h} }{\pageref{timer_8h}}{}
+\item\contentsline{section}{machine/{\bfseries translate.\+h} }{\pageref{translate_8h}}{}
+\item\contentsline{section}{network/{\bfseries post.\+h} }{\pageref{post_8h}}{}
+\item\contentsline{section}{network/{\bfseries reliablenet.\+h} }{\pageref{reliablenet_8h}}{}
+\item\contentsline{section}{test/\hyperlink{asynchstringtest_8c}{asynchstringtest.\+c} \\*Lance 10 thread utilisateur qui affiche une première ou une seconde chaine de caractère de façon contigüe (pas d\textquotesingle{}entrelacement) }{\pageref{asynchstringtest_8c}}{}
+\item\contentsline{section}{test/\hyperlink{forktest_8c}{forktest.\+c} \\*Lance 10 programmes utilisateur dans de nouveaux processus }{\pageref{forktest_8c}}{}
+\item\contentsline{section}{test/\hyperlink{fsshell_8c}{fsshell.\+c} \\*Affiche un shell pour le système de fichier permettant des opérations basique sur les fichiers/repertoire Ce fichier doit être copier sur le système de fichier nachos et il sera nécessaire de lancer nachos avec le flavor userprog-\/fs }{\pageref{fsshell_8c}}{}
+\item\contentsline{section}{test/\hyperlink{halt_8c}{halt.\+c} \\*Effectue quelque opérations basiques et effectu un appel système halt() }{\pageref{halt_8c}}{}
+\item\contentsline{section}{test/\hyperlink{inttest_8c}{inttest.\+c} \\*Demande à l\textquotesingle{}utilisateur d\textquotesingle{}entrer un int et l\textquotesingle{}affiche, permet de tester les appels systèmes sur la console get\+C\+Har\+Int, Get\+Int et Put\+Int }{\pageref{inttest_8c}}{}
+\item\contentsline{section}{test/\hyperlink{putchar_8c}{putchar.\+c} \\*Affiche une série de 5 caractère puis demande un caractère et l\textquotesingle{}affiche. Permet de tester les syscall getchar et putchar }{\pageref{putchar_8c}}{}
+\item\contentsline{section}{test/\hyperlink{putchartest_8c}{putchartest.\+c} \\*Affiche les caractères de 47 à 127 sur la table A\+S\+C\+II grace à Put\+Char }{\pageref{putchartest_8c}}{}
+\item\contentsline{section}{test/\hyperlink{semaphore_8c}{semaphore.\+c} \\*Situation de producteur/consomateur. On créer 2 consomateur qui affichent le contenu d\textquotesingle{}un même buffer et un producteur qui rempli ce buffer avec des caractères de la table A\+S\+C\+II. Le buffer est protégé avec des sémaphores, de la même façon que la situation de producteur/consomateur vu en cours }{\pageref{semaphore_8c}}{}
+\item\contentsline{section}{test/\hyperlink{shell_8c}{shell.\+c} \\*Affiche un shell qui permet de lancer d\textquotesingle{}autre programme utilisateur. Ne fonctionne pas sur le système de fichier }{\pageref{shell_8c}}{}
+\item\contentsline{section}{test/\hyperlink{stringtest_8c}{stringtest.\+c} \\*Récupère des données de l\textquotesingle{}utilisateur via Get\+Int et affiche un (ou plusieurs) train(s) grace a l\textquotesingle{}appel de Put\+String La vitesse des train est très dépendante de la vitesse C\+PU (n\textquotesingle{}ayant pas d\textquotesingle{}horloge interne).. }{\pageref{stringtest_8c}}{}
+\item\contentsline{section}{test/\hyperlink{tetris_8c}{tetris.\+c} \\*Permet de tester l\textquotesingle{}utilisation de la console (get char, get string, put string etc.), la gestion et la synchronisation des threads utilisateurs, les semaphores utilisateurs. Permet aussi de jouer au tetris (note il est possible d\textquotesingle{}entrer jusqu\textquotesingle{}a 2 fonctions de déplacement, par exemple 1+2+enter vas faire aller la pièce à gauche puis va la faire pivoter) }{\pageref{tetris_8c}}{}
+\item\contentsline{section}{test/\hyperlink{userpage0_8c}{userpage0.\+c} \\*Créer 3 threads, chacun fera appel a la fonction thread\+Handler et lui passera en paramètre un caractère qu\textquotesingle{}il affichera 10 fois. On doit donc se retrouver dans la console avec 10 $\ast$ a, 10 $\ast$ b et 10 $\ast$ c répartis de manière plutôt aléatoirement (selon le scheduler) }{\pageref{userpage0_8c}}{}
+\item\contentsline{section}{threads/{\bfseries bool.\+h} }{\pageref{bool_8h}}{}
+\item\contentsline{section}{threads/{\bfseries copyright.\+h} }{\pageref{copyright_8h}}{}
+\item\contentsline{section}{threads/{\bfseries list.\+h} }{\pageref{list_8h}}{}
+\item\contentsline{section}{threads/{\bfseries scheduler.\+h} }{\pageref{scheduler_8h}}{}
+\item\contentsline{section}{threads/{\bfseries switch.\+h} }{\pageref{switch_8h}}{}
+\item\contentsline{section}{threads/\hyperlink{synch_8cc}{synch.\+cc} \\*Implémente des structures de synchronisation (lock,condition et sémaphore) }{\pageref{synch_8cc}}{}
+\item\contentsline{section}{threads/{\bfseries synch.\+h} }{\pageref{synch_8h}}{}
+\item\contentsline{section}{threads/{\bfseries synchlist.\+h} }{\pageref{synchlist_8h}}{}
+\item\contentsline{section}{threads/{\bfseries system.\+h} }{\pageref{system_8h}}{}
+\item\contentsline{section}{threads/{\bfseries thread.\+h} }{\pageref{thread_8h}}{}
+\item\contentsline{section}{threads/{\bfseries utility.\+h} }{\pageref{utility_8h}}{}
+\item\contentsline{section}{userprog/\hyperlink{addrspace_8h}{addrspace.\+h} \\*Structures de données pour l\textquotesingle{}espace d\textquotesingle{}addressage utilisateur }{\pageref{addrspace_8h}}{}
+\item\contentsline{section}{userprog/{\bfseries bitmap.\+h} }{\pageref{bitmap_8h}}{}
+\item\contentsline{section}{userprog/\hyperlink{exception_8cc}{exception.\+cc} \\*Gestion des syscalls }{\pageref{exception_8cc}}{}
+\item\contentsline{section}{userprog/{\bfseries fork.\+h} }{\pageref{fork_8h}}{}
+\item\contentsline{section}{userprog/{\bfseries frameprovider.\+h} }{\pageref{frameprovider_8h}}{}
+\item\contentsline{section}{userprog/\hyperlink{_izi_assert_8h}{Izi\+Assert.\+h} \\*I\+Z\+I\+\_\+\+A\+S\+S\+E\+RT }{\pageref{_izi_assert_8h}}{}
+\item\contentsline{section}{userprog/\hyperlink{synchconsole_8cc}{synchconsole.\+cc} \\*Émulation d\textquotesingle{}une console }{\pageref{synchconsole_8cc}}{}
+\item\contentsline{section}{userprog/\hyperlink{synchconsole_8h}{synchconsole.\+h} \\*Émulation d\textquotesingle{}une console }{\pageref{synchconsole_8h}}{}
+\item\contentsline{section}{userprog/\hyperlink{syscall_8h}{syscall.\+h} \\*Nachos system call interface. These are Nachos kernel operations that can be invoked from user programs, by trapping to the kernel via the \char`\"{}syscall\char`\"{} instruction }{\pageref{syscall_8h}}{}
+\item\contentsline{section}{userprog/\hyperlink{usersemaphore_8h}{usersemaphore.\+h} \\*Fournit des primitives aux programmes utilisateurs pour la gestion des sémahores }{\pageref{usersemaphore_8h}}{}
+\item\contentsline{section}{userprog/\hyperlink{userthread_8cc}{userthread.\+cc} \\*Permet la création et l\textquotesingle{}execution de thread utilisateurs }{\pageref{userthread_8cc}}{}
+\item\contentsline{section}{userprog/\hyperlink{userthread_8h}{userthread.\+h} \\*Permet la création et l\textquotesingle{}execution de thread utilisateurs }{\pageref{userthread_8h}}{}
+\end{DoxyCompactList}

@@ -1,0 +1,53 @@
+\hypertarget{addrspace_8h}{}\subsection{Référence du fichier userprog/addrspace.h}
+\label{addrspace_8h}\index{userprog/addrspace.\+h@{userprog/addrspace.\+h}}
+
+
+Structures de données pour l\textquotesingle{}espace d\textquotesingle{}addressage utilisateur.  
+
+
+{\ttfamily \#include \char`\"{}copyright.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}filesys.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}list.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}synch.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}thread.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}machine.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}bitmap.\+h\char`\"{}}\newline
+\subsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structcompteur_verrou}{compteur\+Verrou}
+\item 
+class \hyperlink{class_addr_space}{Addr\+Space}
+\end{DoxyCompactItemize}
+\subsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{addrspace_8h_a7f75893a4e3fe202253c015a4b75a1cc}{}\label{addrspace_8h_a7f75893a4e3fe202253c015a4b75a1cc} 
+\#define {\bfseries User\+Stack\+Size}~1024
+\item 
+\hypertarget{addrspace_8h_a569e2cc0c31abd1084e147881aae3d4a}{}\label{addrspace_8h_a569e2cc0c31abd1084e147881aae3d4a} 
+\#define {\bfseries no\+Thread\+Join\+Found}~1
+\item 
+\hypertarget{addrspace_8h_a317719d08d1b64f0d115c2f4da1beeeb}{}\label{addrspace_8h_a317719d08d1b64f0d115c2f4da1beeeb} 
+\#define {\bfseries no\+Mutex\+Join\+Found}~2
+\item 
+\hypertarget{addrspace_8h_a4d46105465ab4a54a952b21ddd2bad71}{}\label{addrspace_8h_a4d46105465ab4a54a952b21ddd2bad71} 
+\#define {\bfseries success\+Wait}~3
+\item 
+\hypertarget{addrspace_8h_a1fc9387f2ba1497245ec38457f783d25}{}\label{addrspace_8h_a1fc9387f2ba1497245ec38457f783d25} 
+\#define {\bfseries struct\+Compteur\+Wase\+Deleted}~4
+\item 
+\hypertarget{addrspace_8h_adce218b435e03566aa4b73607a6dcb96}{}\label{addrspace_8h_adce218b435e03566aa4b73607a6dcb96} 
+\#define {\bfseries struct\+Compteur\+Not\+Found}~1;
+\item 
+\hypertarget{addrspace_8h_ae952b8d74619c283cba374a84b3047ed}{}\label{addrspace_8h_ae952b8d74619c283cba374a84b3047ed} 
+\#define {\bfseries struct\+Compteur\+In\+Use}~2;
+\item 
+\hypertarget{addrspace_8h_a9988ada28f6da53316b782bdb3f2e861}{}\label{addrspace_8h_a9988ada28f6da53316b782bdb3f2e861} 
+\#define {\bfseries Max\+Thread}~5
+\end{DoxyCompactItemize}
+
+
+\subsubsection{Description détaillée}
+Structures de données pour l\textquotesingle{}espace d\textquotesingle{}addressage utilisateur. 
+

@@ -1,0 +1,155 @@
+\hypertarget{class_file_map}{}\subsection{Référence de la classe File\+Map}
+\label{class_file_map}\index{File\+Map@{File\+Map}}
+\subsubsection*{Fonctions membres publiques}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_open_file}{Open\+File} $\ast$ \hyperlink{class_file_map_acf17cb5b602e4139ed3d30c11e11751f}{Add} (int key, \hyperlink{class_open_file}{Open\+File} $\ast$value)
+\begin{DoxyCompactList}\small\item\em Ajoute un \hyperlink{class_open_file}{Open\+File} a la table des fichiers ouverts, qui a pour secteur key. \end{DoxyCompactList}\item 
+bool \hyperlink{class_file_map_ab6d2e0d0c522ed4f6bcd9c7788db8ac5}{Delete} (int key)
+\begin{DoxyCompactList}\small\item\em Supprime un fichier de la table des fichiers ouverts. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsubsection*{Attributs publics statiques}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_file_map_af5bd9ace733c982f93ab41ab482d90d0}{}\label{class_file_map_af5bd9ace733c982f93ab41ab482d90d0} 
+static const int \hyperlink{class_file_map_af5bd9ace733c982f93ab41ab482d90d0}{map\+\_\+size} = 10
+\begin{DoxyCompactList}\small\item\em Nombre maximal de fichier ouvert dans le system et par thread. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsubsection*{Fonctions membres privées}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_file_map_a2bc0f5e08a5fd6d715063429f4649071}{}\label{class_file_map_a2bc0f5e08a5fd6d715063429f4649071} 
+int {\bfseries Find} (int key)
+\item 
+int \hyperlink{class_file_map_aead6784e56bc36eedd7aa16af522cb6e}{Find\+Place} ()
+\begin{DoxyCompactList}\small\item\em Trouve un fichier déjà présent dans le system de fichier ouverts. \end{DoxyCompactList}\item 
+bool \hyperlink{class_file_map_abd72d5b1fe0d70f1250bbde70773af20}{is\+In\+Thread} (\hyperlink{class_open_file}{Open\+File} $\ast$of, \hyperlink{class_thread}{Thread} $\ast$cr)
+\begin{DoxyCompactList}\small\item\em Fonction interne qui définit si un fichier ouvert appartient au thread qui essaye de l\textquotesingle{}ouvrir / le fermer. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsubsection*{Attributs privés}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_file_map_a05268c86590f56c99aa67e320dcc5a8f}{}\label{class_file_map_a05268c86590f56c99aa67e320dcc5a8f} 
+\hyperlink{class_lock}{Lock} $\ast$ \hyperlink{class_file_map_a05268c86590f56c99aa67e320dcc5a8f}{table\+Lock}
+\begin{DoxyCompactList}\small\item\em protège l\textquotesingle{}accès a la table \end{DoxyCompactList}\item 
+\hypertarget{class_file_map_a7b03ef9b23dbecbc48124f1d66555cb2}{}\label{class_file_map_a7b03ef9b23dbecbc48124f1d66555cb2} 
+int \hyperlink{class_file_map_a7b03ef9b23dbecbc48124f1d66555cb2}{table} \mbox{[}\hyperlink{class_file_map_af5bd9ace733c982f93ab41ab482d90d0}{map\+\_\+size}\mbox{]}\mbox{[}2\mbox{]}
+\begin{DoxyCompactList}\small\item\em table des fichier ouverts et des thread les possédant \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsubsection{Documentation des fonctions membres}
+\hypertarget{class_file_map_acf17cb5b602e4139ed3d30c11e11751f}{}\label{class_file_map_acf17cb5b602e4139ed3d30c11e11751f} 
+\index{File\+Map@{File\+Map}!Add@{Add}}
+\index{Add@{Add}!File\+Map@{File\+Map}}
+\paragraph{\texorpdfstring{Add()}{Add()}}
+{\footnotesize\ttfamily \hyperlink{class_open_file}{Open\+File} $\ast$ File\+Map\+::\+Add (\begin{DoxyParamCaption}\item[{int}]{key,  }\item[{\hyperlink{class_open_file}{Open\+File} $\ast$}]{value }\end{DoxyParamCaption})}
+
+
+
+Ajoute un \hyperlink{class_open_file}{Open\+File} a la table des fichiers ouverts, qui a pour secteur key. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em key} & Secteur du fichier à supprimer \\
+\hline
+{\em value} & \hyperlink{class_open_file}{Open\+File} qui doit être inséré dans la table \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+Retourne l\textquotesingle{}\hyperlink{class_open_file}{Open\+File} si le fichier a pu être ajouté, N\+U\+LL sinon 
+\end{DoxyReturn}
+
+
+Références Lock\+::\+Acquire(), Find\+Place(), is\+In\+Thread(), map\+\_\+size, Lock\+::\+Release(), table, et table\+Lock.
+
+
+
+Référencé par File\+System\+::\+File\+System().
+
+\hypertarget{class_file_map_ab6d2e0d0c522ed4f6bcd9c7788db8ac5}{}\label{class_file_map_ab6d2e0d0c522ed4f6bcd9c7788db8ac5} 
+\index{File\+Map@{File\+Map}!Delete@{Delete}}
+\index{Delete@{Delete}!File\+Map@{File\+Map}}
+\paragraph{\texorpdfstring{Delete()}{Delete()}}
+{\footnotesize\ttfamily bool File\+Map\+::\+Delete (\begin{DoxyParamCaption}\item[{int}]{key }\end{DoxyParamCaption})}
+
+
+
+Supprime un fichier de la table des fichiers ouverts. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em key} & Secteur du fichier à supprimer \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+Retourn True si le fichier a pu être supprimer, false sinon 
+\end{DoxyReturn}
+
+
+Références Lock\+::\+Acquire(), is\+In\+Thread(), map\+\_\+size, Lock\+::\+Release(), table, et table\+Lock.
+
+
+
+Référencé par File\+System\+::\+Close().
+
+\hypertarget{class_file_map_aead6784e56bc36eedd7aa16af522cb6e}{}\label{class_file_map_aead6784e56bc36eedd7aa16af522cb6e} 
+\index{File\+Map@{File\+Map}!Find\+Place@{Find\+Place}}
+\index{Find\+Place@{Find\+Place}!File\+Map@{File\+Map}}
+\paragraph{\texorpdfstring{Find\+Place()}{FindPlace()}}
+{\footnotesize\ttfamily int File\+Map\+::\+Find\+Place (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Trouve un fichier déjà présent dans le system de fichier ouverts. 
+
+Trouve un emplacement dans la table pour ranger un nouveau fichier ouvert.
+
+
+\begin{DoxyParams}{Paramètres}
+{\em key} & Secteur du fichier à trouver et à comparer. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+Retourne un entier positif si le fichier a été trouvé qui Corresepond à l\textquotesingle{}endroit où il se trouve dans le tableau, -\/1 s\textquotesingle{}il ne s\textquotesingle{}y trouve pas.
+
+Retourne un entier positif si une place a été trouvé qui Corresepond à l\textquotesingle{}endroit ou peut etre ajouté le fichier, -\/1 si la table est complète. 
+\end{DoxyReturn}
+
+
+Références map\+\_\+size, et table.
+
+
+
+Référencé par Add().
+
+\hypertarget{class_file_map_abd72d5b1fe0d70f1250bbde70773af20}{}\label{class_file_map_abd72d5b1fe0d70f1250bbde70773af20} 
+\index{File\+Map@{File\+Map}!is\+In\+Thread@{is\+In\+Thread}}
+\index{is\+In\+Thread@{is\+In\+Thread}!File\+Map@{File\+Map}}
+\paragraph{\texorpdfstring{is\+In\+Thread()}{isInThread()}}
+{\footnotesize\ttfamily bool File\+Map\+::is\+In\+Thread (\begin{DoxyParamCaption}\item[{\hyperlink{class_open_file}{Open\+File} $\ast$}]{of,  }\item[{\hyperlink{class_thread}{Thread} $\ast$}]{cr }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Fonction interne qui définit si un fichier ouvert appartient au thread qui essaye de l\textquotesingle{}ouvrir / le fermer. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em of} & \hyperlink{class_open_file}{Open\+File} a vérifier \\
+\hline
+{\em cr} & \hyperlink{class_thread}{Thread} dont on doit verifier si il est actuellement le propriétaire du fichier ouvert \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+Renvoie true si ce fichier ouvert appartient au thread, sinon false 
+\end{DoxyReturn}
+
+
+Références map\+\_\+size.
+
+
+
+Référencé par Add(), et Delete().
+
+
+
+La documentation de cette classe a été générée à partir des fichiers suivants \+:\begin{DoxyCompactItemize}
+\item 
+filesys/\hyperlink{filemap_8h}{filemap.\+h}\item 
+filesys/\hyperlink{filemap_8cc}{filemap.\+cc}\end{DoxyCompactItemize}

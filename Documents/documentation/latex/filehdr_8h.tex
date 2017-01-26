@@ -1,0 +1,29 @@
+\hypertarget{filehdr_8h}{}\subsection{Référence du fichier filesys/filehdr.h}
+\label{filehdr_8h}\index{filesys/filehdr.\+h@{filesys/filehdr.\+h}}
+
+
+A file header describes where on disk to find the data in a file, along with other information about the file (for instance, its length, owner, etc.)  
+
+
+{\ttfamily \#include \char`\"{}copyright.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}disk.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}bitmap.\+h\char`\"{}}\newline
+\subsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{class_file_header}{File\+Header}
+\end{DoxyCompactItemize}
+\subsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{filehdr_8h_a193693ecec4f818d8270c659139e3961}{}\label{filehdr_8h_a193693ecec4f818d8270c659139e3961} 
+\#define {\bfseries Num\+Direct}~((Sector\+Size -\/ 2 $\ast$ sizeof(int)) / sizeof(int))
+\item 
+\hypertarget{filehdr_8h_a69b573417babb57474d05562283742b6}{}\label{filehdr_8h_a69b573417babb57474d05562283742b6} 
+\#define {\bfseries Max\+File\+Size}~(Num\+Direct $\ast$ Sector\+Size)
+\end{DoxyCompactItemize}
+
+
+\subsubsection{Description détaillée}
+A file header describes where on disk to find the data in a file, along with other information about the file (for instance, its length, owner, etc.) 
+

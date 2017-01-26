@@ -1,0 +1,19 @@
+\hypertarget{dir_386a01e8c60160d2cb79aec927decd2f}{}\subsection{Répertoire de référence de filesys}
+\label{dir_386a01e8c60160d2cb79aec927decd2f}\index{Répertoire de référence de filesys@{Répertoire de référence de filesys}}
+\subsubsection*{Fichiers}
+\begin{DoxyCompactItemize}
+\item 
+fichier \hyperlink{directory_8cc}{directory.\+cc}
+\begin{DoxyCompactList}\small\item\em The directory is a table of fixed length entries; each entry represents a single file, and contains the file name, and the location of the file header on disk. The fixed size of each directory entry means that we have the restriction of a fixed maximum size for file names. \end{DoxyCompactList}\item 
+fichier \hyperlink{directory_8h}{directory.\+h}
+\begin{DoxyCompactList}\small\item\em A directory is a table of pairs\+: $<$file name, sector \#$>$, giving the name of each file in the directory, and where to find its file header (the data structure describing where to find the file\textquotesingle{}s data blocks) on disk. \end{DoxyCompactList}\item 
+fichier \hyperlink{filehdr_8cc}{filehdr.\+cc}
+\begin{DoxyCompactList}\small\item\em The file header is used to locate where on disk the file\textquotesingle{}s data is stored. We implement this as a fixed size table of pointers -- each entry in the table points to the disk sector containing that portion of the file data (in other words, there are no indirect or doubly indirect blocks). The table size is chosen so that the file header will be just big enough to fit in one disk sector, Unlike in a real system, we do not keep track of file permissions, ownership, last modification date, etc., in the file header. \end{DoxyCompactList}\item 
+fichier \hyperlink{filehdr_8h}{filehdr.\+h}
+\begin{DoxyCompactList}\small\item\em A file header describes where on disk to find the data in a file, along with other information about the file (for instance, its length, owner, etc.) \end{DoxyCompactList}\item 
+fichier \hyperlink{filemap_8cc}{filemap.\+cc}
+\begin{DoxyCompactList}\small\item\em Gère les fichiers ouverts dans le systeme. \end{DoxyCompactList}\item 
+fichier \hyperlink{filemap_8h}{filemap.\+h}
+\begin{DoxyCompactList}\small\item\em Gère les fichiers ouverts dans le system. \end{DoxyCompactList}\item 
+fichier \hyperlink{filesys_8h}{filesys.\+h}
+\begin{DoxyCompactList}\small\item\em implemente des fonctions pour la gestion des fichiers \end{DoxyCompactList}\end{DoxyCompactItemize}

@@ -1,0 +1,229 @@
+\hypertarget{class_synch_console}{}\subsection{Référence de la classe Synch\+Console}
+\label{class_synch_console}\index{Synch\+Console@{Synch\+Console}}
+
+
+Émulation d\textquotesingle{}une console synchrone.  
+
+
+
+
+{\ttfamily \#include $<$synchconsole.\+h$>$}
+
+\subsubsection*{Fonctions membres publiques}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_synch_console_a888915fb5c11051308853603ccf0e436}{Synch\+Console} (char $\ast$read\+File, char $\ast$write\+File)
+\begin{DoxyCompactList}\small\item\em Initialise l\textquotesingle{}utilisation d\textquotesingle{}une console hardware simulée. \end{DoxyCompactList}\item 
+\hypertarget{class_synch_console_a0d2354246920f69af7d316a11820b385}{}\label{class_synch_console_a0d2354246920f69af7d316a11820b385} 
+\hyperlink{class_synch_console_a0d2354246920f69af7d316a11820b385}{$\sim$\+Synch\+Console} ()
+\begin{DoxyCompactList}\small\item\em Nettoie la console simulée. \end{DoxyCompactList}\item 
+void \hyperlink{class_synch_console_a20b9d14d9173609f843d926e18fdd8ac}{Synch\+Put\+Char} (const char ch)
+\begin{DoxyCompactList}\small\item\em Ecrit un caractère de façon synchrone dans la console simulée. \end{DoxyCompactList}\item 
+char \hyperlink{class_synch_console_a005ecd5d135d4b7faf9cfa27aa9792a1}{Synch\+Get\+Char} ()
+\begin{DoxyCompactList}\small\item\em Obtient un caractère de façon synchrone depuis l\textquotesingle{}entrée standard de la console simulée. \end{DoxyCompactList}\item 
+void \hyperlink{class_synch_console_adda30ee11ac596b035a06eb69b13407e}{Synch\+Put\+String} (const char $\ast$s)
+\begin{DoxyCompactList}\small\item\em Écrit une chaîne de caractères de façon synchrone dans la console simulée. \end{DoxyCompactList}\item 
+void \hyperlink{class_synch_console_a632abb28f8b2bdbd5d9c69adf364f013}{Synch\+Get\+String} (char $\ast$s, int n)
+\begin{DoxyCompactList}\small\item\em Obtient une chaîne de caractères de façon synchrone depuis l\textquotesingle{}entrée standard de la console simulée, Information \+: Ignore et écrase les données du buffer. \end{DoxyCompactList}\item 
+void \hyperlink{class_synch_console_a396a17fea20cf5d90f15fcf898e29fcb}{copy\+String\+From\+Machine} (int from, char $\ast$to, unsigned size)
+\begin{DoxyCompactList}\small\item\em Converti une chaîne de caractères M\+I\+PS en chaîne de caractères Linux. \end{DoxyCompactList}\item 
+void \hyperlink{class_synch_console_a6d18320cf487bac83c8227afc7498a7b}{copy\+Machine\+From\+String} (char $\ast$from, int to, unsigned size)
+\begin{DoxyCompactList}\small\item\em Converti une chaîne de caractères Linux en chaîne de caractères M\+I\+PS. \end{DoxyCompactList}\item 
+void \hyperlink{class_synch_console_a78d924b143bcadae321144c50f971df0}{Synch\+Get\+Int} (int $\ast$n)
+\begin{DoxyCompactList}\small\item\em Obtenir un entier 8bits depuis l\textquotesingle{}entrée de la console standard. La fonction travail uniquement sur des entiers codés sur 8bits. \end{DoxyCompactList}\item 
+void \hyperlink{class_synch_console_a7e65587e2fb5725e30dd46204c6ed56c}{Synch\+Put\+Int} (int n)
+\begin{DoxyCompactList}\small\item\em Ecrit un entier sur la console standard. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsubsection*{Attributs privés}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_synch_console_a5076e225db5a11078e57f63512e3d77a}{}\label{class_synch_console_a5076e225db5a11078e57f63512e3d77a} 
+\hyperlink{class_console}{Console} $\ast$ {\bfseries console}
+\end{DoxyCompactItemize}
+
+
+\subsubsection{Description détaillée}
+Émulation d\textquotesingle{}une console synchrone. 
+
+\subsubsection{Documentation des constructeurs et destructeur}
+\hypertarget{class_synch_console_a888915fb5c11051308853603ccf0e436}{}\label{class_synch_console_a888915fb5c11051308853603ccf0e436} 
+\index{Synch\+Console@{Synch\+Console}!Synch\+Console@{Synch\+Console}}
+\index{Synch\+Console@{Synch\+Console}!Synch\+Console@{Synch\+Console}}
+\paragraph{\texorpdfstring{Synch\+Console()}{SynchConsole()}}
+{\footnotesize\ttfamily Synch\+Console\+::\+Synch\+Console (\begin{DoxyParamCaption}\item[{char $\ast$}]{read\+File,  }\item[{char $\ast$}]{write\+File }\end{DoxyParamCaption})}
+
+
+
+Initialise l\textquotesingle{}utilisation d\textquotesingle{}une console hardware simulée. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em read\+File} & U\+N\+IX file simulating the keyboard (N\+U\+LL -\/$>$ use stdin) \\
+\hline
+{\em write\+File} & U\+N\+IX file simulating the display (N\+U\+LL -\/$>$ use stdout) \\
+\hline
+\end{DoxyParams}
+
+
+\subsubsection{Documentation des fonctions membres}
+\hypertarget{class_synch_console_a6d18320cf487bac83c8227afc7498a7b}{}\label{class_synch_console_a6d18320cf487bac83c8227afc7498a7b} 
+\index{Synch\+Console@{Synch\+Console}!copy\+Machine\+From\+String@{copy\+Machine\+From\+String}}
+\index{copy\+Machine\+From\+String@{copy\+Machine\+From\+String}!Synch\+Console@{Synch\+Console}}
+\paragraph{\texorpdfstring{copy\+Machine\+From\+String()}{copyMachineFromString()}}
+{\footnotesize\ttfamily void Synch\+Console\+::copy\+Machine\+From\+String (\begin{DoxyParamCaption}\item[{char $\ast$}]{from,  }\item[{int}]{to,  }\item[{unsigned}]{size }\end{DoxyParamCaption})}
+
+
+
+Converti une chaîne de caractères Linux en chaîne de caractères M\+I\+PS. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em from} & L\textquotesingle{}adresse de la chaine de caractères L\+I\+N\+UX \\
+\hline
+{\em to} & L\textquotesingle{}adresse M\+I\+PS de la chaine de caractères \\
+\hline
+{\em size} & La taille maximale de la chaine de caractères à convertir \\
+\hline
+\end{DoxyParams}
+
+
+Références Semaphore\+::\+P().
+
+\hypertarget{class_synch_console_a396a17fea20cf5d90f15fcf898e29fcb}{}\label{class_synch_console_a396a17fea20cf5d90f15fcf898e29fcb} 
+\index{Synch\+Console@{Synch\+Console}!copy\+String\+From\+Machine@{copy\+String\+From\+Machine}}
+\index{copy\+String\+From\+Machine@{copy\+String\+From\+Machine}!Synch\+Console@{Synch\+Console}}
+\paragraph{\texorpdfstring{copy\+String\+From\+Machine()}{copyStringFromMachine()}}
+{\footnotesize\ttfamily void Synch\+Console\+::copy\+String\+From\+Machine (\begin{DoxyParamCaption}\item[{int}]{from,  }\item[{char $\ast$}]{to,  }\item[{unsigned}]{size }\end{DoxyParamCaption})}
+
+
+
+Converti une chaîne de caractères M\+I\+PS en chaîne de caractères Linux. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em from} & L\textquotesingle{}adresse M\+I\+PS de la chaine de caractères (premier caractère) \\
+\hline
+{\em to} & Chaine de caractères valeur de retour \\
+\hline
+{\em size} & La taille maximale de la chaine de caractères à convertir \\
+\hline
+\end{DoxyParams}
+
+
+Références Semaphore\+::\+P().
+
+\hypertarget{class_synch_console_a005ecd5d135d4b7faf9cfa27aa9792a1}{}\label{class_synch_console_a005ecd5d135d4b7faf9cfa27aa9792a1} 
+\index{Synch\+Console@{Synch\+Console}!Synch\+Get\+Char@{Synch\+Get\+Char}}
+\index{Synch\+Get\+Char@{Synch\+Get\+Char}!Synch\+Console@{Synch\+Console}}
+\paragraph{\texorpdfstring{Synch\+Get\+Char()}{SynchGetChar()}}
+{\footnotesize\ttfamily char Synch\+Console\+::\+Synch\+Get\+Char (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Obtient un caractère de façon synchrone depuis l\textquotesingle{}entrée standard de la console simulée. 
+
+\begin{DoxyReturn}{Renvoie}
+Retourne un caractère entré dans la console 
+\end{DoxyReturn}
+
+
+Références Semaphore\+::\+P().
+
+
+
+Référencé par Synch\+Get\+String().
+
+\hypertarget{class_synch_console_a78d924b143bcadae321144c50f971df0}{}\label{class_synch_console_a78d924b143bcadae321144c50f971df0} 
+\index{Synch\+Console@{Synch\+Console}!Synch\+Get\+Int@{Synch\+Get\+Int}}
+\index{Synch\+Get\+Int@{Synch\+Get\+Int}!Synch\+Console@{Synch\+Console}}
+\paragraph{\texorpdfstring{Synch\+Get\+Int()}{SynchGetInt()}}
+{\footnotesize\ttfamily void Synch\+Console\+::\+Synch\+Get\+Int (\begin{DoxyParamCaption}\item[{int $\ast$}]{n }\end{DoxyParamCaption})}
+
+
+
+Obtenir un entier 8bits depuis l\textquotesingle{}entrée de la console standard. La fonction travail uniquement sur des entiers codés sur 8bits. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em n} & L\textquotesingle{}entier resultant \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_synch_console_a632abb28f8b2bdbd5d9c69adf364f013}{}\label{class_synch_console_a632abb28f8b2bdbd5d9c69adf364f013} 
+\index{Synch\+Console@{Synch\+Console}!Synch\+Get\+String@{Synch\+Get\+String}}
+\index{Synch\+Get\+String@{Synch\+Get\+String}!Synch\+Console@{Synch\+Console}}
+\paragraph{\texorpdfstring{Synch\+Get\+String()}{SynchGetString()}}
+{\footnotesize\ttfamily void Synch\+Console\+::\+Synch\+Get\+String (\begin{DoxyParamCaption}\item[{char $\ast$}]{s,  }\item[{int}]{n }\end{DoxyParamCaption})}
+
+
+
+Obtient une chaîne de caractères de façon synchrone depuis l\textquotesingle{}entrée standard de la console simulée, Information \+: Ignore et écrase les données du buffer. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em s} & chaîne de caractères resultante \\
+\hline
+{\em n} & taille maximale de la chaîne de caractères en entrée \\
+\hline
+\end{DoxyParams}
+
+
+Références Semaphore\+::\+P(), et Synch\+Get\+Char().
+
+\hypertarget{class_synch_console_a20b9d14d9173609f843d926e18fdd8ac}{}\label{class_synch_console_a20b9d14d9173609f843d926e18fdd8ac} 
+\index{Synch\+Console@{Synch\+Console}!Synch\+Put\+Char@{Synch\+Put\+Char}}
+\index{Synch\+Put\+Char@{Synch\+Put\+Char}!Synch\+Console@{Synch\+Console}}
+\paragraph{\texorpdfstring{Synch\+Put\+Char()}{SynchPutChar()}}
+{\footnotesize\ttfamily void Synch\+Console\+::\+Synch\+Put\+Char (\begin{DoxyParamCaption}\item[{const char}]{ch }\end{DoxyParamCaption})}
+
+
+
+Ecrit un caractère de façon synchrone dans la console simulée. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em ch} & Caractere à afficher \\
+\hline
+\end{DoxyParams}
+
+
+Références Semaphore\+::\+P(), et Semaphore\+::\+V().
+
+\hypertarget{class_synch_console_a7e65587e2fb5725e30dd46204c6ed56c}{}\label{class_synch_console_a7e65587e2fb5725e30dd46204c6ed56c} 
+\index{Synch\+Console@{Synch\+Console}!Synch\+Put\+Int@{Synch\+Put\+Int}}
+\index{Synch\+Put\+Int@{Synch\+Put\+Int}!Synch\+Console@{Synch\+Console}}
+\paragraph{\texorpdfstring{Synch\+Put\+Int()}{SynchPutInt()}}
+{\footnotesize\ttfamily void Synch\+Console\+::\+Synch\+Put\+Int (\begin{DoxyParamCaption}\item[{int}]{n }\end{DoxyParamCaption})}
+
+
+
+Ecrit un entier sur la console standard. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em n} & L\textquotesingle{}entier à écrire \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_synch_console_adda30ee11ac596b035a06eb69b13407e}{}\label{class_synch_console_adda30ee11ac596b035a06eb69b13407e} 
+\index{Synch\+Console@{Synch\+Console}!Synch\+Put\+String@{Synch\+Put\+String}}
+\index{Synch\+Put\+String@{Synch\+Put\+String}!Synch\+Console@{Synch\+Console}}
+\paragraph{\texorpdfstring{Synch\+Put\+String()}{SynchPutString()}}
+{\footnotesize\ttfamily void Synch\+Console\+::\+Synch\+Put\+String (\begin{DoxyParamCaption}\item[{const char $\ast$}]{s }\end{DoxyParamCaption})}
+
+
+
+Écrit une chaîne de caractères de façon synchrone dans la console simulée. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em s} & chaîne de caractères à flush sur la console \\
+\hline
+\end{DoxyParams}
+
+
+Références Semaphore\+::\+P().
+
+
+
+La documentation de cette classe a été générée à partir des fichiers suivants \+:\begin{DoxyCompactItemize}
+\item 
+userprog/\hyperlink{synchconsole_8h}{synchconsole.\+h}\item 
+userprog/\hyperlink{synchconsole_8cc}{synchconsole.\+cc}\end{DoxyCompactItemize}

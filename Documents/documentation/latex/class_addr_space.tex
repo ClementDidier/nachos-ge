@@ -1,0 +1,162 @@
+\hypertarget{class_addr_space}{}\subsection{Référence de la classe Addr\+Space}
+\label{class_addr_space}\index{Addr\+Space@{Addr\+Space}}
+\subsubsection*{Fonctions membres publiques}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_addr_space_a92150df1034dc2faa393f7b9bcef8851}{}\label{class_addr_space_a92150df1034dc2faa393f7b9bcef8851} 
+{\bfseries Addr\+Space} (\hyperlink{class_open_file}{Open\+File} $\ast$executable)
+\item 
+\hypertarget{class_addr_space_ab0eb6814961508ac27437b235a9296fc}{}\label{class_addr_space_ab0eb6814961508ac27437b235a9296fc} 
+void {\bfseries Init\+Registers} ()
+\item 
+\hypertarget{class_addr_space_afbdfe878dfdbc45c3fd0712ba49ebc68}{}\label{class_addr_space_afbdfe878dfdbc45c3fd0712ba49ebc68} 
+void {\bfseries Save\+State} ()
+\item 
+\hypertarget{class_addr_space_ac874975e4df82801d99588c35ea8252a}{}\label{class_addr_space_ac874975e4df82801d99588c35ea8252a} 
+void {\bfseries Restore\+State} ()
+\item 
+\hypertarget{class_addr_space_abeaa5e533f91a63f5e12d07103b580b2}{}\label{class_addr_space_abeaa5e533f91a63f5e12d07103b580b2} 
+void \hyperlink{class_addr_space_abeaa5e533f91a63f5e12d07103b580b2}{Bind\+User\+Thread} ()
+\begin{DoxyCompactList}\small\item\em ajoute un thread sur le compteur des thread actif et verouille le lock \char`\"{}verrou\char`\"{} utilisé pour l\textquotesingle{}attente lors du halt. \end{DoxyCompactList}\item 
+\hypertarget{class_addr_space_aa9d31694a627661696305ced978f7421}{}\label{class_addr_space_aa9d31694a627661696305ced978f7421} 
+void \hyperlink{class_addr_space_aa9d31694a627661696305ced978f7421}{Unbind\+User\+Thread} ()
+\begin{DoxyCompactList}\small\item\em retire un thread sur le compteur des thread actif et déverouille le lock \char`\"{}verrou\char`\"{} utilisé pour l\textquotesingle{}attente lors du halt. \end{DoxyCompactList}\item 
+void \hyperlink{class_addr_space_a0357219ec2eaccdd49b7635bf06f8172}{Push\+Me\+In\+Thread\+List} ()
+\begin{DoxyCompactList}\small\item\em ajoute le pointeur vers l\textquotesingle{}objet thread du thread courrant dans le tableau des threads actifs. Les opération sur les listes sont effectué de manière protégées. \end{DoxyCompactList}\item 
+\hypertarget{class_addr_space_a87a8af28618b37bd50316398d5114612}{}\label{class_addr_space_a87a8af28618b37bd50316398d5114612} 
+bool {\bfseries Check\+Thread\+List} (int tid)
+\item 
+\hyperlink{class_thread}{Thread} $\ast$ \hyperlink{class_addr_space_aaaefe0a86296c40a15f6f238bf96f30e}{Find\+Thread\+List} (int tid)
+\begin{DoxyCompactList}\small\item\em recherche dans le tableau des thread actif le thread ayant le tid passé en paramètre. \end{DoxyCompactList}\item 
+\hypertarget{class_addr_space_a562bc7b549fe84fdc62c90f218bbc528}{}\label{class_addr_space_a562bc7b549fe84fdc62c90f218bbc528} 
+void {\bfseries Delete\+Thread\+List} (\hyperlink{class_thread}{Thread} $\ast$ThreadP)
+\item 
+\hypertarget{class_addr_space_ab20a6e47ab579c7bd195118fdf7d62ca}{}\label{class_addr_space_ab20a6e47ab579c7bd195118fdf7d62ca} 
+int {\bfseries Attendre} (int tid)
+\item 
+\hypertarget{class_addr_space_a1c9adc2f0c3d96a6e646fa9e3fd3ffbf}{}\label{class_addr_space_a1c9adc2f0c3d96a6e646fa9e3fd3ffbf} 
+struct \hyperlink{structcompteur_verrou}{compteur\+Verrou} $\ast$ {\bfseries Find\+Compteur\+Verrou} (int tid)
+\item 
+\hypertarget{class_addr_space_ab3d5374f27f38e8411722dc73d39a22b}{}\label{class_addr_space_ab3d5374f27f38e8411722dc73d39a22b} 
+int {\bfseries Check\+If\+Waiting\+Thread} (int tid)
+\item 
+int \hyperlink{class_addr_space_af63bb5a857c1403fa47b0a55ea989130}{Add\+In\+G\+C\+Thread\+Verrou} (struct \hyperlink{structcompteur_verrou}{compteur\+Verrou} $\ast$)
+\begin{DoxyCompactList}\small\item\em ajoute le pointeur vers la structure passé en paramètre vers un espace libre du tableau du garbage collector. Permettant de la supprimer lorsque plus aucun thread n\textquotesingle{}attends le verrou \end{DoxyCompactList}\item 
+\hypertarget{class_addr_space_a02fcf9f9829c38a69e847681fef503ab}{}\label{class_addr_space_a02fcf9f9829c38a69e847681fef503ab} 
+void \hyperlink{class_addr_space_a02fcf9f9829c38a69e847681fef503ab}{Garbage\+Collector} ()
+\begin{DoxyCompactList}\small\item\em parcourt le tableau G\+C\+Thread\+Verrou à la recherche de structure de compteur avec un compteur de thread à 0. Supprime les struture trouvées ainsi que les mutex utilisés pour pour se mettre en attente sur le thread. Met à N\+U\+LL les cases du tableau concernées une fois fini pour réutilisation. Cette opération sur le tableau G\+C\+Thread\+Verrou est protégé par le verrou G\+C\+Thread\+Verrou\+Lock. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsubsection*{Attributs publics}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_addr_space_a1ee45c0f68ff24be2e0c5a301f6e7c77}{}\label{class_addr_space_a1ee45c0f68ff24be2e0c5a301f6e7c77} 
+\hyperlink{class_semaphore}{Semaphore} $\ast$ {\bfseries mutex}
+\item 
+\hypertarget{class_addr_space_aa42f86e2f783f75b4f7696ed6569f799}{}\label{class_addr_space_aa42f86e2f783f75b4f7696ed6569f799} 
+\hyperlink{class_semaphore}{Semaphore} $\ast$ {\bfseries verrou}
+\item 
+\hypertarget{class_addr_space_afce98e903a4e4e57d7cdfc83a59259a6}{}\label{class_addr_space_afce98e903a4e4e57d7cdfc83a59259a6} 
+\hyperlink{class_thread}{Thread} $\ast$ {\bfseries Thread\+List} \mbox{[}Max\+Thread\mbox{]}
+\item 
+\hypertarget{class_addr_space_a85a4f4cf62f078fcb6b52e62e11f994c}{}\label{class_addr_space_a85a4f4cf62f078fcb6b52e62e11f994c} 
+struct \hyperlink{structcompteur_verrou}{compteur\+Verrou} $\ast$ {\bfseries G\+C\+Thread\+Verrou} \mbox{[}Max\+Thread $\ast$2\mbox{]}
+\item 
+\hypertarget{class_addr_space_adbf243386d0eb95c95f089e733d88b91}{}\label{class_addr_space_adbf243386d0eb95c95f089e733d88b91} 
+\hyperlink{class_lock}{Lock} $\ast$ {\bfseries G\+C\+Thread\+Verrou\+Lock}
+\item 
+\hypertarget{class_addr_space_a7f329a364d07cd9bbd276e113bc9fa76}{}\label{class_addr_space_a7f329a364d07cd9bbd276e113bc9fa76} 
+\hyperlink{class_lock}{Lock} $\ast$ {\bfseries map\+Lock}
+\item 
+\hypertarget{class_addr_space_ab1fd4a7fd8d2b4fd9d9cb3a73cc521cb}{}\label{class_addr_space_ab1fd4a7fd8d2b4fd9d9cb3a73cc521cb} 
+\hyperlink{class_bit_map}{Bit\+Map} $\ast$ {\bfseries thread\+Map}
+\item 
+\hypertarget{class_addr_space_a9628f37e9a94c976a35cc5dd75f41e38}{}\label{class_addr_space_a9628f37e9a94c976a35cc5dd75f41e38} 
+\hyperlink{class_lock}{Lock} $\ast$ {\bfseries Lock\+Thread\+List}
+\end{DoxyCompactItemize}
+\subsubsection*{Attributs privés}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_addr_space_aa3da30f5be78084f881aae4b9e50eda0}{}\label{class_addr_space_aa3da30f5be78084f881aae4b9e50eda0} 
+int {\bfseries Nb\+Active\+Threads}
+\item 
+\hypertarget{class_addr_space_adf07f482066dfc9b526918d4e2cf747a}{}\label{class_addr_space_adf07f482066dfc9b526918d4e2cf747a} 
+\hyperlink{class_translation_entry}{Translation\+Entry} $\ast$ {\bfseries page\+Table}
+\item 
+\hypertarget{class_addr_space_a337a28919411c2ff85837d442a7c86ef}{}\label{class_addr_space_a337a28919411c2ff85837d442a7c86ef} 
+unsigned int {\bfseries num\+Pages}
+\end{DoxyCompactItemize}
+
+
+\subsubsection{Documentation des fonctions membres}
+\hypertarget{class_addr_space_af63bb5a857c1403fa47b0a55ea989130}{}\label{class_addr_space_af63bb5a857c1403fa47b0a55ea989130} 
+\index{Addr\+Space@{Addr\+Space}!Add\+In\+G\+C\+Thread\+Verrou@{Add\+In\+G\+C\+Thread\+Verrou}}
+\index{Add\+In\+G\+C\+Thread\+Verrou@{Add\+In\+G\+C\+Thread\+Verrou}!Addr\+Space@{Addr\+Space}}
+\paragraph{\texorpdfstring{Add\+In\+G\+C\+Thread\+Verrou()}{AddInGCThreadVerrou()}}
+{\footnotesize\ttfamily void Addr\+Space\+::\+Add\+In\+G\+C\+Thread\+Verrou (\begin{DoxyParamCaption}\item[{struct \hyperlink{structcompteur_verrou}{compteur\+Verrou} $\ast$}]{compteur }\end{DoxyParamCaption})}
+
+
+
+ajoute le pointeur vers la structure passé en paramètre vers un espace libre du tableau du garbage collector. Permettant de la supprimer lorsque plus aucun thread n\textquotesingle{}attends le verrou 
+
+\begin{DoxyReturn}{Renvoie}
+1 si on a pu ajouter la structure dans la tableau G\+C\+Thread\+Verrou, -\/1 sinon 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em invalide} & in assert on a pas trouvé de place de libre dans le tableau. \\
+\hline
+\end{DoxyExceptions}
+
+
+Références Lock\+::\+Acquire(), et Lock\+::\+Release().
+
+
+
+Référencé par Push\+Me\+In\+Thread\+List().
+
+\hypertarget{class_addr_space_aaaefe0a86296c40a15f6f238bf96f30e}{}\label{class_addr_space_aaaefe0a86296c40a15f6f238bf96f30e} 
+\index{Addr\+Space@{Addr\+Space}!Find\+Thread\+List@{Find\+Thread\+List}}
+\index{Find\+Thread\+List@{Find\+Thread\+List}!Addr\+Space@{Addr\+Space}}
+\paragraph{\texorpdfstring{Find\+Thread\+List()}{FindThreadList()}}
+{\footnotesize\ttfamily void Addr\+Space\+::\+Find\+Thread\+List (\begin{DoxyParamCaption}\item[{int}]{tid }\end{DoxyParamCaption})}
+
+
+
+recherche dans le tableau des thread actif le thread ayant le tid passé en paramètre. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em tid} & \+: un numéro (int) the thread utilisateur \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+retourne un pointeur vers l\textquotesingle{}objet thread associé au thread ayant l\textquotesingle{}id passé en paramètre (tid). Si aucun thread actif n\textquotesingle{}a ce tid alors la fonction retourne N\+U\+LL 
+\end{DoxyReturn}
+
+
+Références Lock\+::\+Acquire().
+
+\hypertarget{class_addr_space_a0357219ec2eaccdd49b7635bf06f8172}{}\label{class_addr_space_a0357219ec2eaccdd49b7635bf06f8172} 
+\index{Addr\+Space@{Addr\+Space}!Push\+Me\+In\+Thread\+List@{Push\+Me\+In\+Thread\+List}}
+\index{Push\+Me\+In\+Thread\+List@{Push\+Me\+In\+Thread\+List}!Addr\+Space@{Addr\+Space}}
+\paragraph{\texorpdfstring{Push\+Me\+In\+Thread\+List()}{PushMeInThreadList()}}
+{\footnotesize\ttfamily void Addr\+Space\+::\+Push\+Me\+In\+Thread\+List (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+ajoute le pointeur vers l\textquotesingle{}objet thread du thread courrant dans le tableau des threads actifs. Les opération sur les listes sont effectué de manière protégées. 
+
+
+\begin{DoxyExceptions}{Exceptions}
+{\em invalide} & un assert si aucun emplacement libre n\textquotesingle{}existe dans le tableau. Ceci signifie que l\textquotesingle{}on a dépassé le nombre de thread autorisé à s\textquotesingle{}éxécuter sur un thread noyau. \\
+\hline
+\end{DoxyExceptions}
+
+
+Références Lock\+::\+Acquire(), Add\+In\+G\+C\+Thread\+Verrou(), Thread\+::get\+T\+I\+D(), et Lock\+::\+Release().
+
+
+
+La documentation de cette classe a été générée à partir des fichiers suivants \+:\begin{DoxyCompactItemize}
+\item 
+userprog/\hyperlink{addrspace_8h}{addrspace.\+h}\item 
+userprog/addrspace.\+cc\end{DoxyCompactItemize}

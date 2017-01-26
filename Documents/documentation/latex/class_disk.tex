@@ -1,0 +1,59 @@
+\hypertarget{class_disk}{}\subsection{Référence de la classe Disk}
+\label{class_disk}\index{Disk@{Disk}}
+\subsubsection*{Fonctions membres publiques}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_disk_a3e2ac7e4ca32bbec9b1acb015a4a71fa}{}\label{class_disk_a3e2ac7e4ca32bbec9b1acb015a4a71fa} 
+{\bfseries Disk} (const char $\ast$name, Void\+Function\+Ptr call\+When\+Done, int call\+Arg)
+\item 
+\hypertarget{class_disk_a8b51a82d4f2fd009335d0c591ae11042}{}\label{class_disk_a8b51a82d4f2fd009335d0c591ae11042} 
+void {\bfseries Read\+Request} (int sector\+Number, char $\ast$\hyperlink{structdata}{data})
+\item 
+\hypertarget{class_disk_aec33797c6480a8c919fc7d340c316abe}{}\label{class_disk_aec33797c6480a8c919fc7d340c316abe} 
+void {\bfseries Write\+Request} (int sector\+Number, char $\ast$\hyperlink{structdata}{data})
+\item 
+\hypertarget{class_disk_a32d4a38e61501c221163ef845b9d6969}{}\label{class_disk_a32d4a38e61501c221163ef845b9d6969} 
+void {\bfseries Handle\+Interrupt} ()
+\item 
+\hypertarget{class_disk_a2337b1c68eb5f6a15502d8327d15248b}{}\label{class_disk_a2337b1c68eb5f6a15502d8327d15248b} 
+int {\bfseries Compute\+Latency} (int new\+Sector, bool writing)
+\end{DoxyCompactItemize}
+\subsubsection*{Fonctions membres privées}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_disk_abecdf19e160925b1bc9b4542c90de2ac}{}\label{class_disk_abecdf19e160925b1bc9b4542c90de2ac} 
+int {\bfseries Time\+To\+Seek} (int new\+Sector, int $\ast$rotate)
+\item 
+\hypertarget{class_disk_a2b4e12aa9e93939c3e03985c16bed453}{}\label{class_disk_a2b4e12aa9e93939c3e03985c16bed453} 
+int {\bfseries Modulo\+Diff} (int to, int from)
+\item 
+\hypertarget{class_disk_aa87426eeedc8cf390fa4b293ecd34b42}{}\label{class_disk_aa87426eeedc8cf390fa4b293ecd34b42} 
+void {\bfseries Update\+Last} (int new\+Sector)
+\end{DoxyCompactItemize}
+\subsubsection*{Attributs privés}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_disk_a27881148b34cffd7005df5d7353ce775}{}\label{class_disk_a27881148b34cffd7005df5d7353ce775} 
+int {\bfseries fileno}
+\item 
+\hypertarget{class_disk_aa7ff4bb271805d97872bd0022a8c61a3}{}\label{class_disk_aa7ff4bb271805d97872bd0022a8c61a3} 
+Void\+Function\+Ptr {\bfseries handler}
+\item 
+\hypertarget{class_disk_a8433930b7bd06c6011ae15daca656516}{}\label{class_disk_a8433930b7bd06c6011ae15daca656516} 
+int {\bfseries handler\+Arg}
+\item 
+\hypertarget{class_disk_a41ece24e9dead4ad0af20607d3ac4934}{}\label{class_disk_a41ece24e9dead4ad0af20607d3ac4934} 
+bool {\bfseries active}
+\item 
+\hypertarget{class_disk_a09339a72e2d38a32238934f0ae2ae1bb}{}\label{class_disk_a09339a72e2d38a32238934f0ae2ae1bb} 
+int {\bfseries last\+Sector}
+\item 
+\hypertarget{class_disk_a90d96204820fdafec55af216ef9bf023}{}\label{class_disk_a90d96204820fdafec55af216ef9bf023} 
+int {\bfseries buffer\+Init}
+\end{DoxyCompactItemize}
+
+
+La documentation de cette classe a été générée à partir des fichiers suivants \+:\begin{DoxyCompactItemize}
+\item 
+machine/disk.\+h\item 
+machine/disk.\+cc\end{DoxyCompactItemize}

@@ -1,0 +1,233 @@
+\documentclass[twoside]{article}
+
+% Packages required by doxygen
+\usepackage{fixltx2e}
+\usepackage{calc}
+\usepackage{doxygen}
+\usepackage[export]{adjustbox} % also loads graphicx
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage{makeidx}
+\usepackage{multicol}
+\usepackage{multirow}
+\PassOptionsToPackage{warn}{textcomp}
+\usepackage{textcomp}
+\usepackage[nointegrals]{wasysym}
+\usepackage[table]{xcolor}
+
+% NLS support packages
+\usepackage[french]{babel}
+
+% Font selection
+\usepackage[T1]{fontenc}
+\usepackage[scaled=.90]{helvet}
+\usepackage{courier}
+\usepackage{amssymb}
+\usepackage{sectsty}
+\renewcommand{\familydefault}{\sfdefault}
+\allsectionsfont{%
+  \fontseries{bc}\selectfont%
+  \color{darkgray}%
+}
+\renewcommand{\DoxyLabelFont}{%
+  \fontseries{bc}\selectfont%
+  \color{darkgray}%
+}
+\newcommand{\+}{\discretionary{\mbox{\scriptsize$\hookleftarrow$}}{}{}}
+
+% Page & text layout
+\usepackage{geometry}
+\geometry{%
+  a4paper,%
+  top=2.5cm,%
+  bottom=2.5cm,%
+  left=2.5cm,%
+  right=2.5cm%
+}
+\tolerance=750
+\hfuzz=15pt
+\hbadness=750
+\setlength{\emergencystretch}{15pt}
+\setlength{\parindent}{0cm}
+\setlength{\parskip}{3ex plus 2ex minus 2ex}
+\makeatletter
+\renewcommand{\paragraph}{%
+  \@startsection{paragraph}{4}{0ex}{-1.0ex}{1.0ex}{%
+    \normalfont\normalsize\bfseries\SS@parafont%
+  }%
+}
+\renewcommand{\subparagraph}{%
+  \@startsection{subparagraph}{5}{0ex}{-1.0ex}{1.0ex}{%
+    \normalfont\normalsize\bfseries\SS@subparafont%
+  }%
+}
+\makeatother
+
+% Headers & footers
+\usepackage{fancyhdr}
+\pagestyle{fancyplain}
+\fancyhead[LE]{\fancyplain{}{\bfseries\thepage}}
+\fancyhead[CE]{\fancyplain{}{}}
+\fancyhead[RE]{\fancyplain{}{\bfseries\leftmark}}
+\fancyhead[LO]{\fancyplain{}{\bfseries\rightmark}}
+\fancyhead[CO]{\fancyplain{}{}}
+\fancyhead[RO]{\fancyplain{}{\bfseries\thepage}}
+\fancyfoot[LE]{\fancyplain{}{}}
+\fancyfoot[CE]{\fancyplain{}{}}
+\fancyfoot[RE]{\fancyplain{}{\bfseries\scriptsize Généré par Doxygen }}
+\fancyfoot[LO]{\fancyplain{}{\bfseries\scriptsize Généré par Doxygen }}
+\fancyfoot[CO]{\fancyplain{}{}}
+\fancyfoot[RO]{\fancyplain{}{}}
+\renewcommand{\footrulewidth}{0.4pt}
+\renewcommand{\sectionmark}[1]{%
+  \markright{\thesection\ #1}%
+}
+
+% Indices & bibliography
+\usepackage{natbib}
+\usepackage[titles]{tocloft}
+\setcounter{tocdepth}{3}
+\setcounter{secnumdepth}{5}
+\makeindex
+
+% Hyperlinks (required, but should be loaded last)
+\usepackage{ifpdf}
+\ifpdf
+  \usepackage[pdftex,pagebackref=true]{hyperref}
+\else
+  \usepackage[ps2pdf,pagebackref=true]{hyperref}
+\fi
+\hypersetup{%
+  colorlinks=true,%
+  linkcolor=blue,%
+  citecolor=blue,%
+  unicode%
+}
+
+% Custom commands
+\newcommand{\clearemptydoublepage}{%
+  \newpage{\pagestyle{empty}\cleardoublepage}%
+}
+
+\usepackage{caption}
+\captionsetup{labelsep=space,justification=centering,font={bf},singlelinecheck=off,skip=4pt,position=top}
+
+%===== C O N T E N T S =====
+
+\begin{document}
+
+% Titlepage & ToC
+\hypersetup{pageanchor=false,
+             bookmarksnumbered=true,
+             pdfencoding=unicode
+            }
+\pagenumbering{alph}
+\begin{titlepage}
+\vspace*{7cm}
+\begin{center}%
+{\Large Nach\+OS }\\
+\vspace*{1cm}
+{\large Généré par Doxygen 1.8.12}\\
+\end{center}
+\end{titlepage}
+\pagenumbering{roman}
+\tableofcontents
+\pagenumbering{arabic}
+\hypersetup{pageanchor=true}
+
+%--- Begin generated contents ---
+\section{Index des classes}
+\input{annotated}
+\section{Index des fichiers}
+\input{files}
+\section{Documentation des classes}
+\input{class_addr_space}
+\input{structaouthdr}
+\input{structarg_retparams}
+\input{class_bit_map}
+\input{structcompteur_verrou}
+\input{class_condition}
+\input{class_console}
+\input{structdata}
+\input{class_directory}
+\input{class_directory_entry}
+\input{class_disk}
+\input{structfilehdr}
+\input{class_file_header}
+\input{class_file_map}
+\input{class_file_system}
+\input{class_frame_provider}
+\input{class_instruction}
+\input{class_interrupt}
+\input{class_list}
+\input{class_list_element}
+\input{class_lock}
+\input{class_machine}
+\input{class_mail}
+\input{class_mail_box}
+\input{class_mail_header}
+\input{class_network}
+\input{structnoff_header}
+\input{class_open_file}
+\input{struct_op_info}
+\input{struct_op_string}
+\input{struct_packet_context}
+\input{class_packet_header}
+\input{struct_packet_header_reliable}
+\input{class_paquet}
+\input{class_pending_interrupt}
+\input{class_post_office}
+\input{class_reliable_net}
+\input{class_scheduler}
+\input{structscnhdr}
+\input{structsegment}
+\input{class_semaphore}
+\input{class_statistics}
+\input{structstruct_test_cond}
+\input{class_synch_console}
+\input{class_synch_disk}
+\input{class_synch_list}
+\input{class_thread}
+\input{class_timer}
+\input{class_translation_entry}
+\input{structuser_thread_params}
+\section{Documentation des fichiers}
+\input{directory_8cc}
+\input{directory_8h}
+\input{filehdr_8cc}
+\input{filehdr_8h}
+\input{filemap_8cc}
+\input{filemap_8h}
+\input{filesys_8h}
+\input{asynchstringtest_8c}
+\input{forktest_8c}
+\input{fsshell_8c}
+\input{halt_8c}
+\input{inttest_8c}
+\input{putchar_8c}
+\input{putchartest_8c}
+\input{semaphore_8c}
+\input{shell_8c}
+\input{stringtest_8c}
+\input{tetris_8c}
+\input{userpage0_8c}
+\input{synch_8cc}
+\input{addrspace_8h}
+\input{exception_8cc}
+\input{_izi_assert_8h}
+\input{synchconsole_8cc}
+\input{synchconsole_8h}
+\input{syscall_8h}
+\input{usersemaphore_8h}
+\input{userthread_8cc}
+\input{userthread_8h}
+%--- End generated contents ---
+
+% Index
+\newpage
+\phantomsection
+\clearemptydoublepage
+\addcontentsline{toc}{section}{Index}
+\printindex
+
+\end{document}

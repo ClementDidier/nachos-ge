@@ -1,0 +1,55 @@
+\hypertarget{synchconsole_8cc}{}\subsection{Référence du fichier userprog/synchconsole.cc}
+\label{synchconsole_8cc}\index{userprog/synchconsole.\+cc@{userprog/synchconsole.\+cc}}
+
+
+Émulation d\textquotesingle{}une console.  
+
+
+{\ttfamily \#include \char`\"{}copyright.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}system.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}synchconsole.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}synch.\+h\char`\"{}}\newline
+\subsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{synchconsole_8cc_a4e67e9429d48a2ba8f833ee3b1dceb5d}{}\label{synchconsole_8cc_a4e67e9429d48a2ba8f833ee3b1dceb5d} 
+\#define {\bfseries E\+OL}~\textquotesingle{}\textbackslash{}0\textquotesingle{}
+\item 
+\hypertarget{synchconsole_8cc_a4fc34b120ed3bd1120c1eb36abbcd6af}{}\label{synchconsole_8cc_a4fc34b120ed3bd1120c1eb36abbcd6af} 
+\#define {\bfseries NL}~\textquotesingle{}\textbackslash{}n\textquotesingle{}
+\end{DoxyCompactItemize}
+\subsubsection*{Fonctions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{synchconsole_8cc_a4bcb13942a4e1307947ab7d24566fb4a}{}\label{synchconsole_8cc_a4bcb13942a4e1307947ab7d24566fb4a} 
+static void {\bfseries Read\+Avail} (int arg)
+\item 
+\hypertarget{synchconsole_8cc_a52baa4266533c51b563289092e34df0e}{}\label{synchconsole_8cc_a52baa4266533c51b563289092e34df0e} 
+static void {\bfseries Write\+Done} (int arg)
+\end{DoxyCompactItemize}
+\subsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{synchconsole_8cc_a8cb122f7adfddacaa7e4451bbe538390}{}\label{synchconsole_8cc_a8cb122f7adfddacaa7e4451bbe538390} 
+static \hyperlink{class_semaphore}{Semaphore} $\ast$ {\bfseries read\+Avail}
+\item 
+\hypertarget{synchconsole_8cc_a11ada0e7115ad30e49bf3ac9783d2edb}{}\label{synchconsole_8cc_a11ada0e7115ad30e49bf3ac9783d2edb} 
+static \hyperlink{class_semaphore}{Semaphore} $\ast$ {\bfseries write\+Done}
+\item 
+\hypertarget{synchconsole_8cc_a7dc374896f15c8462f54539514191fff}{}\label{synchconsole_8cc_a7dc374896f15c8462f54539514191fff} 
+static \hyperlink{class_semaphore}{Semaphore} $\ast$ {\bfseries sem\+Read}
+\item 
+\hypertarget{synchconsole_8cc_ac20ac85c63e2d95658f2586a00cc0791}{}\label{synchconsole_8cc_ac20ac85c63e2d95658f2586a00cc0791} 
+static \hyperlink{class_semaphore}{Semaphore} $\ast$ {\bfseries sem\+Write}
+\item 
+\hypertarget{synchconsole_8cc_ad679cbad4fb36ff16f87d7c1462f71a5}{}\label{synchconsole_8cc_ad679cbad4fb36ff16f87d7c1462f71a5} 
+static \hyperlink{class_semaphore}{Semaphore} $\ast$ {\bfseries sem\+Memory}
+\item 
+\hypertarget{synchconsole_8cc_a40050070cbbeb6e72893d0ff7ed3c591}{}\label{synchconsole_8cc_a40050070cbbeb6e72893d0ff7ed3c591} 
+static \hyperlink{class_semaphore}{Semaphore} $\ast$ {\bfseries sem\+Put\+Char}
+\end{DoxyCompactItemize}
+
+
+\subsubsection{Description détaillée}
+Émulation d\textquotesingle{}une console. 
+

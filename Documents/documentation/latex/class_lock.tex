@@ -1,0 +1,97 @@
+\hypertarget{class_lock}{}\subsection{Référence de la classe Lock}
+\label{class_lock}\index{Lock@{Lock}}
+\subsubsection*{Fonctions membres publiques}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_lock_afe45a309ecbd6b3346db887a76f0a9cf}{Lock} (const char $\ast$debug\+Name)
+\begin{DoxyCompactList}\small\item\em Initialise une sémaphore à 1 jeton représentant un mutex simple. Le pointeur du thread appelant est initialisé à N\+U\+LL. \end{DoxyCompactList}\item 
+\hypertarget{class_lock_a7ab6d9485c8665bb3643710432882971}{}\label{class_lock_a7ab6d9485c8665bb3643710432882971} 
+\hyperlink{class_lock_a7ab6d9485c8665bb3643710432882971}{$\sim$\+Lock} ()
+\begin{DoxyCompactList}\small\item\em détruit la sémaphore utilisé par le mutex et détruit l\textquotesingle{}objet On assume que le lock n\textquotesingle{}est plus utilisé \end{DoxyCompactList}\item 
+\hypertarget{class_lock_a92995bad9c4f3b02b8630c4b0f25daea}{}\label{class_lock_a92995bad9c4f3b02b8630c4b0f25daea} 
+const char $\ast$ {\bfseries get\+Name} ()
+\item 
+\hypertarget{class_lock_ad4c4699fd1ab73f3927b10edc01c54db}{}\label{class_lock_ad4c4699fd1ab73f3927b10edc01c54db} 
+void \hyperlink{class_lock_ad4c4699fd1ab73f3927b10edc01c54db}{Acquire} ()
+\begin{DoxyCompactList}\small\item\em aquiert le verrou (prend un jeron dans la semaphore) \end{DoxyCompactList}\item 
+void \hyperlink{class_lock_a5ca005b84272e56c2bf447056ee9217c}{Release} ()
+\begin{DoxyCompactList}\small\item\em libère le verrou, défini à N\+U\+LL le pointeur du thread ayant acqui le verrou. \end{DoxyCompactList}\item 
+bool \hyperlink{class_lock_a35b68baf5f5a3165a4e6fe50845a46a2}{is\+Held\+By\+Current\+Thread} ()
+\end{DoxyCompactItemize}
+\subsubsection*{Attributs privés}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_lock_a4fab518d5af485ba8c0a73e5467904dd}{}\label{class_lock_a4fab518d5af485ba8c0a73e5467904dd} 
+const char $\ast$ {\bfseries name}
+\item 
+\hypertarget{class_lock_a2f6d199f9e3322259aa999aad60a4f54}{}\label{class_lock_a2f6d199f9e3322259aa999aad60a4f54} 
+\hyperlink{class_semaphore}{Semaphore} $\ast$ {\bfseries mutex}
+\item 
+\hypertarget{class_lock_a44b08d70093bc63d221c25b3d3ac1d4a}{}\label{class_lock_a44b08d70093bc63d221c25b3d3ac1d4a} 
+\hyperlink{class_thread}{Thread} $\ast$ {\bfseries ThreadP}
+\end{DoxyCompactItemize}
+
+
+\subsubsection{Documentation des constructeurs et destructeur}
+\hypertarget{class_lock_afe45a309ecbd6b3346db887a76f0a9cf}{}\label{class_lock_afe45a309ecbd6b3346db887a76f0a9cf} 
+\index{Lock@{Lock}!Lock@{Lock}}
+\index{Lock@{Lock}!Lock@{Lock}}
+\paragraph{\texorpdfstring{Lock()}{Lock()}}
+{\footnotesize\ttfamily Lock\+::\+Lock (\begin{DoxyParamCaption}\item[{const char $\ast$}]{debug\+Name }\end{DoxyParamCaption})}
+
+
+
+Initialise une sémaphore à 1 jeton représentant un mutex simple. Le pointeur du thread appelant est initialisé à N\+U\+LL. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em debug\+Name} & un nom éventuellement utilisable pour des opération de débugguages. \\
+\hline
+\end{DoxyParams}
+
+
+Références Semaphore\+::\+Semaphore().
+
+
+
+\subsubsection{Documentation des fonctions membres}
+\hypertarget{class_lock_a35b68baf5f5a3165a4e6fe50845a46a2}{}\label{class_lock_a35b68baf5f5a3165a4e6fe50845a46a2} 
+\index{Lock@{Lock}!is\+Held\+By\+Current\+Thread@{is\+Held\+By\+Current\+Thread}}
+\index{is\+Held\+By\+Current\+Thread@{is\+Held\+By\+Current\+Thread}!Lock@{Lock}}
+\paragraph{\texorpdfstring{is\+Held\+By\+Current\+Thread()}{isHeldByCurrentThread()}}
+{\footnotesize\ttfamily bool Lock\+::is\+Held\+By\+Current\+Thread (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Paramètres}
+{\em } & \\
+\hline
+\end{DoxyParams}
+
+
+Référencé par Condition\+::\+Wait().
+
+\hypertarget{class_lock_a5ca005b84272e56c2bf447056ee9217c}{}\label{class_lock_a5ca005b84272e56c2bf447056ee9217c} 
+\index{Lock@{Lock}!Release@{Release}}
+\index{Release@{Release}!Lock@{Lock}}
+\paragraph{\texorpdfstring{Release()}{Release()}}
+{\footnotesize\ttfamily void Lock\+::\+Release (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+libère le verrou, défini à N\+U\+LL le pointeur du thread ayant acqui le verrou. 
+
+
+\begin{DoxyExceptions}{Exceptions}
+{\em invalide} & un assert si le thread qui tente de libérer le verrou (mutex) n\textquotesingle{}est pas le thread appelant. invalide un assert en cas de plusieurs libération (si le nombre de jeton dépasse 1 dans la sémaphore après libération). \\
+\hline
+\end{DoxyExceptions}
+
+
+Référencé par File\+Map\+::\+Add(), Addr\+Space\+::\+Add\+In\+G\+C\+Thread\+Verrou(), File\+Map\+::\+Delete(), do\+\_\+\+User\+Thread\+Create(), do\+\_\+\+User\+Thread\+Exit(), Addr\+Space\+::\+Garbage\+Collector(), Addr\+Space\+::\+Push\+Me\+In\+Thread\+List(), et Condition\+::\+Wait().
+
+
+
+La documentation de cette classe a été générée à partir des fichiers suivants \+:\begin{DoxyCompactItemize}
+\item 
+threads/synch.\+h\item 
+threads/\hyperlink{synch_8cc}{synch.\+cc}\end{DoxyCompactItemize}

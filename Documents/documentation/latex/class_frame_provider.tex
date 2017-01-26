@@ -1,0 +1,75 @@
+\hypertarget{class_frame_provider}{}\subsection{Référence de la classe Frame\+Provider}
+\label{class_frame_provider}\index{Frame\+Provider@{Frame\+Provider}}
+
+
+Le \hyperlink{class_frame_provider}{Frame\+Provider} permet d\textquotesingle{}attribuer des cadres de mémoire physique aux processus en encapsulant l\textquotesingle{}allocation des pages physiques aux pages virtuelles.  
+
+
+
+
+{\ttfamily \#include $<$frameprovider.\+h$>$}
+
+\subsubsection*{Fonctions membres publiques}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_frame_provider_aab862343741993c0eebad9d25d1762ae}{}\label{class_frame_provider_aab862343741993c0eebad9d25d1762ae} 
+\hyperlink{class_frame_provider_aab862343741993c0eebad9d25d1762ae}{Frame\+Provider} ()
+\begin{DoxyCompactList}\small\item\em Constructeur de la classe \hyperlink{class_frame_provider}{Frame\+Provider}. \end{DoxyCompactList}\item 
+\hypertarget{class_frame_provider_a5f1f4d140636a7201e89b646c5a4380d}{}\label{class_frame_provider_a5f1f4d140636a7201e89b646c5a4380d} 
+\hyperlink{class_frame_provider_a5f1f4d140636a7201e89b646c5a4380d}{$\sim$\+Frame\+Provider} ()
+\begin{DoxyCompactList}\small\item\em Destructeur de la classe \hyperlink{class_frame_provider}{Frame\+Provider}. \end{DoxyCompactList}\item 
+int \hyperlink{class_frame_provider_a24e2dbd45651d75f94d0f6fb3920b70b}{Get\+Empty\+Frame} ()
+\begin{DoxyCompactList}\small\item\em Récupére un cadre libre et l\textquotesingle{}initialise à 0. \end{DoxyCompactList}\item 
+void \hyperlink{class_frame_provider_a42f08056453908df534cfc3c086d71a2}{Release\+Frame} (int frame)
+\begin{DoxyCompactList}\small\item\em Libére un cadre occupé \end{DoxyCompactList}\item 
+\hypertarget{class_frame_provider_a39d96ba2ec4289234e2201c30a7a0fd3}{}\label{class_frame_provider_a39d96ba2ec4289234e2201c30a7a0fd3} 
+int \hyperlink{class_frame_provider_a39d96ba2ec4289234e2201c30a7a0fd3}{Num\+Avail\+Frame} ()
+\begin{DoxyCompactList}\small\item\em Retourne le nombre de cadres libres. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsubsection*{Attributs privés}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_frame_provider_ae02e4f5520987c04d6ec66dc17aa9823}{}\label{class_frame_provider_ae02e4f5520987c04d6ec66dc17aa9823} 
+\hyperlink{class_bit_map}{Bit\+Map} $\ast$ {\bfseries frame\+Map}
+\end{DoxyCompactItemize}
+
+
+\subsubsection{Description détaillée}
+Le \hyperlink{class_frame_provider}{Frame\+Provider} permet d\textquotesingle{}attribuer des cadres de mémoire physique aux processus en encapsulant l\textquotesingle{}allocation des pages physiques aux pages virtuelles. 
+
+\subsubsection{Documentation des fonctions membres}
+\hypertarget{class_frame_provider_a24e2dbd45651d75f94d0f6fb3920b70b}{}\label{class_frame_provider_a24e2dbd45651d75f94d0f6fb3920b70b} 
+\index{Frame\+Provider@{Frame\+Provider}!Get\+Empty\+Frame@{Get\+Empty\+Frame}}
+\index{Get\+Empty\+Frame@{Get\+Empty\+Frame}!Frame\+Provider@{Frame\+Provider}}
+\paragraph{\texorpdfstring{Get\+Empty\+Frame()}{GetEmptyFrame()}}
+{\footnotesize\ttfamily Frame\+Provider\+::\+Get\+Empty\+Frame (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Récupére un cadre libre et l\textquotesingle{}initialise à 0. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em frame} & Table de page du processus \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_frame_provider_a42f08056453908df534cfc3c086d71a2}{}\label{class_frame_provider_a42f08056453908df534cfc3c086d71a2} 
+\index{Frame\+Provider@{Frame\+Provider}!Release\+Frame@{Release\+Frame}}
+\index{Release\+Frame@{Release\+Frame}!Frame\+Provider@{Frame\+Provider}}
+\paragraph{\texorpdfstring{Release\+Frame()}{ReleaseFrame()}}
+{\footnotesize\ttfamily Frame\+Provider\+::\+Release\+Frame (\begin{DoxyParamCaption}\item[{int}]{frame }\end{DoxyParamCaption})}
+
+
+
+Libére un cadre occupé 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em frame} & Table de page du processus \\
+\hline
+\end{DoxyParams}
+
+
+La documentation de cette classe a été générée à partir des fichiers suivants \+:\begin{DoxyCompactItemize}
+\item 
+userprog/frameprovider.\+h\item 
+userprog/frameprovider.\+cc\end{DoxyCompactItemize}

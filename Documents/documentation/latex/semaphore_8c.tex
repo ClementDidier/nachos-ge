@@ -1,0 +1,52 @@
+\hypertarget{semaphore_8c}{}\subsection{Référence du fichier test/semaphore.c}
+\label{semaphore_8c}\index{test/semaphore.\+c@{test/semaphore.\+c}}
+
+
+Situation de producteur/consomateur. On créer 2 consomateur qui affichent le contenu d\textquotesingle{}un même buffer et un producteur qui rempli ce buffer avec des caractères de la table A\+S\+C\+II. Le buffer est protégé avec des sémaphores, de la même façon que la situation de producteur/consomateur vu en cours.  
+
+
+{\ttfamily \#include \char`\"{}syscall.\+h\char`\"{}}\newline
+\subsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{semaphore_8c_a6b20d41d6252e9871430c242cb1a56e7}{}\label{semaphore_8c_a6b20d41d6252e9871430c242cb1a56e7} 
+\#define {\bfseries B\+U\+F\+F\+E\+R\+\_\+\+S\+I\+ZE}~10
+\end{DoxyCompactItemize}
+\subsubsection*{Fonctions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{semaphore_8c_a9108fc5c170d9b5a585664c3d62bd07e}{}\label{semaphore_8c_a9108fc5c170d9b5a585664c3d62bd07e} 
+void {\bfseries consummer} (void $\ast$arg)
+\item 
+\hypertarget{semaphore_8c_a2d2b39fb47420666b983e6ac0d7e89f4}{}\label{semaphore_8c_a2d2b39fb47420666b983e6ac0d7e89f4} 
+void {\bfseries producer} (void $\ast$arg)
+\item 
+\hypertarget{semaphore_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}{}\label{semaphore_8c_ae66f6b31b5ad750f1fe042a706a4e3d4} 
+int {\bfseries main} ()
+\end{DoxyCompactItemize}
+\subsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{semaphore_8c_a76e6a89e5438b42a8b46cc698ee40e3c}{}\label{semaphore_8c_a76e6a89e5438b42a8b46cc698ee40e3c} 
+sem\+\_\+t $\ast$ {\bfseries sem\+Empty}
+\item 
+\hypertarget{semaphore_8c_a444968ab5418caacbf75f7e529a2e99d}{}\label{semaphore_8c_a444968ab5418caacbf75f7e529a2e99d} 
+sem\+\_\+t $\ast$ {\bfseries sem\+Full}
+\item 
+\hypertarget{semaphore_8c_a0d1e7f1881f5e18b34ba161295badca8}{}\label{semaphore_8c_a0d1e7f1881f5e18b34ba161295badca8} 
+sem\+\_\+t $\ast$ {\bfseries sem\+Mutex}
+\item 
+\hypertarget{semaphore_8c_af00b615ca097c43dbb02ae3a00ea3a62}{}\label{semaphore_8c_af00b615ca097c43dbb02ae3a00ea3a62} 
+char {\bfseries buffer} \mbox{[}B\+U\+F\+F\+E\+R\+\_\+\+S\+I\+ZE\mbox{]}
+\item 
+\hypertarget{semaphore_8c_a26aeebe75887b4360c73659342f5dc61}{}\label{semaphore_8c_a26aeebe75887b4360c73659342f5dc61} 
+int {\bfseries in} = 0
+\item 
+\hypertarget{semaphore_8c_aa8000eda101cade7c6c4b913fce0cc9c}{}\label{semaphore_8c_aa8000eda101cade7c6c4b913fce0cc9c} 
+int {\bfseries out} = 0
+\end{DoxyCompactItemize}
+
+
+\subsubsection{Description détaillée}
+Situation de producteur/consomateur. On créer 2 consomateur qui affichent le contenu d\textquotesingle{}un même buffer et un producteur qui rempli ce buffer avec des caractères de la table A\+S\+C\+II. Le buffer est protégé avec des sémaphores, de la même façon que la situation de producteur/consomateur vu en cours. 
+

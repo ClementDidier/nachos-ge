@@ -1,0 +1,32 @@
+\hypertarget{exception_8cc}{}\subsection{Référence du fichier userprog/exception.cc}
+\label{exception_8cc}\index{userprog/exception.\+cc@{userprog/exception.\+cc}}
+
+
+Gestion des syscalls.  
+
+
+{\ttfamily \#include \char`\"{}copyright.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}system.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}syscall.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}userthread.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}usersemaphore.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}synch.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Izi\+Assert.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}fork.\+h\char`\"{}}\newline
+\subsubsection*{Fonctions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{exception_8cc_a5398a8f87781de78e6d586a76bb9f2d2}{}\label{exception_8cc_a5398a8f87781de78e6d586a76bb9f2d2} 
+static void {\bfseries Update\+PC} ()
+\item 
+\hypertarget{exception_8cc_a5214d3046f23b6c21d84e725ac4cc833}{}\label{exception_8cc_a5214d3046f23b6c21d84e725ac4cc833} 
+void {\bfseries resetbuffer} (char $\ast$buffer, int buffersize)
+\item 
+\hypertarget{exception_8cc_a69c8c3bb4a492eeea6b21600a76cada7}{}\label{exception_8cc_a69c8c3bb4a492eeea6b21600a76cada7} 
+void {\bfseries Exception\+Handler} (Exception\+Type which)
+\end{DoxyCompactItemize}
+
+
+\subsubsection{Description détaillée}
+Gestion des syscalls. 
+

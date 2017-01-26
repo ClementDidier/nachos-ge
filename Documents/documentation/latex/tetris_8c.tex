@@ -1,0 +1,208 @@
+\hypertarget{tetris_8c}{}\subsection{Référence du fichier test/tetris.c}
+\label{tetris_8c}\index{test/tetris.\+c@{test/tetris.\+c}}
+
+
+permet de tester l\textquotesingle{}utilisation de la console (get char, get string, put string etc.), la gestion et la synchronisation des threads utilisateurs, les semaphores utilisateurs. Permet aussi de jouer au tetris (note il est possible d\textquotesingle{}entrer jusqu\textquotesingle{}a 2 fonctions de déplacement, par exemple 1+2+enter vas faire aller la pièce à gauche puis va la faire pivoter)  
+
+
+{\ttfamily \#include \char`\"{}syscall.\+h\char`\"{}}\newline
+\subsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{tetris_8c_af4a13e4f962eaa8b45728838b9abdefa}{}\label{tetris_8c_af4a13e4f962eaa8b45728838b9abdefa} 
+\#define {\bfseries hauteur}~40
+\item 
+\hypertarget{tetris_8c_a088c7c70422ca34b59267c58a7d68767}{}\label{tetris_8c_a088c7c70422ca34b59267c58a7d68767} 
+\#define {\bfseries largeur}~20
+\item 
+\hypertarget{tetris_8c_a98a3a89ac9de9d5d280bec69bb5ba1b8}{}\label{tetris_8c_a98a3a89ac9de9d5d280bec69bb5ba1b8} 
+\#define {\bfseries milieu}~9
+\item 
+\hypertarget{tetris_8c_a48c0427129074c7d5749199b9363ecf9}{}\label{tetris_8c_a48c0427129074c7d5749199b9363ecf9} 
+\#define {\bfseries coeff}~2
+\item 
+\hypertarget{tetris_8c_afc469b0fbec8513c90ffac501f6080cb}{}\label{tetris_8c_afc469b0fbec8513c90ffac501f6080cb} 
+\#define {\bfseries scrheight}~70
+\item 
+\hypertarget{tetris_8c_a95fe6a73214ad703e9505cfb18bedb22}{}\label{tetris_8c_a95fe6a73214ad703e9505cfb18bedb22} 
+\#define {\bfseries nb\+Piece\+List}~14
+\end{DoxyCompactItemize}
+\subsubsection*{Énumérations}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{tetris_8c_a12ed9719bbdf7bc596ff7a6f4bf3f021}{}\label{tetris_8c_a12ed9719bbdf7bc596ff7a6f4bf3f021} 
+enum {\bfseries Piece\+Type} \{ \newline
+{\bfseries C\+A\+R\+RE}, 
+{\bfseries B\+A\+R\+RE}, 
+{\bfseries L\+G\+A\+U\+C\+HE}, 
+{\bfseries L\+D\+R\+O\+IT}, 
+\newline
+{\bfseries T}, 
+{\bfseries Q\+U\+A\+T\+RE}, 
+{\bfseries Q\+I\+N\+V\+E\+R\+SE}
+ \}
+\end{DoxyCompactItemize}
+\subsubsection*{Fonctions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{tetris_8c_acfef1586e94c7b109a3469cd8bd7e1cb}{}\label{tetris_8c_acfef1586e94c7b109a3469cd8bd7e1cb} 
+void {\bfseries Custom\+Usleep} (int duree)
+\item 
+\hypertarget{tetris_8c_a739edd8dffc7ed84c3b344e7a9203868}{}\label{tetris_8c_a739edd8dffc7ed84c3b344e7a9203868} 
+int {\bfseries find\+Z\+In\+Line} (int ligne)
+\item 
+\hypertarget{tetris_8c_a4689ef744432b81441275407726f9711}{}\label{tetris_8c_a4689ef744432b81441275407726f9711} 
+int {\bfseries find\+Z\+In\+Col} (int col)
+\item 
+\hypertarget{tetris_8c_a0b3970cb6e4aa04f04f0278c4f8f2da5}{}\label{tetris_8c_a0b3970cb6e4aa04f04f0278c4f8f2da5} 
+int {\bfseries pivoterT} ()
+\item 
+\hypertarget{tetris_8c_aa1001c7413f22c3fb2368f81900733c4}{}\label{tetris_8c_aa1001c7413f22c3fb2368f81900733c4} 
+int {\bfseries pivoter\+L\+Gauche} ()
+\item 
+\hypertarget{tetris_8c_acba8824ac919154b83a2cdd54dadc9c0}{}\label{tetris_8c_acba8824ac919154b83a2cdd54dadc9c0} 
+int {\bfseries pivoter\+L\+Droit} ()
+\item 
+\hypertarget{tetris_8c_a52231f1dcf8550401d8c52f5e55879e9}{}\label{tetris_8c_a52231f1dcf8550401d8c52f5e55879e9} 
+int {\bfseries pivoter\+Barre} ()
+\item 
+\hypertarget{tetris_8c_ac19cff7bb4b927a37104e7b6c2846999}{}\label{tetris_8c_ac19cff7bb4b927a37104e7b6c2846999} 
+int {\bfseries pivoter\+Quatre} ()
+\item 
+\hypertarget{tetris_8c_ae15e0a556772800c409d3d3ff2644574}{}\label{tetris_8c_ae15e0a556772800c409d3d3ff2644574} 
+int {\bfseries pivoter\+Q\+Inverse} ()
+\item 
+\hypertarget{tetris_8c_ab1b9e11a7732be651ef92cb9017ec2c7}{}\label{tetris_8c_ab1b9e11a7732be651ef92cb9017ec2c7} 
+void {\bfseries pivoter} ()
+\item 
+\hypertarget{tetris_8c_ab48abf6006e8775f669c2f0dbdb30b9c}{}\label{tetris_8c_ab48abf6006e8775f669c2f0dbdb30b9c} 
+void {\bfseries Put\+Int\+In\+Ascii\+Art} (int i)
+\item 
+\hypertarget{tetris_8c_a513578d35c464b9c78cb8cf3a8e96721}{}\label{tetris_8c_a513578d35c464b9c78cb8cf3a8e96721} 
+int {\bfseries pop\+Carre} ()
+\item 
+\hypertarget{tetris_8c_a34618e2c30b07f0f136afb3e171c9c2e}{}\label{tetris_8c_a34618e2c30b07f0f136afb3e171c9c2e} 
+int {\bfseries pop\+Barre} ()
+\item 
+\hypertarget{tetris_8c_afe53039cf5dcd950107c0ba61d388330}{}\label{tetris_8c_afe53039cf5dcd950107c0ba61d388330} 
+int {\bfseries pop\+Quatre} ()
+\item 
+\hypertarget{tetris_8c_ae7594fd0ff538e87636c7fabc6f14f03}{}\label{tetris_8c_ae7594fd0ff538e87636c7fabc6f14f03} 
+int {\bfseries pop\+Q\+Inverse} ()
+\item 
+\hypertarget{tetris_8c_ae1f1808cb07d2c7f14a907d4e264b8d9}{}\label{tetris_8c_ae1f1808cb07d2c7f14a907d4e264b8d9} 
+int {\bfseries pop\+L\+Droit} ()
+\item 
+\hypertarget{tetris_8c_adb4e79a4bd00425ced6c235558ef67ff}{}\label{tetris_8c_adb4e79a4bd00425ced6c235558ef67ff} 
+int {\bfseries pop\+L\+Gauche} ()
+\item 
+\hypertarget{tetris_8c_a3467ad9e33bc91dbae5358d30b1e558b}{}\label{tetris_8c_a3467ad9e33bc91dbae5358d30b1e558b} 
+int {\bfseries popT} ()
+\item 
+\hypertarget{tetris_8c_aaff1c7afc7a577fbff41a1fcf885031a}{}\label{tetris_8c_aaff1c7afc7a577fbff41a1fcf885031a} 
+void {\bfseries clearscr} ()
+\item 
+\hypertarget{tetris_8c_acae73b9cbc04fb4bdd2e37ac820f8929}{}\label{tetris_8c_acae73b9cbc04fb4bdd2e37ac820f8929} 
+int {\bfseries check\+O\+K\+Descendre\+Ligne} ()
+\item 
+\hypertarget{tetris_8c_ae53588c7ef40a636f1dc4ffdb0415cf4}{}\label{tetris_8c_ae53588c7ef40a636f1dc4ffdb0415cf4} 
+int {\bfseries check\+O\+K\+Go\+Left} ()
+\item 
+\hypertarget{tetris_8c_a720ed6bc5f89f6bf50864aa6a9309e59}{}\label{tetris_8c_a720ed6bc5f89f6bf50864aa6a9309e59} 
+void {\bfseries go\+Left} ()
+\item 
+\hypertarget{tetris_8c_a15b460b29fd80383c289024f0939eae9}{}\label{tetris_8c_a15b460b29fd80383c289024f0939eae9} 
+int {\bfseries check\+O\+K\+Go\+Right} ()
+\item 
+\hypertarget{tetris_8c_a6e08678fed687cc7907e8bb59245ba8c}{}\label{tetris_8c_a6e08678fed687cc7907e8bb59245ba8c} 
+void {\bfseries go\+Right} ()
+\item 
+\hypertarget{tetris_8c_a439dd60c78fec875e7e22844af456148}{}\label{tetris_8c_a439dd60c78fec875e7e22844af456148} 
+void {\bfseries fix\+Ligne} (int ligne)
+\item 
+\hypertarget{tetris_8c_a47e775990e8e151f7fedf6cc7d4a66c3}{}\label{tetris_8c_a47e775990e8e151f7fedf6cc7d4a66c3} 
+void {\bfseries descendre\+Ligne} (int ligne)
+\item 
+\hypertarget{tetris_8c_ab44e90b00a42941ac646688344e0493c}{}\label{tetris_8c_ab44e90b00a42941ac646688344e0493c} 
+void {\bfseries Aff\+Small\+Next} ()
+\item 
+\hypertarget{tetris_8c_a40ef8c3208c21a4c4606a110268980f8}{}\label{tetris_8c_a40ef8c3208c21a4c4606a110268980f8} 
+void {\bfseries print\+Global} ()
+\item 
+\hypertarget{tetris_8c_a8414d0db26adf969d136cff2eab81863}{}\label{tetris_8c_a8414d0db26adf969d136cff2eab81863} 
+void {\bfseries supprime\+Ligne} ()
+\item 
+\hypertarget{tetris_8c_a138d6b20cdb172541b9633a77a01784d}{}\label{tetris_8c_a138d6b20cdb172541b9633a77a01784d} 
+void {\bfseries descendre\+Global} (int diff)
+\item 
+\hypertarget{tetris_8c_a3b12c2771a51896abb261ed0c577d3f4}{}\label{tetris_8c_a3b12c2771a51896abb261ed0c577d3f4} 
+void {\bfseries control\+Thread} (void $\ast$v)
+\item 
+\hypertarget{tetris_8c_a2b526b7335042f57b7c4e60718b6b831}{}\label{tetris_8c_a2b526b7335042f57b7c4e60718b6b831} 
+int {\bfseries pop\+Next} ()
+\item 
+\hypertarget{tetris_8c_acffa300f943ac9b3bd150ede149d9c90}{}\label{tetris_8c_acffa300f943ac9b3bd150ede149d9c90} 
+void {\bfseries get\+Nom\+High\+Score} (char buffer\mbox{[}16\mbox{]})
+\item 
+\hypertarget{tetris_8c_a026d019671eda0cfe729200fc24d23ba}{}\label{tetris_8c_a026d019671eda0cfe729200fc24d23ba} 
+void {\bfseries game\+Over} ()
+\item 
+\hypertarget{tetris_8c_a6fee83e2016dda0f3723509db5851e18}{}\label{tetris_8c_a6fee83e2016dda0f3723509db5851e18} 
+void {\bfseries play} (int diff)
+\item 
+\hypertarget{tetris_8c_ab13e858612c64eeef73aff1d8a03945e}{}\label{tetris_8c_ab13e858612c64eeef73aff1d8a03945e} 
+void {\bfseries print\+Menu} ()
+\item 
+\hypertarget{tetris_8c_ad4952f88b5d628ce55f78bb06d8dedaa}{}\label{tetris_8c_ad4952f88b5d628ce55f78bb06d8dedaa} 
+void {\bfseries print\+Logo} ()
+\item 
+\hypertarget{tetris_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}{}\label{tetris_8c_ae66f6b31b5ad750f1fe042a706a4e3d4} 
+int {\bfseries main} ()
+\end{DoxyCompactItemize}
+\subsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{tetris_8c_a771bdc44273d0c5ead00ef3e7da9ea14}{}\label{tetris_8c_a771bdc44273d0c5ead00ef3e7da9ea14} 
+enum Piece\+Type {\bfseries current\+\_\+piece}
+\item 
+\hypertarget{tetris_8c_a29a414cf16a617f6b38324dd01a44e09}{}\label{tetris_8c_a29a414cf16a617f6b38324dd01a44e09} 
+int {\bfseries current\+\_\+position}
+\item 
+\hypertarget{tetris_8c_ac8f2c17d4020a12d7ef767de163ad8c9}{}\label{tetris_8c_ac8f2c17d4020a12d7ef767de163ad8c9} 
+char {\bfseries global} \mbox{[}hauteur\mbox{]}\mbox{[}largeur+1\mbox{]}
+\item 
+\hypertarget{tetris_8c_a14d69c81aa830eb296094444b4ca1fd2}{}\label{tetris_8c_a14d69c81aa830eb296094444b4ca1fd2} 
+char {\bfseries clrscr\+Array} \mbox{[}scrheight\mbox{]}
+\item 
+\hypertarget{tetris_8c_aef160b7437d94056f1dc59646cd5b87d}{}\label{tetris_8c_aef160b7437d94056f1dc59646cd5b87d} 
+int {\bfseries score} = 0
+\item 
+\hypertarget{tetris_8c_a9446a6d719017eb55568d9af3e033f9a}{}\label{tetris_8c_a9446a6d719017eb55568d9af3e033f9a} 
+enum Piece\+Type {\bfseries Piece\+List} \mbox{[}nb\+Piece\+List\mbox{]}
+\item 
+\hypertarget{tetris_8c_a468dcc2c0523fb34e1aa548d73fc7458}{}\label{tetris_8c_a468dcc2c0523fb34e1aa548d73fc7458} 
+int {\bfseries go\+Kill\+Yourself} = 0
+\item 
+\hypertarget{tetris_8c_a80d878c6cd0d78f12f7b0bdd2295f8f1}{}\label{tetris_8c_a80d878c6cd0d78f12f7b0bdd2295f8f1} 
+int {\bfseries has\+Changed} = 1
+\item 
+\hypertarget{tetris_8c_a0284e3918a71825203ccedd3f50e9de2}{}\label{tetris_8c_a0284e3918a71825203ccedd3f50e9de2} 
+int {\bfseries asked\+Action} \mbox{[}2\mbox{]}
+\item 
+\hypertarget{tetris_8c_a38801b5a37f67a30d1c8724a5138902b}{}\label{tetris_8c_a38801b5a37f67a30d1c8724a5138902b} 
+sem\+\_\+t $\ast$ {\bfseries sem\+\_\+action}
+\item 
+\hypertarget{tetris_8c_aa99291ce6e98e057138dcb687e18e2c2}{}\label{tetris_8c_aa99291ce6e98e057138dcb687e18e2c2} 
+sem\+\_\+t $\ast$ {\bfseries sem\+\_\+run}
+\item 
+\hypertarget{tetris_8c_a63e4a0a274d96e364f64bdbfed53ed02}{}\label{tetris_8c_a63e4a0a274d96e364f64bdbfed53ed02} 
+int {\bfseries num\+Piece}
+\item 
+\hypertarget{tetris_8c_a6fe89cefdd9fc95dd2021caaee329d17}{}\label{tetris_8c_a6fe89cefdd9fc95dd2021caaee329d17} 
+int {\bfseries previousscore} = 0
+\end{DoxyCompactItemize}
+
+
+\subsubsection{Description détaillée}
+permet de tester l\textquotesingle{}utilisation de la console (get char, get string, put string etc.), la gestion et la synchronisation des threads utilisateurs, les semaphores utilisateurs. Permet aussi de jouer au tetris (note il est possible d\textquotesingle{}entrer jusqu\textquotesingle{}a 2 fonctions de déplacement, par exemple 1+2+enter vas faire aller la pièce à gauche puis va la faire pivoter) 
+

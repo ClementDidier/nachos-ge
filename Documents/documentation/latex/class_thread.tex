@@ -1,0 +1,150 @@
+\hypertarget{class_thread}{}\subsection{Référence de la classe Thread}
+\label{class_thread}\index{Thread@{Thread}}
+\subsubsection*{Fonctions membres publiques}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_thread_aeef00ecb5eda30734cff97a0ac492bdd}{}\label{class_thread_aeef00ecb5eda30734cff97a0ac492bdd} 
+{\bfseries Thread} (const char $\ast$debug\+Name)
+\item 
+\hypertarget{class_thread_af855fdbb46192090ce0f8c5e7a263eeb}{}\label{class_thread_af855fdbb46192090ce0f8c5e7a263eeb} 
+int {\bfseries Fork} (Void\+Function\+Ptr func, int arg)
+\item 
+\hypertarget{class_thread_adbc2bfb172d2eff4b46882aade9eeb8a}{}\label{class_thread_adbc2bfb172d2eff4b46882aade9eeb8a} 
+void {\bfseries Yield} ()
+\item 
+\hypertarget{class_thread_a187a4c1e62087511b69068220840244a}{}\label{class_thread_a187a4c1e62087511b69068220840244a} 
+void {\bfseries Sleep} ()
+\item 
+\hypertarget{class_thread_a1e43c788c40e9783311c970bcea7239b}{}\label{class_thread_a1e43c788c40e9783311c970bcea7239b} 
+void {\bfseries Finish} ()
+\item 
+\hypertarget{class_thread_afa6657ff14b9c6866eadd85ea32c9147}{}\label{class_thread_afa6657ff14b9c6866eadd85ea32c9147} 
+void {\bfseries Check\+Overflow} ()
+\item 
+\hypertarget{class_thread_a39061ce2692542188f82f909d005b1c3}{}\label{class_thread_a39061ce2692542188f82f909d005b1c3} 
+void {\bfseries set\+Status} (Thread\+Status st)
+\item 
+\hypertarget{class_thread_aed303e0688ec792e41fb9b7429a3d948}{}\label{class_thread_aed303e0688ec792e41fb9b7429a3d948} 
+const char $\ast$ {\bfseries get\+Name} ()
+\item 
+\hypertarget{class_thread_ad707af00a9ce1a1d324804e7c73dc4ab}{}\label{class_thread_ad707af00a9ce1a1d324804e7c73dc4ab} 
+void {\bfseries Print} ()
+\item 
+int \hyperlink{class_thread_a4cb215377b6846f0e9a33084d3d61b68}{get\+T\+ID} ()
+\begin{DoxyCompactList}\small\item\em retourne le tid de l\textquotesingle{}objet thread, (unique pour chaque thread utilisateur). \end{DoxyCompactList}\item 
+\hypertarget{class_thread_abafd49d784372da5d051514ac3e21a4f}{}\label{class_thread_abafd49d784372da5d051514ac3e21a4f} 
+void {\bfseries Save\+User\+State} ()
+\item 
+\hypertarget{class_thread_a3758b8a2903590f3a590ca10c2d477d5}{}\label{class_thread_a3758b8a2903590f3a590ca10c2d477d5} 
+void {\bfseries Restore\+User\+State} ()
+\item 
+void \hyperlink{class_thread_a6208073ef0f52efa40eb5e813a191954}{set\+T\+ID} ()
+\begin{DoxyCompactList}\small\item\em associe le T\+ID du thread utilisateur courrant à celui du compteur Incrémente le compteur (les opérations sont protégée par une sémaphore) \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsubsection*{Attributs publics}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_thread_afcd6b50d2a4d35f1a9cf70e9769f4963}{}\label{class_thread_afcd6b50d2a4d35f1a9cf70e9769f4963} 
+\hyperlink{class_lock}{Lock} $\ast$ {\bfseries Thread\+Join\+Mutex}
+\item 
+\hypertarget{class_thread_ab247c9c39f7e50a39abfcd2a86831e29}{}\label{class_thread_ab247c9c39f7e50a39abfcd2a86831e29} 
+int {\bfseries map\+ID}
+\item 
+\hypertarget{class_thread_a5c76853f51d64bc8bb1eb2f6bfddf404}{}\label{class_thread_a5c76853f51d64bc8bb1eb2f6bfddf404} 
+int {\bfseries T\+ID}
+\item 
+\hypertarget{class_thread_a41956ac61c6462788ff5ad6155c4b6c7}{}\label{class_thread_a41956ac61c6462788ff5ad6155c4b6c7} 
+int {\bfseries P\+ID}
+\item 
+\hypertarget{class_thread_a6d69347555b57c5c25de4cec71e23fcf}{}\label{class_thread_a6d69347555b57c5c25de4cec71e23fcf} 
+\hyperlink{class_addr_space}{Addr\+Space} $\ast$ {\bfseries space}
+\end{DoxyCompactItemize}
+\subsubsection*{Attributs publics statiques}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_thread_abefab7459c3d3ad3eb72e5b246fe0923}{}\label{class_thread_abefab7459c3d3ad3eb72e5b246fe0923} 
+static int {\bfseries T\+I\+Dcnt} = 0
+\item 
+\hypertarget{class_thread_ad99ab89f894fb54eb799c1ab1e55c8dd}{}\label{class_thread_ad99ab89f894fb54eb799c1ab1e55c8dd} 
+static int {\bfseries P\+I\+Dcnt} = 0
+\item 
+\hypertarget{class_thread_aae04c21b35329d0cf24ca2f1bab13b58}{}\label{class_thread_aae04c21b35329d0cf24ca2f1bab13b58} 
+static \hyperlink{class_semaphore}{Semaphore} $\ast$ {\bfseries T\+I\+Dcnt\+Lock} = new \hyperlink{class_semaphore}{Semaphore}(\char`\"{}T\+I\+Dcnt\+Lock\char`\"{},1)
+\item 
+\hypertarget{class_thread_a24af7dfa0b618b0488308194b39b256c}{}\label{class_thread_a24af7dfa0b618b0488308194b39b256c} 
+static \hyperlink{class_semaphore}{Semaphore} $\ast$ {\bfseries Op\+On\+User\+Thread\+Sem} = new \hyperlink{class_semaphore}{Semaphore}(\char`\"{}Op\+On\+User\+Thread\+Sem\char`\"{},1)
+\item 
+\hypertarget{class_thread_ae5f35f9aebf2b37e2af68ab44b16fe4a}{}\label{class_thread_ae5f35f9aebf2b37e2af68ab44b16fe4a} 
+static \hyperlink{class_semaphore}{Semaphore} $\ast$ {\bfseries Shell\+Proc\+Only\+One} = new \hyperlink{class_semaphore}{Semaphore}(\char`\"{}on ne peut lancer qu\textquotesingle{}un seul proc dans le shell\char`\"{},0)
+\end{DoxyCompactItemize}
+\subsubsection*{Fonctions membres privées}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_thread_a171c33e7e9b1ffe9d2a2e02b06a6f4dd}{}\label{class_thread_a171c33e7e9b1ffe9d2a2e02b06a6f4dd} 
+void {\bfseries Stack\+Allocate} (Void\+Function\+Ptr func, int arg)
+\end{DoxyCompactItemize}
+\subsubsection*{Attributs privés}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_thread_ac39ffcd6f50a21e542302c408aa70ec0}{}\label{class_thread_ac39ffcd6f50a21e542302c408aa70ec0} 
+int $\ast$ {\bfseries stack\+Top}
+\item 
+\hypertarget{class_thread_ae7f0e9d72338fd2fd49abb20649814fb}{}\label{class_thread_ae7f0e9d72338fd2fd49abb20649814fb} 
+int {\bfseries machine\+State} \mbox{[}Machine\+State\+Size\mbox{]}
+\item 
+\hypertarget{class_thread_a52b4f44d9bf19cd860910044a43d6d5c}{}\label{class_thread_a52b4f44d9bf19cd860910044a43d6d5c} 
+int $\ast$ {\bfseries stack}
+\item 
+\hypertarget{class_thread_a3855378e2bbc5f325c759c87d4b6b068}{}\label{class_thread_a3855378e2bbc5f325c759c87d4b6b068} 
+Thread\+Status {\bfseries status}
+\item 
+\hypertarget{class_thread_adf8367c62ce6a746d82304600cbd2f9c}{}\label{class_thread_adf8367c62ce6a746d82304600cbd2f9c} 
+const char $\ast$ {\bfseries name}
+\item 
+\hypertarget{class_thread_a0206dd43ff9fe866a84bda01f9cbe8be}{}\label{class_thread_a0206dd43ff9fe866a84bda01f9cbe8be} 
+int {\bfseries user\+Registers} \mbox{[}Num\+Total\+Regs\mbox{]}
+\end{DoxyCompactItemize}
+
+
+\subsubsection{Documentation des fonctions membres}
+\hypertarget{class_thread_a4cb215377b6846f0e9a33084d3d61b68}{}\label{class_thread_a4cb215377b6846f0e9a33084d3d61b68} 
+\index{Thread@{Thread}!get\+T\+ID@{get\+T\+ID}}
+\index{get\+T\+ID@{get\+T\+ID}!Thread@{Thread}}
+\paragraph{\texorpdfstring{get\+T\+I\+D()}{getTID()}}
+{\footnotesize\ttfamily int Thread\+::get\+T\+ID (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+retourne le tid de l\textquotesingle{}objet thread, (unique pour chaque thread utilisateur). 
+
+\begin{DoxyReturn}{Renvoie}
+le tid unique du thread utulisateur 
+\end{DoxyReturn}
+
+
+Référencé par do\+\_\+\+User\+Thread\+Exit(), do\+\_\+\+User\+Thread\+Join(), et Addr\+Space\+::\+Push\+Me\+In\+Thread\+List().
+
+\hypertarget{class_thread_a6208073ef0f52efa40eb5e813a191954}{}\label{class_thread_a6208073ef0f52efa40eb5e813a191954} 
+\index{Thread@{Thread}!set\+T\+ID@{set\+T\+ID}}
+\index{set\+T\+ID@{set\+T\+ID}!Thread@{Thread}}
+\paragraph{\texorpdfstring{set\+T\+I\+D()}{setTID()}}
+{\footnotesize\ttfamily void Thread\+::set\+T\+ID (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+associe le T\+ID du thread utilisateur courrant à celui du compteur Incrémente le compteur (les opérations sont protégée par une sémaphore) 
+
+associe le T\+ID du thread utilisateur courrant à celui du compteur Incrémente le compteur (les opérations sont protégée par une sémaphore)  func is the procedure to run concurrently.  arg is a single argument to be passed to the procedure.
+
+\begin{DoxyReturn}{Renvoie}
+le tid unique du thread utulisateur 
+\end{DoxyReturn}
+
+
+Références Semaphore\+::\+P(), et Semaphore\+::\+V().
+
+
+
+La documentation de cette classe a été générée à partir des fichiers suivants \+:\begin{DoxyCompactItemize}
+\item 
+threads/thread.\+h\item 
+threads/thread.\+cc\end{DoxyCompactItemize}

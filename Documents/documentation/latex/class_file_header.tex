@@ -1,0 +1,108 @@
+\hypertarget{class_file_header}{}\subsection{Référence de la classe File\+Header}
+\label{class_file_header}\index{File\+Header@{File\+Header}}
+\subsubsection*{Types publics}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_file_header_a56c06d0f178e349f85def594f9a6ff3c}{}\label{class_file_header_a56c06d0f178e349f85def594f9a6ff3c} 
+enum {\bfseries Type} \{ {\bfseries f}, 
+{\bfseries d}
+ \}
+\end{DoxyCompactItemize}
+\subsubsection*{Fonctions membres publiques}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_file_header_a2fb90f63470e10c847393e124763fd1a}{}\label{class_file_header_a2fb90f63470e10c847393e124763fd1a} 
+bool {\bfseries Allocate} (\hyperlink{class_bit_map}{Bit\+Map} $\ast$bit\+Map, int file\+Size)
+\item 
+\hypertarget{class_file_header_a0d8a66db0af2460ccb27edd8d2331179}{}\label{class_file_header_a0d8a66db0af2460ccb27edd8d2331179} 
+void {\bfseries Deallocate} (\hyperlink{class_bit_map}{Bit\+Map} $\ast$bit\+Map)
+\item 
+\hypertarget{class_file_header_aa85564cee98fc9592df08cc5e4a2efc6}{}\label{class_file_header_aa85564cee98fc9592df08cc5e4a2efc6} 
+void {\bfseries Fetch\+From} (int sector\+Number)
+\item 
+\hypertarget{class_file_header_ab896cc7dd7274e3f8072da2c7d9beee8}{}\label{class_file_header_ab896cc7dd7274e3f8072da2c7d9beee8} 
+void {\bfseries Write\+Back} (int sector\+Number)
+\item 
+\hypertarget{class_file_header_adacbe1c1af441d0b1e978c65a05d60f2}{}\label{class_file_header_adacbe1c1af441d0b1e978c65a05d60f2} 
+int {\bfseries Byte\+To\+Sector} (int offset)
+\item 
+\hypertarget{class_file_header_a676d88bbc37d3d108625be75d637a8e6}{}\label{class_file_header_a676d88bbc37d3d108625be75d637a8e6} 
+int {\bfseries File\+Length} ()
+\item 
+\hypertarget{class_file_header_a57b661cda2c4d51ee06cc29e7ea0a0c0}{}\label{class_file_header_a57b661cda2c4d51ee06cc29e7ea0a0c0} 
+void {\bfseries Print} ()
+\item 
+int \hyperlink{class_file_header_acd6d2c54e660c15dbfb4d367f722f88d}{get\+Sector} (int id)
+\begin{DoxyCompactList}\small\item\em Récupère les données a un secteur donné du fichier. \end{DoxyCompactList}\item 
+void \hyperlink{class_file_header_a97a47f8bf9c3200f64b799815b9b9bbd}{set\+Sector} (int sector, int id)
+\begin{DoxyCompactList}\small\item\em Ecrit des données sur le secteur numero id du fichier. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsubsection*{Attributs publics}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_file_header_ac34633b420f66e4467b33bded8ab6372}{}\label{class_file_header_ac34633b420f66e4467b33bded8ab6372} 
+Type \hyperlink{class_file_header_ac34633b420f66e4467b33bded8ab6372}{type}
+\begin{DoxyCompactList}\small\item\em Type du fichier (Dossier/\+Fichier) \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsubsection*{Attributs privés}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_file_header_a8ce2c3a2c0eb628a60120acecf8a225b}{}\label{class_file_header_a8ce2c3a2c0eb628a60120acecf8a225b} 
+int {\bfseries num\+Bytes}
+\item 
+\hypertarget{class_file_header_ab18c90cd87cf858a00b65bc7023cc28e}{}\label{class_file_header_ab18c90cd87cf858a00b65bc7023cc28e} 
+int {\bfseries num\+Sectors}
+\item 
+\hypertarget{class_file_header_aa9ca0b73f5c5cac7821c4c919db43ccf}{}\label{class_file_header_aa9ca0b73f5c5cac7821c4c919db43ccf} 
+int {\bfseries data\+Sectors} \mbox{[}Num\+Direct\mbox{]}
+\end{DoxyCompactItemize}
+
+
+\subsubsection{Documentation des fonctions membres}
+\hypertarget{class_file_header_acd6d2c54e660c15dbfb4d367f722f88d}{}\label{class_file_header_acd6d2c54e660c15dbfb4d367f722f88d} 
+\index{File\+Header@{File\+Header}!get\+Sector@{get\+Sector}}
+\index{get\+Sector@{get\+Sector}!File\+Header@{File\+Header}}
+\paragraph{\texorpdfstring{get\+Sector()}{getSector()}}
+{\footnotesize\ttfamily int File\+Header\+::get\+Sector (\begin{DoxyParamCaption}\item[{int}]{id }\end{DoxyParamCaption})}
+
+
+
+Récupère les données a un secteur donné du fichier. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em id} & Secteur où les données doivent etre récupérées \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+Données récupérées au secteur id 
+\end{DoxyReturn}
+
+
+Référencé par File\+System\+::\+Change\+Dir(), et File\+System\+::\+Create\+Dir().
+
+\hypertarget{class_file_header_a97a47f8bf9c3200f64b799815b9b9bbd}{}\label{class_file_header_a97a47f8bf9c3200f64b799815b9b9bbd} 
+\index{File\+Header@{File\+Header}!set\+Sector@{set\+Sector}}
+\index{set\+Sector@{set\+Sector}!File\+Header@{File\+Header}}
+\paragraph{\texorpdfstring{set\+Sector()}{setSector()}}
+{\footnotesize\ttfamily void File\+Header\+::set\+Sector (\begin{DoxyParamCaption}\item[{int}]{sector,  }\item[{int}]{id }\end{DoxyParamCaption})}
+
+
+
+Ecrit des données sur le secteur numero id du fichier. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em sector} & Données à ecrire \\
+\hline
+{\em id} & Secteur du fichier où les données doivent etre écrites \\
+\hline
+\end{DoxyParams}
+
+
+Référencé par File\+System\+::\+Create\+Dir(), et File\+System\+::\+File\+System().
+
+
+
+La documentation de cette classe a été générée à partir des fichiers suivants \+:\begin{DoxyCompactItemize}
+\item 
+filesys/\hyperlink{filehdr_8h}{filehdr.\+h}\item 
+filesys/\hyperlink{filehdr_8cc}{filehdr.\+cc}\end{DoxyCompactItemize}

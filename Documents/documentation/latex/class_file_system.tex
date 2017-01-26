@@ -1,0 +1,206 @@
+\hypertarget{class_file_system}{}\subsection{Référence de la classe File\+System}
+\label{class_file_system}\index{File\+System@{File\+System}}
+\subsubsection*{Fonctions membres publiques}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_file_system_aa20f3ad23274f0c10b23f2fe00b30b23}{}\label{class_file_system_aa20f3ad23274f0c10b23f2fe00b30b23} 
+\hyperlink{class_file_system_aa20f3ad23274f0c10b23f2fe00b30b23}{File\+System} (bool format)
+\begin{DoxyCompactList}\small\item\em Initialize the file system. Must be called {\itshape after} \char`\"{}synch\+Disk\char`\"{} has been initialized. If \char`\"{}format\char`\"{}, there is nothing on the disk, so initialize the directory and the bitmap of free blocks. \end{DoxyCompactList}\item 
+\hypertarget{class_file_system_ad6fc1591cd298f34c4655a6ea64afbef}{}\label{class_file_system_ad6fc1591cd298f34c4655a6ea64afbef} 
+bool {\bfseries Create} (const char $\ast$name, int initial\+Size, File\+Header\+::\+Type type=File\+Header\+::f)
+\item 
+\hypertarget{class_file_system_affae6d7e2deb69df4da1b7e2ccf340df}{}\label{class_file_system_affae6d7e2deb69df4da1b7e2ccf340df} 
+\hyperlink{class_open_file}{Open\+File} $\ast$ {\bfseries Open} (const char $\ast$name)
+\item 
+void \hyperlink{class_file_system_a52b38efbde699112b9b79ed029a394ea}{Close} (const char $\ast$name)
+\begin{DoxyCompactList}\small\item\em créer un fichier ou un dossier dans le repertoire courrant \end{DoxyCompactList}\item 
+\hypertarget{class_file_system_acde5af39108d5a11699af421ceeb29b5}{}\label{class_file_system_acde5af39108d5a11699af421ceeb29b5} 
+bool \hyperlink{class_file_system_acde5af39108d5a11699af421ceeb29b5}{Remove} (const char $\ast$name)
+\begin{DoxyCompactList}\small\item\em Delete a file (U\+N\+IX unlink) \end{DoxyCompactList}\item 
+\hypertarget{class_file_system_aaf76918c6f0d24bc72aaa84625adfddf}{}\label{class_file_system_aaf76918c6f0d24bc72aaa84625adfddf} 
+void {\bfseries List} ()
+\item 
+void \hyperlink{class_file_system_aebaf06661b1879a62afefa5abe99f21e}{Print} ()
+\begin{DoxyCompactList}\small\item\em \hyperlink{class_list}{List} all the files in the file system. \end{DoxyCompactList}\item 
+bool \hyperlink{class_file_system_a8064a856821dd9c6a66ade6ff42e0974}{Create\+Dir} (const char $\ast$name)
+\begin{DoxyCompactList}\small\item\em suppime le repertoire name du dossier courrant. \end{DoxyCompactList}\item 
+bool \hyperlink{class_file_system_a1895af5b9242017d18dd7bfd349eeee4}{Delete\+Dir} (const char $\ast$name)
+\begin{DoxyCompactList}\small\item\em suppime le repertoire name du dossier courrant. \end{DoxyCompactList}\item 
+int \hyperlink{class_file_system_ab60a0afd7904cc1826d6964e4d6025e2}{Change\+Dir} (const char $\ast$name)
+\begin{DoxyCompactList}\small\item\em recherche le nom du dossier passé en paramètre, recherche le secteur associé et change l\textquotesingle{}emplacement \end{DoxyCompactList}\item 
+int \hyperlink{class_file_system_a1d0a587c40ecb3f5d768ee5faf03e771}{Change\+Dir\+Path} (const char $\ast$name)
+\begin{DoxyCompactList}\small\item\em analyse la chaine passé en paramètre \end{DoxyCompactList}\item 
+void \hyperlink{class_file_system_a0bc2ed13af3e6772c610ad1a8bd0c5aa}{clear\+Buffer} (char $\ast$buffer)
+\begin{DoxyCompactList}\small\item\em réinitialise le buffer passé en paramètre \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsubsection*{Attributs privés}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_file_system_ac011f3b710a3b03d29fb9e554008699d}{}\label{class_file_system_ac011f3b710a3b03d29fb9e554008699d} 
+\hyperlink{class_open_file}{Open\+File} $\ast$ {\bfseries free\+Map\+File}
+\item 
+\hypertarget{class_file_system_a8d062da5905bf0eca01033ad70d0e2d5}{}\label{class_file_system_a8d062da5905bf0eca01033ad70d0e2d5} 
+\hyperlink{class_open_file}{Open\+File} $\ast$ {\bfseries directory\+File}
+\item 
+\hypertarget{class_file_system_a02aaa8b1bdbe6f73e3058a0ccea2172c}{}\label{class_file_system_a02aaa8b1bdbe6f73e3058a0ccea2172c} 
+\hyperlink{class_file_map}{File\+Map} $\ast$ {\bfseries Opened\+Files}
+\end{DoxyCompactItemize}
+
+
+\subsubsection{Documentation des fonctions membres}
+\hypertarget{class_file_system_ab60a0afd7904cc1826d6964e4d6025e2}{}\label{class_file_system_ab60a0afd7904cc1826d6964e4d6025e2} 
+\index{File\+System@{File\+System}!Change\+Dir@{Change\+Dir}}
+\index{Change\+Dir@{Change\+Dir}!File\+System@{File\+System}}
+\paragraph{\texorpdfstring{Change\+Dir()}{ChangeDir()}}
+{\footnotesize\ttfamily void File\+System\+::\+Change\+Dir (\begin{DoxyParamCaption}\item[{const char $\ast$}]{buffer }\end{DoxyParamCaption})}
+
+
+
+recherche le nom du dossier passé en paramètre, recherche le secteur associé et change l\textquotesingle{}emplacement 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em name} & une chaine de taille max 9 (taille maximum de nom de fichier) qui contient un nom de dossier du repertoire courrant (. et .. inclu). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+retourne 1 si on a pu changer de repertoire, 0 sinon. 
+\end{DoxyReturn}
+
+
+Références File\+Header\+::get\+Sector().
+
+
+
+Référencé par Change\+Dir\+Path(), Create\+Dir(), et Delete\+Dir().
+
+\hypertarget{class_file_system_a1d0a587c40ecb3f5d768ee5faf03e771}{}\label{class_file_system_a1d0a587c40ecb3f5d768ee5faf03e771} 
+\index{File\+System@{File\+System}!Change\+Dir\+Path@{Change\+Dir\+Path}}
+\index{Change\+Dir\+Path@{Change\+Dir\+Path}!File\+System@{File\+System}}
+\paragraph{\texorpdfstring{Change\+Dir\+Path()}{ChangeDirPath()}}
+{\footnotesize\ttfamily void File\+System\+::\+Change\+Dir\+Path (\begin{DoxyParamCaption}\item[{const char $\ast$}]{buffer }\end{DoxyParamCaption})}
+
+
+
+analyse la chaine passé en paramètre 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em name} & une chaine de taille max 9 (taille maximum de nom de fichier) qui contient un chemin de repertoire absolu ou relatif. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+retourne 1 si on a pu changer de repertoire, 0 sinon. 
+\end{DoxyReturn}
+
+
+Références Change\+Dir(), et clear\+Buffer().
+
+\hypertarget{class_file_system_a0bc2ed13af3e6772c610ad1a8bd0c5aa}{}\label{class_file_system_a0bc2ed13af3e6772c610ad1a8bd0c5aa} 
+\index{File\+System@{File\+System}!clear\+Buffer@{clear\+Buffer}}
+\index{clear\+Buffer@{clear\+Buffer}!File\+System@{File\+System}}
+\paragraph{\texorpdfstring{clear\+Buffer()}{clearBuffer()}}
+{\footnotesize\ttfamily void File\+System\+::clear\+Buffer (\begin{DoxyParamCaption}\item[{char $\ast$}]{buffer }\end{DoxyParamCaption})}
+
+
+
+réinitialise le buffer passé en paramètre 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em buffer} & doit être de taille M\+A\+X\+\_\+\+S\+T\+R\+I\+N\+G\+\_\+\+S\+I\+ZE \\
+\hline
+\end{DoxyParams}
+
+
+Référencé par Change\+Dir\+Path().
+
+\hypertarget{class_file_system_a52b38efbde699112b9b79ed029a394ea}{}\label{class_file_system_a52b38efbde699112b9b79ed029a394ea} 
+\index{File\+System@{File\+System}!Close@{Close}}
+\index{Close@{Close}!File\+System@{File\+System}}
+\paragraph{\texorpdfstring{Close()}{Close()}}
+{\footnotesize\ttfamily void File\+System\+::\+Close (\begin{DoxyParamCaption}\item[{const char $\ast$}]{name }\end{DoxyParamCaption})}
+
+
+
+créer un fichier ou un dossier dans le repertoire courrant 
+
+ferme une fichier
+
+Open a file (U\+N\+IX open)
+
+
+\begin{DoxyParams}{Paramètres}
+{\em name} & nom du ficheir ou repertoire à créer \\
+\hline
+{\em initial\+Size} & taille initial du fichier ou repertoire à créer (int) \\
+\hline
+{\em type} & f en cas de fichier, d en cas de repertoire \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+true(1) si on a pu créer le repertoire ou le fichier, 0 sinon 
+\end{DoxyReturn}
+
+
+Références File\+Map\+::\+Delete().
+
+\hypertarget{class_file_system_a8064a856821dd9c6a66ade6ff42e0974}{}\label{class_file_system_a8064a856821dd9c6a66ade6ff42e0974} 
+\index{File\+System@{File\+System}!Create\+Dir@{Create\+Dir}}
+\index{Create\+Dir@{Create\+Dir}!File\+System@{File\+System}}
+\paragraph{\texorpdfstring{Create\+Dir()}{CreateDir()}}
+{\footnotesize\ttfamily void File\+System\+::\+Create\+Dir (\begin{DoxyParamCaption}\item[{const char $\ast$}]{buffer }\end{DoxyParamCaption})}
+
+
+
+suppime le repertoire name du dossier courrant. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em name} & une chaine de taille max 9 (taille maximum de nom de fichier) qui contient un nom de dossier du repertoire courrant (. et .. exclus). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+retourne true(1) si on a pu créer le repertoire, false(0) sinon. 
+\end{DoxyReturn}
+
+
+Références Change\+Dir(), File\+Header\+::get\+Sector(), et File\+Header\+::set\+Sector().
+
+\hypertarget{class_file_system_a1895af5b9242017d18dd7bfd349eeee4}{}\label{class_file_system_a1895af5b9242017d18dd7bfd349eeee4} 
+\index{File\+System@{File\+System}!Delete\+Dir@{Delete\+Dir}}
+\index{Delete\+Dir@{Delete\+Dir}!File\+System@{File\+System}}
+\paragraph{\texorpdfstring{Delete\+Dir()}{DeleteDir()}}
+{\footnotesize\ttfamily void File\+System\+::\+Delete\+Dir (\begin{DoxyParamCaption}\item[{const char $\ast$}]{buffer }\end{DoxyParamCaption})}
+
+
+
+suppime le repertoire name du dossier courrant. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em name} & une chaine de taille max 9 (taille maximum de nom de fichier) qui contient un nom de dossier du repertoire courrant (. et .. exclus). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+retourne true(1) si on a pu supprimer le repertoire, false(0) sinon. 
+\end{DoxyReturn}
+
+
+Références Change\+Dir(), et Directory\+::\+Is\+Empty().
+
+\hypertarget{class_file_system_aebaf06661b1879a62afefa5abe99f21e}{}\label{class_file_system_aebaf06661b1879a62afefa5abe99f21e} 
+\index{File\+System@{File\+System}!Print@{Print}}
+\index{Print@{Print}!File\+System@{File\+System}}
+\paragraph{\texorpdfstring{Print()}{Print()}}
+{\footnotesize\ttfamily void File\+System\+::\+Print (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\hyperlink{class_list}{List} all the files in the file system. 
+
+\hyperlink{class_list}{List} all the files and their contents. 
+
+La documentation de cette classe a été générée à partir des fichiers suivants \+:\begin{DoxyCompactItemize}
+\item 
+filesys/\hyperlink{filesys_8h}{filesys.\+h}\item 
+filesys/filesys.\+cc\end{DoxyCompactItemize}

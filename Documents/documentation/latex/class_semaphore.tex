@@ -1,0 +1,97 @@
+\hypertarget{class_semaphore}{}\subsection{Référence de la classe Semaphore}
+\label{class_semaphore}\index{Semaphore@{Semaphore}}
+\subsubsection*{Fonctions membres publiques}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_semaphore_a671a20336d97ab712cc84aab3381d34d}{Semaphore} (const char $\ast$debug\+Name, int initial\+Value)
+\begin{DoxyCompactList}\small\item\em Initialize a semaphore, so that it can be used for synchronization. \end{DoxyCompactList}\item 
+\hypertarget{class_semaphore_a633658a6fde276bffc912028725c6ade}{}\label{class_semaphore_a633658a6fde276bffc912028725c6ade} 
+\hyperlink{class_semaphore_a633658a6fde276bffc912028725c6ade}{$\sim$\+Semaphore} ()
+\begin{DoxyCompactList}\small\item\em De-\/allocate semaphore, when no longer needed. Assume no one is still waiting on the semaphore! \end{DoxyCompactList}\item 
+\hypertarget{class_semaphore_a42700933286df899977950787b46499e}{}\label{class_semaphore_a42700933286df899977950787b46499e} 
+const char $\ast$ {\bfseries get\+Name} ()
+\item 
+void \hyperlink{class_semaphore_a4fee22da0205e3c704b08beaa17e0e7a}{P} ()
+\begin{DoxyCompactList}\small\item\em Wait until semaphore value $>$ 0, then decrement. Checking the value and decrementing must be done atomically, so we need to disable interrupts before checking the value. \end{DoxyCompactList}\item 
+\hypertarget{class_semaphore_a3e42125b95660ef696d0d0069b804343}{}\label{class_semaphore_a3e42125b95660ef696d0d0069b804343} 
+void \hyperlink{class_semaphore_a3e42125b95660ef696d0d0069b804343}{V} ()
+\begin{DoxyCompactList}\small\item\em Increment semaphore value, waking up a waiter if necessary. As with \hyperlink{class_semaphore_a4fee22da0205e3c704b08beaa17e0e7a}{P()}, this operation must be atomic, so we need to disable interrupts. Scheduler\+::\+Ready\+To\+Run() assumes that threads are disabled when it is called. \end{DoxyCompactList}\item 
+bool \hyperlink{class_semaphore_ab834b59c88a6061633480c6b7adf7f14}{check\+Un\+Tocken} ()
+\begin{DoxyCompactList}\small\item\em vérifie si il n\textquotesingle{}y a qu\textquotesingle{}un seul token dans la sémaphore. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsubsection*{Attributs privés}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_semaphore_a44d5bb3170dee133e805ab31e281acde}{}\label{class_semaphore_a44d5bb3170dee133e805ab31e281acde} 
+const char $\ast$ {\bfseries name}
+\item 
+\hypertarget{class_semaphore_a951b9b5b03dd295a2cd1b193e03c03f6}{}\label{class_semaphore_a951b9b5b03dd295a2cd1b193e03c03f6} 
+int {\bfseries value}
+\item 
+\hypertarget{class_semaphore_a42a688d9eb5fc88112988ce7d337326c}{}\label{class_semaphore_a42a688d9eb5fc88112988ce7d337326c} 
+\hyperlink{class_list}{List} $\ast$ {\bfseries queue}
+\end{DoxyCompactItemize}
+
+
+\subsubsection{Documentation des constructeurs et destructeur}
+\hypertarget{class_semaphore_a671a20336d97ab712cc84aab3381d34d}{}\label{class_semaphore_a671a20336d97ab712cc84aab3381d34d} 
+\index{Semaphore@{Semaphore}!Semaphore@{Semaphore}}
+\index{Semaphore@{Semaphore}!Semaphore@{Semaphore}}
+\paragraph{\texorpdfstring{Semaphore()}{Semaphore()}}
+{\footnotesize\ttfamily Semaphore\+::\+Semaphore (\begin{DoxyParamCaption}\item[{const char $\ast$}]{debug\+Name,  }\item[{int}]{initial\+Value }\end{DoxyParamCaption})}
+
+
+
+Initialize a semaphore, so that it can be used for synchronization. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em debug\+Name} & is an arbitrary name, useful for debugging. \\
+\hline
+{\em initial\+Value} & is the initial value of the semaphore. \\
+\hline
+\end{DoxyParams}
+
+
+Référencé par Lock\+::\+Lock().
+
+
+
+\subsubsection{Documentation des fonctions membres}
+\hypertarget{class_semaphore_ab834b59c88a6061633480c6b7adf7f14}{}\label{class_semaphore_ab834b59c88a6061633480c6b7adf7f14} 
+\index{Semaphore@{Semaphore}!check\+Un\+Tocken@{check\+Un\+Tocken}}
+\index{check\+Un\+Tocken@{check\+Un\+Tocken}!Semaphore@{Semaphore}}
+\paragraph{\texorpdfstring{check\+Un\+Tocken()}{checkUnTocken()}}
+{\footnotesize\ttfamily bool Semaphore\+::check\+Un\+Tocken (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+vérifie si il n\textquotesingle{}y a qu\textquotesingle{}un seul token dans la sémaphore. 
+
+\begin{DoxyReturn}{Renvoie}
+retourne vrai si la sémaphore ne contient qu\textquotesingle{}un token, faux sinon 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em } & \\
+\hline
+\end{DoxyExceptions}
+\hypertarget{class_semaphore_a4fee22da0205e3c704b08beaa17e0e7a}{}\label{class_semaphore_a4fee22da0205e3c704b08beaa17e0e7a} 
+\index{Semaphore@{Semaphore}!P@{P}}
+\index{P@{P}!Semaphore@{Semaphore}}
+\paragraph{\texorpdfstring{P()}{P()}}
+{\footnotesize\ttfamily void Semaphore\+::P (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Wait until semaphore value $>$ 0, then decrement. Checking the value and decrementing must be done atomically, so we need to disable interrupts before checking the value. 
+
+Note that Thread\+::\+Sleep assumes that interrupts are disabled when it is called. 
+
+Référencé par Addr\+Space\+::\+Bind\+User\+Thread(), Synch\+Console\+::copy\+Machine\+From\+String(), Synch\+Console\+::copy\+String\+From\+Machine(), do\+\_\+\+User\+Sem\+P(), do\+\_\+\+User\+Thread\+Create(), do\+\_\+\+User\+Thread\+Exit(), do\+\_\+\+User\+Thread\+Join(), Thread\+::set\+T\+I\+D(), Synch\+Console\+::\+Synch\+Get\+Char(), Synch\+Console\+::\+Synch\+Get\+String(), Synch\+Console\+::\+Synch\+Put\+Char(), Synch\+Console\+::\+Synch\+Put\+String(), et Addr\+Space\+::\+Unbind\+User\+Thread().
+
+
+
+La documentation de cette classe a été générée à partir des fichiers suivants \+:\begin{DoxyCompactItemize}
+\item 
+threads/synch.\+h\item 
+threads/\hyperlink{synch_8cc}{synch.\+cc}\end{DoxyCompactItemize}

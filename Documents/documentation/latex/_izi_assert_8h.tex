@@ -1,0 +1,44 @@
+\hypertarget{_izi_assert_8h}{}\subsection{Référence du fichier userprog/\+Izi\+Assert.h}
+\label{_izi_assert_8h}\index{userprog/\+Izi\+Assert.\+h@{userprog/\+Izi\+Assert.\+h}}
+
+
+I\+Z\+I\+\_\+\+A\+S\+S\+E\+RT.  
+
+
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+\subsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{_izi_assert_8h_a41f9c5fb8b08eb5dc3edce4dcb37fee7}{}\label{_izi_assert_8h_a41f9c5fb8b08eb5dc3edce4dcb37fee7} 
+\#define {\bfseries true}~1
+\item 
+\hypertarget{_izi_assert_8h_a65e9886d74aaee76545e83dd09011727}{}\label{_izi_assert_8h_a65e9886d74aaee76545e83dd09011727} 
+\#define {\bfseries false}~0
+\item 
+\hypertarget{_izi_assert_8h_abb452686968e48b67397da5f97445f5b}{}\label{_izi_assert_8h_abb452686968e48b67397da5f97445f5b} 
+\#define {\bfseries bool}~int
+\item 
+\hypertarget{_izi_assert_8h_aa25bf78139c9907666ab506544972aa2}{}\label{_izi_assert_8h_aa25bf78139c9907666ab506544972aa2} 
+\#define {\bfseries I\+Z\+I\+\_\+\+A\+S\+S\+E\+RT}(condition)~izi\+Assert(condition, \#condition, \+\_\+\+\_\+\+F\+I\+L\+E\+\_\+\+\_\+, \+\_\+\+\_\+\+L\+I\+N\+E\+\_\+\+\_\+, \+\_\+\+\_\+func\+\_\+\+\_\+);
+\end{DoxyCompactItemize}
+\subsubsection*{Fonctions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{_izi_assert_8h_a4fa3db4b5dc1c2f527b31e0c9ea9002f}{}\label{_izi_assert_8h_a4fa3db4b5dc1c2f527b31e0c9ea9002f} 
+void {\bfseries izi\+Assert} (bool success, const char $\ast$condition, const int line\+Number, const char $\ast$function\+Name)
+\end{DoxyCompactItemize}
+
+
+\subsubsection{Description détaillée}
+I\+Z\+I\+\_\+\+A\+S\+S\+E\+RT. 
+
+\begin{DoxyAuthor}{Auteurs}
+Floran N\+A\+R\+E\+N\+J\+I-\/\+S\+H\+E\+S\+H\+K\+A\+L\+A\+NI
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+24/11/2014
+\end{DoxyDate}
+\begin{DoxyVersion}{Version}
+V1.\+0 
+\end{DoxyVersion}
