@@ -4,11 +4,11 @@
 #include "network.h"
 #include "synchlist.h"
 
-#define MSG 0x00
-#define ACK 0x01
+#define MSG 46
+#define ACK 47
 #define DATA_SIZE 30
 #define MAXREEMISSIONS 10
-#define TEMPO 1
+#define TEMPO 2
 
 typedef struct 
 {
@@ -46,13 +46,13 @@ class ReliableNet
     	Network* network;
 
 	private:
-		PacketHeaderReliable ParseReliableHeader(char * buffer);
+		PacketHeaderReliable * ParseReliableHeader(char * buffer);
 		
-		PacketHeader pktHdr;
-		PacketHeaderReliable pktHdrReliable;
 		SynchList * messages;
 		
-    	NetworkAddress target;
+		NetworkAddress from;
+		NetworkAddress target;
+
     	char memory[MaxPacketSize];
     	int memoryIndex;
     	int memorySize;
@@ -67,9 +67,6 @@ typedef struct
 	PacketHeader hdr;
 	PacketHeaderReliable hdrReliable;
 	char* data;
-	/*int nE; // num emission
-	int nA; // num ack
-	Network * network;*/
 	ReliableNet * rlbnet;
 } PacketContext;
 

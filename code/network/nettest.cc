@@ -113,20 +113,16 @@ void AnneauTest(int cible){
 
 void Ping(int target)
 {
-    ReliableNet * rlbnet = new ReliableNet(netname, 1.0, target);
+    ReliableNet * rlbnet = new ReliableNet(netname, 0.3, target);
     Delay(3);
 
     printf("Création de reliablenet\n");
     
 
-    printf("Envoi message\n");
     rlbnet->Send(MSG, "PING", 4);
 
     Delay(1);
 
     char data[4];
-    printf("Recoi message\n");
     rlbnet->Receive(data, 4);
-
-    printf("%s\n", data);
 }
